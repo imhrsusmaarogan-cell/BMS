@@ -9,8 +9,17 @@
 body{margin:0;font-family:'Segoe UI';background:#000;color:#fff;display:flex;justify-content:center}
 .app{width:100%;max-width:420px;min-height:100vh}
 
-header{text-align:center;padding:15px;border-bottom:1px solid #c9a227}
-header h1{color:#c9a227;font-size:18px}
+/* ✅ BABY PINK HEADER */
+header{
+text-align:center;
+padding:15px;
+background:#ffb6c1;
+}
+header h1{
+color:#000;
+font-size:18px;
+letter-spacing:1px;
+}
 
 .container{padding:10px}
 
@@ -34,7 +43,7 @@ gap:8px;
 }
 
 .qtyBox button{
-background:#c9a227;
+background:#ffb6c1;
 border:none;
 color:#000;
 width:28px;
@@ -43,6 +52,7 @@ border-radius:50%;
 font-size:16px;
 }
 
+/* MODAL */
 .modal{
 position:fixed;
 width:100%;
@@ -56,6 +66,13 @@ align-items:center;
 z-index:999;
 }
 
+/* ✅ SKY BLUE CART */
+#cartModal .modal-box{
+background:#87ceeb;
+color:#000;
+}
+
+/* normal modal */
 .modal-box{
 background:#111;
 padding:15px;
@@ -68,7 +85,7 @@ overflow:auto;
 
 /* CART */
 .cartBox{
-background:#1a1a1a;
+background:#e6f7ff;
 border-radius:10px;
 padding:10px;
 margin-bottom:10px;
@@ -79,13 +96,13 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 padding:8px 0;
-border-bottom:1px solid #333;
+border-bottom:1px solid #ccc;
 }
 
 .cartRow:last-child{border:none}
 
 button{
-background:#c9a227;
+background:#ffb6c1;
 border:none;
 padding:10px;
 border-radius:8px;
@@ -97,15 +114,17 @@ bottom:20px;
 right:20px;
 padding:15px;
 border-radius:50px;
+background:#ffb6c1;
+color:#000;
 }
 
 input,select{
 width:100%;
 padding:10px;
 margin:6px 0;
-background:#1a1a1a;
+background:#fff;
 border:none;
-color:#fff;
+color:#000;
 border-radius:8px;
 }
 </style>
@@ -158,7 +177,6 @@ border-radius:8px;
 
 <script>
 
-/* FIX */
 const modal = document.getElementById('modal');
 const cartModal = document.getElementById('cartModal');
 
@@ -168,7 +186,6 @@ function closeCart(){cartModal.style.display='none';}
 const menuDiv = document.getElementById('menu');
 const phoneInput = document.getElementById('phone');
 
-/* ✅ FULL MENU RESTORED */
 const menu=[
 {name:"Aloo tikki burger",half:39,full:39},
 {name:"Classic veg burger",half:49,full:49},
@@ -259,7 +276,6 @@ total-=total*d/100;
 document.getElementById('cartTotal').innerText=Math.round(total);
 }
 
-/* ✅ SINGLE BOX CART */
 function updateCart(){
 let html="";
 Object.keys(order).forEach(i=>{
