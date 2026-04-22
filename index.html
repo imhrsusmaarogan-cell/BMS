@@ -82,11 +82,7 @@
             font-size: 1rem;
         }
 
-        .action-area {
-            height: 40px;
-            display: flex;
-            align-items: center;
-        }
+        .action-area { height: 40px; display: flex; align-items: center; }
 
         .add-btn {
             background-color: var(--zomato-yellow);
@@ -99,11 +95,7 @@
             font-size: 0.9rem;
         }
 
-        .qty-selector {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .qty-selector { display: flex; align-items: center; gap: 12px; }
 
         .ctrl-btn {
             background-color: var(--zomato-yellow);
@@ -120,11 +112,7 @@
             color: #000;
         }
 
-        .qty-display {
-            color: white;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
+        .qty-display { color: white; font-weight: bold; font-size: 1.1rem; }
 
         #cart-modal {
             display: none;
@@ -146,7 +134,7 @@
             border-top-left-radius: 25px;
             border-top-right-radius: 25px;
             padding: 25px;
-            max-height: 85vh;
+            max-height: 90vh;
             overflow-y: auto;
         }
 
@@ -161,16 +149,17 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px solid #eee;
         }
 
-        .order-form input {
+        .order-form input, .order-form select {
             width: 100%;
             padding: 12px;
             margin-bottom: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid #ccc;
             border-radius: 8px;
+            font-size: 0.9rem;
         }
 
         .place-order-btn {
@@ -225,7 +214,22 @@
         <div class="billing-box" id="cart-items-container"></div>
 
         <div class="order-form">
-            <input type="tel" id="cust-phone" placeholder="Enter WhatsApp Number (e.g. 9198XXXXXXXX)">
+            <p style="font-weight:bold; margin-bottom:8px; color:#333;">Customer Details (Internal):</p>
+            <input type="text" id="cust-name" placeholder="Customer Name">
+            <input type="tel" id="cust-phone" placeholder="WhatsApp Number (e.g. 91...)">
+            
+            <select id="order-type" onchange="toggleAddress()">
+                <option value="Dining">Dining</option>
+                <option value="Take Away">Take Away</option>
+            </select>
+
+            <input type="text" id="cust-address" placeholder="Delivery Address" style="display:none;">
+
+            <select id="payment-method">
+                <option value="Cash">Cash</option>
+                <option value="Online">Online</option>
+            </select>
+
             <div style="text-align:right; font-weight:bold; font-size:1.2rem; margin:10px 0; color: #000;">
                 TOTAL: ₹<span id="grand-total">0</span>
             </div>
@@ -294,9 +298,7 @@
         const index = cart.findIndex(c => c.id === id);
         if (index > -1) {
             cart[index].qty += delta;
-            if (cart[index].qty <= 0) {
-                cart.splice(index, 1);
-            }
+            if (cart[index].qty <= 0) cart.splice(index, 1);
             updateItemControls(id);
         }
         updateCartUI();
@@ -306,33 +308,32 @@
         const container = document.getElementById('cart-items-container');
         const countSpan = document.getElementById('cart-count');
         const totalSpan = document.getElementById('grand-total');
-        
-        let total = 0;
-        let count = 0;
+        let total = 0, count = 0;
 
         if (cart.length === 0) {
             container.innerHTML = "<p style='text-align:center; color:#333;'>Your cart is empty</p>";
         } else {
-            container.innerHTML = `<p style="font-weight:bold; margin-bottom:10px;">Order sumary:</p>` + 
+            container.innerHTML = `<p style="font-weight:bold; margin-bottom:10px; color:#000;">Order sumary:</p>` + 
             cart.map(item => {
                 const subtotal = item.price * item.qty;
-                total += subtotal;
-                count += item.qty;
+                total += subtotal; count += item.qty;
                 return `
                     <div class="cart-row">
-                        <div style="color:#000">
-                            ${item.name} x${item.qty} = ₹${subtotal}
-                        </div>
+                        <div style="color:#000">${item.name} x${item.qty} = ₹${subtotal}</div>
                         <div class="qty-selector">
                              <button class="ctrl-btn" style="width:25px; height:25px;" onclick="updateQty(${item.id}, -1)">-</button>
                              <button class="ctrl-btn" style="width:25px; height:25px;" onclick="updateQty(${item.id}, 1)">+</button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }).join('');
         }
         countSpan.innerText = count;
         totalSpan.innerText = total;
+    }
+
+    function toggleAddress() {
+        const type = document.getElementById('order-type').value;
+        document.getElementById('cust-address').style.display = (type === 'Take Away') ? 'block' : 'none';
     }
 
     function toggleCart(show) {
@@ -341,15 +342,12 @@
 
     function placeOrder() {
         if (cart.length === 0) return;
-
         const phone = document.getElementById('cust-phone').value;
         const total = document.getElementById('grand-total').innerText;
 
-        if (!phone) {
-            alert("Please enter a WhatsApp number.");
-            return;
-        }
+        if (!phone) { alert("Please enter WhatsApp number."); return; }
         
+        // Exact format as requested (No customer details in message)
         let msg = `SAFFRON FOOD\n\n`;
         msg += `Order sumary:\n`;
         cart.forEach(item => {
