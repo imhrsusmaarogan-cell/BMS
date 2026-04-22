@@ -42,7 +42,6 @@
             border-bottom-right-radius: 20px;
             color: #d81b60;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .category-title {
@@ -69,7 +68,6 @@
             flex-direction: column;
             justify-content: space-between;
             min-height: 160px;
-            border: 1px solid #2a2a2a;
         }
 
         .item-name {
@@ -87,50 +85,77 @@
             font-size: 0.85rem;
         }
 
-        .action-area { display: flex; flex-direction: column; gap: 8px; }
-
+        /* Fixed Add Button Size from original design */
         .add-btn {
             background-color: var(--zomato-yellow);
             border: none;
-            padding: 8px 10px;
+            padding: 8px 15px;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
             color: #000;
-            font-size: 0.8rem;
-            transition: 0.2s;
+            font-size: 0.9rem;
+            width: fit-content;
         }
 
-        .qty-selector { 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between;
-            background: var(--zomato-yellow);
-            border-radius: 8px;
-            padding: 4px;
-            width: 100%;
+        .qty-selector {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .ctrl-btn {
-            background: transparent;
+            background-color: var(--zomato-yellow);
             border: none;
-            width: 30px;
-            height: 25px;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
             font-weight: bold;
             font-size: 1.2rem;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #000;
         }
 
-        .qty-display { color: #000; font-weight: bold; font-size: 0.9rem; }
+        .qty-display { color: white; font-weight: bold; font-size: 1.1rem; }
+
+        /* Pop-up / Modals */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .compact-popup {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            width: 280px;
+            text-align: center;
+        }
+
+        .size-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #eee;
+            margin: 10px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
         #cart-modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85);
             z-index: 1000;
             justify-content: center;
@@ -154,56 +179,31 @@
             padding: 15px;
             margin-bottom: 15px;
             color: #000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .cart-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px dashed #ddd;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
         }
 
         .order-form input, .order-form select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 8px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            width: 100%; padding: 10px; margin-bottom: 8px;
+            border: 1px solid #ccc; border-radius: 6px;
         }
 
         .place-order-btn {
-            background: #25d366;
-            color: white;
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            cursor: pointer;
-            margin-top: 10px;
+            background: #25d366; color: white; width: 100%; padding: 15px;
+            border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
         }
 
         .view-cart-trigger {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 440px;
-            background: var(--zomato-yellow);
-            padding: 18px;
-            border-radius: 15px;
-            text-align: center;
-            font-weight: bold;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-            cursor: pointer;
-            color: #000;
-            z-index: 999;
-            font-size: 1.1rem;
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 440px; background: var(--zomato-yellow);
+            padding: 15px; border-radius: 12px; text-align: center; font-weight: bold;
+            color: #000; z-index: 999;
         }
     </style>
 </head>
@@ -217,29 +217,35 @@
     </div>
 </div>
 
+<div id="size-popup" class="modal-overlay" onclick="closeSizePopup(event)">
+    <div class="compact-popup" onclick="event.stopPropagation()">
+        <h3 id="popup-item-name" style="margin-bottom:15px; color:#333">Select Size</h3>
+        <div id="size-options-list"></div>
+        <button onclick="closeSizePopup()" style="margin-top:10px; background:none; border:none; color:red; font-weight:bold;">Cancel</button>
+    </div>
+</div>
+
 <div id="cart-modal">
     <div class="cart-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; color:#0288d1;">
-            <h2 style="letter-spacing: 1px;">SAFFRON FOOD</h2>
-            <button onclick="toggleCart(false)" style="background:none; border:none; font-size:2rem; cursor:pointer;">&times;</button>
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px; color:#0288d1;">
+            <h2>SAFFRON FOOD</h2>
+            <button onclick="toggleCart(false)" style="background:none; border:none; font-size:1.5rem;">✕</button>
         </div>
-
         <div class="billing-box" id="cart-items-container"></div>
-
         <div class="order-form">
-            <p style="font-weight:bold; margin-bottom:8px; color:#333;">Customer Info (Internal Only):</p>
+            <p style="font-weight:bold; margin-bottom:5px;">Internal Details:</p>
             <input type="text" id="cust-name" placeholder="Customer Name">
             <input type="tel" id="cust-phone" placeholder="WhatsApp Number (e.g. 91...)">
             <select id="order-type" onchange="toggleAddress()">
                 <option value="Dining">Dining</option>
                 <option value="Take Away">Take Away</option>
             </select>
-            <input type="text" id="cust-address" placeholder="Address for Take Away" style="display:none;">
+            <input type="text" id="cust-address" placeholder="Delivery Address" style="display:none;">
             <select id="payment-method">
                 <option value="Cash">Cash</option>
                 <option value="Online">Online</option>
             </select>
-            <div style="text-align:right; font-weight:bold; font-size:1.4rem; margin:15px 0; color:#000;">
+            <div style="text-align:right; font-weight:bold; font-size:1.2rem; margin:10px 0; color:#000;">
                 TOTAL: ₹<span id="grand-total">0</span>
             </div>
             <button class="place-order-btn" onclick="placeOrder()">Place Order ❣️</button>
@@ -335,13 +341,8 @@
                     <div class="menu-item">
                         <div class="item-name">${item.name}</div>
                         <div class="price-text">${isDual ? `H: ₹${item.priceHalf} / F: ₹${item.priceFull}` : `₹${item.price}`}</div>
-                        <div class="action-area">
-                            ${isDual ? `
-                                <div id="ctrls-${item.id}-Half" style="width:100%"><button class="add-btn" style="width:100%" onclick="handleInitialAdd(${item.id}, 'Half')">Add Half</button></div>
-                                <div id="ctrls-${item.id}-Full" style="width:100%"><button class="add-btn" style="width:100%" onclick="handleInitialAdd(${item.id}, 'Full')">Add Full</button></div>
-                            ` : `
-                                <div id="ctrls-${item.id}-Normal" style="width:100%"><button class="add-btn" style="width:100%" onclick="handleInitialAdd(${item.id}, 'Normal')">Add to Cart</button></div>
-                            `}
+                        <div class="action-area" id="ctrls-${item.id}">
+                            <button class="add-btn" onclick="handleItemClick(${item.id})">Add</button>
                         </div>
                     </div>`;
                 }).join('')}
@@ -349,29 +350,41 @@
         `).join('');
     }
 
-    function handleInitialAdd(id, size) {
-        addToCart(id, size);
-        updateItemControls(id, size);
+    function handleItemClick(id) {
+        let itemRef;
+        menuData.forEach(cat => {
+            const found = cat.items.find(i => i.id === id);
+            if(found) itemRef = found;
+        });
+
+        if (itemRef.priceHalf !== undefined) {
+            openSizePopup(itemRef);
+        } else {
+            addToCart(id, 'Normal');
+        }
     }
 
-    function updateItemControls(id, size) {
-        const container = document.getElementById(`ctrls-${id}-${size}`);
-        if (!container) return;
-        const cartKey = `${id}-${size}`;
-        const itemInCart = cart.find(c => c.cartKey === cartKey);
+    function openSizePopup(item) {
+        document.getElementById('popup-item-name').innerText = item.name;
+        const list = document.getElementById('size-options-list');
+        list.innerHTML = `
+            <div class="size-option" onclick="selectFromPopup(${item.id}, 'Half')">
+                <span>Half</span><span>₹${item.priceHalf}</span>
+            </div>
+            <div class="size-option" onclick="selectFromPopup(${item.id}, 'Full')">
+                <span>Full</span><span>₹${item.priceFull}</span>
+            </div>
+        `;
+        document.getElementById('size-popup').style.display = 'flex';
+    }
 
-        if (itemInCart && itemInCart.qty > 0) {
-            container.innerHTML = `
-                <div class="qty-selector">
-                    <button class="ctrl-btn" onclick="updateQty('${cartKey}', -1)">-</button>
-                    <span class="qty-display">${itemInCart.qty}</span>
-                    <button class="ctrl-btn" onclick="updateQty('${cartKey}', 1)">+</button>
-                </div>
-            `;
-        } else {
-            const label = size === 'Normal' ? 'Add to Cart' : `Add ${size}`;
-            container.innerHTML = `<button class="add-btn" style="width:100%" onclick="handleInitialAdd(${id}, '${size}')">${label}</button>`;
-        }
+    function selectFromPopup(id, size) {
+        addToCart(id, size);
+        closeSizePopup();
+    }
+
+    function closeSizePopup() {
+        document.getElementById('size-popup').style.display = 'none';
     }
 
     function addToCart(id, size) {
@@ -388,7 +401,29 @@
         if (existing) existing.qty++;
         else cart.push({ ...itemRef, size, price, qty: 1, cartKey });
         
+        updateItemControls(id, size);
         updateCartUI();
+    }
+
+    function updateItemControls(id, size) {
+        const container = document.getElementById(`ctrls-${id}`);
+        // If single size, just show counter. If multiple sizes (Half/Full), logic can get messy in grid, 
+        // so we show the last added size's counter or keep button simple. 
+        // For best UX with Half/Full, we swap to a simple counter for the specific key.
+        const cartKey = `${id}-${size}`;
+        const itemInCart = cart.find(c => c.cartKey === cartKey);
+
+        if (itemInCart && itemInCart.qty > 0) {
+            container.innerHTML = `
+                <div class="qty-selector">
+                    <button class="ctrl-btn" onclick="updateQty('${cartKey}', -1)">-</button>
+                    <span class="qty-display">${itemInCart.qty}</span>
+                    <button class="ctrl-btn" onclick="updateQty('${cartKey}', 1)">+</button>
+                </div>
+            `;
+        } else {
+            container.innerHTML = `<button class="add-btn" onclick="handleItemClick(${id})">Add</button>`;
+        }
     }
 
     function updateQty(cartKey, delta) {
@@ -410,19 +445,20 @@
         let total = 0, count = 0;
 
         if (cart.length === 0) {
-            container.innerHTML = "<p style='text-align:center; padding: 20px; color:#666;'>No items in bill.</p>";
+            container.innerHTML = "<p style='text-align:center;'>Cart is empty</p>";
         } else {
-            container.innerHTML = `<p style="font-weight:bold; margin-bottom:10px; color:#000;">Order sumary:</p>` + 
+            container.innerHTML = `<p style="font-weight:bold; margin-bottom:10px;">Order sumary:</p>` + 
             cart.map(item => {
                 const subtotal = item.price * item.qty;
                 total += subtotal; count += item.qty;
                 const sizeLabel = item.size !== 'Normal' ? ` (${item.size})` : '';
                 return `
                     <div class="cart-row">
-                        <div style="color:#000; font-size: 0.9rem;">${item.name}${sizeLabel} x${item.qty} = ₹${subtotal}</div>
-                        <div style="display:flex; gap: 10px;">
-                             <button class="add-btn" style="padding: 2px 8px;" onclick="updateQty('${item.cartKey}', -1)">-</button>
-                             <button class="add-btn" style="padding: 2px 8px;" onclick="updateQty('${item.cartKey}', 1)">+</button>
+                        <div>${item.name}${sizeLabel} x${item.qty} = ₹${subtotal}</div>
+                        <div class="qty-selector">
+                             <button class="ctrl-btn" style="width:25px; height:25px;" onclick="updateQty('${item.cartKey}', -1)">-</button>
+                             <span style="color:#000">${item.qty}</span>
+                             <button class="ctrl-btn" style="width:25px; height:25px;" onclick="updateQty('${item.cartKey}', 1)">+</button>
                         </div>
                     </div>`;
             }).join('');
@@ -436,15 +472,10 @@
         document.getElementById('cust-address').style.display = (type === 'Take Away') ? 'block' : 'none';
     }
 
-    function toggleCart(show) { 
-        document.getElementById('cart-modal').style.display = show ? 'flex' : 'none'; 
-    }
+    function toggleCart(show) { document.getElementById('cart-modal').style.display = show ? 'flex' : 'none'; }
 
     function placeOrder() {
-        if (cart.length === 0) {
-            alert("Add some items first!");
-            return;
-        }
+        if (cart.length === 0) return;
         const phone = document.getElementById('cust-phone').value;
         if (!phone) { alert("Please enter WhatsApp number."); return; }
         
