@@ -9,7 +9,6 @@
 body{margin:0;font-family:'Segoe UI';background:#000;color:#fff;display:flex;justify-content:center}
 .app{width:100%;max-width:420px;min-height:100vh}
 
-/* ✅ BABY PINK HEADER */
 header{
 text-align:center;
 padding:15px;
@@ -18,21 +17,31 @@ background:#ffb6c1;
 header h1{
 color:#000;
 font-size:18px;
-letter-spacing:1px;
 }
 
 .container{padding:10px}
 
+/* ITEM CARD */
 .item{
-display:flex;
-justify-content:space-between;
-align-items:center;
 background:#151515;
-padding:12px;
-border-radius:10px;
-margin-bottom:10px;
+padding:14px;
+border-radius:14px;
+margin-bottom:12px;
 }
 
+/* 🔥 EXACT BUTTON STYLE */
+.addBtn{
+background:#ffd600;
+color:#000;
+border:none;
+padding:8px 14px;
+border-radius:8px;
+font-size:14px;
+cursor:pointer;
+margin-top:8px;
+}
+
+/* KEEP OLD QTY STYLE (not removed) */
 .qtyBox{
 display:flex;
 align-items:center;
@@ -40,6 +49,7 @@ background:#222;
 border-radius:20px;
 padding:3px 6px;
 gap:8px;
+margin-top:8px;
 }
 
 .qtyBox button{
@@ -49,7 +59,6 @@ color:#000;
 width:28px;
 height:28px;
 border-radius:50%;
-font-size:16px;
 }
 
 /* MODAL */
@@ -66,24 +75,20 @@ align-items:center;
 z-index:999;
 }
 
-/* ✅ SKY BLUE CART */
-#cartModal .modal-box{
-background:#87ceeb;
-color:#000;
-}
-
-/* normal modal */
 .modal-box{
 background:#111;
 padding:15px;
 border-radius:12px;
 width:90%;
 max-width:400px;
-max-height:90%;
-overflow:auto;
 }
 
-/* CART */
+/* CART BLUE */
+#cartModal .modal-box{
+background:#87ceeb;
+color:#000;
+}
+
 .cartBox{
 background:#e6f7ff;
 border-radius:10px;
@@ -98,8 +103,6 @@ align-items:center;
 padding:8px 0;
 border-bottom:1px solid #ccc;
 }
-
-.cartRow:last-child{border:none}
 
 button{
 background:#ffb6c1;
@@ -225,11 +228,13 @@ const menu=[
 
 let order={},selected;
 
+/* 🔥 ONLY UI CHANGE HERE */
 function render(){
 let html="";
 menu.forEach((m,i)=>{
 html+=`<div class='item'>
 <div>${m.name}<br>₹${m.half}/${m.full}</div>
+<button class="addBtn" onclick='add(${i})'>Add to Cart</button>
 <div class="qtyBox">
 <button onclick='dec(${i})'>-</button>
 <span id='q${i}'>0</span>
