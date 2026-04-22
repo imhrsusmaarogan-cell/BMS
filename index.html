@@ -16,7 +16,7 @@
             --text-dim: #b0b0b0;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
 
         body {
             background-color: #000;
@@ -31,7 +31,7 @@
             background-color: var(--dark-bg);
             min-height: 100vh;
             position: relative;
-            padding-bottom: 100px;
+            padding-bottom: 120px;
         }
 
         header {
@@ -42,36 +42,41 @@
             border-bottom-right-radius: 20px;
             color: #d81b60;
             font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
-        h2.category-title {
+        .category-title {
             color: var(--zomato-yellow);
-            padding: 20px 15px 10px;
-            font-size: 1.8rem;
+            padding: 20px 15px 5px;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid #333;
+            margin: 0 15px 10px;
         }
 
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 12px;
             padding: 15px;
         }
 
         .menu-item {
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 20px;
+            border-radius: 15px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: 180px;
+            min-height: 160px;
+            border: 1px solid #2a2a2a;
         }
 
         .item-name {
             color: var(--text-main);
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             line-height: 1.2;
         }
 
@@ -79,40 +84,45 @@
             color: var(--zomato-yellow);
             font-weight: 600;
             margin-bottom: 10px;
-            font-size: 1rem;
+            font-size: 0.85rem;
         }
 
-        .action-area { height: 40px; display: flex; align-items: center; }
+        .action-area { display: flex; flex-direction: column; gap: 8px; }
 
         .add-btn {
             background-color: var(--zomato-yellow);
             border: none;
-            padding: 8px 15px;
+            padding: 8px 10px;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
             color: #000;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
+            transition: 0.2s;
         }
 
-        .qty-selector { display: flex; align-items: center; gap: 12px; }
+        .qty-selector { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            background: var(--zomato-yellow);
+            border-radius: 8px;
+            padding: 4px;
+            width: 100%;
+        }
 
         .ctrl-btn {
-            background-color: var(--zomato-yellow);
+            background: transparent;
             border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
+            width: 30px;
+            height: 25px;
             font-weight: bold;
             font-size: 1.2rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             color: #000;
         }
 
-        .qty-display { color: white; font-weight: bold; font-size: 1.1rem; }
+        .qty-display { color: #000; font-weight: bold; font-size: 0.9rem; }
 
         #cart-modal {
             display: none;
@@ -121,7 +131,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             z-index: 1000;
             justify-content: center;
             align-items: flex-end;
@@ -133,7 +143,7 @@
             max-width: 480px;
             border-top-left-radius: 25px;
             border-top-right-radius: 25px;
-            padding: 25px;
+            padding: 20px;
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -143,20 +153,22 @@
             border-radius: 15px;
             padding: 15px;
             margin-bottom: 15px;
+            color: #000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .cart-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+            border-bottom: 1px dashed #ddd;
         }
 
         .order-form input, .order-form select {
             width: 100%;
             padding: 12px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             border: 1px solid #ccc;
             border-radius: 8px;
             font-size: 0.9rem;
@@ -168,9 +180,11 @@
             width: 100%;
             padding: 15px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: bold;
+            font-size: 1.1rem;
             cursor: pointer;
+            margin-top: 10px;
         }
 
         .view-cart-trigger {
@@ -181,13 +195,15 @@
             width: 90%;
             max-width: 440px;
             background: var(--zomato-yellow);
-            padding: 15px;
-            border-radius: 12px;
+            padding: 18px;
+            border-radius: 15px;
             text-align: center;
             font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
             cursor: pointer;
             color: #000;
+            z-index: 999;
+            font-size: 1.1rem;
         }
     </style>
 </head>
@@ -195,10 +211,7 @@
 
 <div class="app-container">
     <header><h1>SAFFRON FOOD</h1></header>
-    
-    <h2 class="category-title">Menu</h2>
-    <div class="menu-grid" id="menu-grid"></div>
-
+    <div id="menu-container"></div>
     <div class="view-cart-trigger" onclick="toggleCart(true)">
         View Cart (<span id="cart-count">0</span>)
     </div>
@@ -206,31 +219,27 @@
 
 <div id="cart-modal">
     <div class="cart-content">
-        <div style="display:flex; justify-content:space-between; margin-bottom:15px; color:#0288d1;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; color:#0288d1;">
             <h2 style="letter-spacing: 1px;">SAFFRON FOOD</h2>
-            <button onclick="toggleCart(false)" style="background:none; border:none; font-size:1.5rem;">✕</button>
+            <button onclick="toggleCart(false)" style="background:none; border:none; font-size:2rem; cursor:pointer;">&times;</button>
         </div>
 
         <div class="billing-box" id="cart-items-container"></div>
 
         <div class="order-form">
-            <p style="font-weight:bold; margin-bottom:8px; color:#333;">Customer Details (Internal):</p>
+            <p style="font-weight:bold; margin-bottom:8px; color:#333;">Customer Info (Internal Only):</p>
             <input type="text" id="cust-name" placeholder="Customer Name">
             <input type="tel" id="cust-phone" placeholder="WhatsApp Number (e.g. 91...)">
-            
             <select id="order-type" onchange="toggleAddress()">
                 <option value="Dining">Dining</option>
                 <option value="Take Away">Take Away</option>
             </select>
-
-            <input type="text" id="cust-address" placeholder="Delivery Address" style="display:none;">
-
+            <input type="text" id="cust-address" placeholder="Address for Take Away" style="display:none;">
             <select id="payment-method">
                 <option value="Cash">Cash</option>
                 <option value="Online">Online</option>
             </select>
-
-            <div style="text-align:right; font-weight:bold; font-size:1.2rem; margin:10px 0; color: #000;">
+            <div style="text-align:right; font-weight:bold; font-size:1.4rem; margin:15px 0; color:#000;">
                 TOTAL: ₹<span id="grand-total">0</span>
             </div>
             <button class="place-order-btn" onclick="placeOrder()">Place Order ❣️</button>
@@ -239,67 +248,157 @@
 </div>
 
 <script>
-    const menuItems = [
-        { id: 1, name: "Aloo tikki burger", price: 39 },
-        { id: 2, name: "Veg fried rice", price: 109 },
-        { id: 3, name: "veg schezwan fried rice", price: 149 },
-        { id: 4, name: "Sweet lassi", price: 49 }
+    const menuData = [
+        {
+            category: "Appetizers",
+            items: [
+                { id: 1, name: "Aloo tikki burger", price: 39 },
+                { id: 2, name: "Classic veg burger", price: 49 },
+                { id: 3, name: "Veg cheese burger", price: 59 },
+                { id: 4, name: "Double patty veg burger", price: 79 },
+                { id: 5, name: "Saffron Burger", price: 99 },
+                { id: 6, name: "French fries", priceHalf: 45, priceFull: 79 },
+                { id: 7, name: "Chilli potato", priceHalf: 59, priceFull: 109 },
+                { id: 8, name: "Honey chilli potato", priceHalf: 69, priceFull: 119 },
+                { id: 9, name: "Plain Veg Noodles", priceHalf: 59, priceFull: 109 },
+                { id: 10, name: "Veg Hakka Noodles", priceHalf: 69, priceFull: 119 },
+                { id: 11, name: "Veg Schezwan Noodles", priceHalf: 79, priceFull: 139 },
+                { id: 12, name: "Veg Chilli Garlic Noodle", priceHalf: 89, priceFull: 159 }
+            ]
+        },
+        {
+            category: "Sandwiches",
+            items: [
+                { id: 13, name: "Aloo Grilled sandwich", price: 49 },
+                { id: 14, name: "Veg grilled sandwich", price: 69 },
+                { id: 15, name: "Veg cheese grilled sandwich", price: 79 },
+                { id: 16, name: "Cheese Corn Grilled Sandwich", price: 89 },
+                { id: 17, name: "Paneer & cheese Grilled Sandwich", price: 99 }
+            ]
+        },
+        {
+            category: "Pasta",
+            items: [
+                { id: 18, name: "veg Red souce pasta", price: 59 },
+                { id: 19, name: "veg white souce pasta", price: 69 }
+            ]
+        },
+        {
+            category: "Momos",
+            items: [
+                { id: 20, name: "veg momos steam", priceHalf: 39, priceFull: 69 },
+                { id: 21, name: "veg momos fried", priceHalf: 49, priceFull: 79 },
+                { id: 22, name: "paneer momos steam", priceHalf: 49, priceFull: 89 },
+                { id: 23, name: "paneer momos fried", priceHalf: 69, priceFull: 119 }
+            ]
+        },
+        {
+            category: "Maggi",
+            items: [
+                { id: 24, name: "Plain maggi", price: 39 },
+                { id: 25, name: "Veg maggi", price: 49 }
+            ]
+        },
+        {
+            category: "Rice",
+            items: [
+                { id: 26, name: "Veg fried rice", priceHalf: 59, priceFull: 109 },
+                { id: 27, name: "Classic spicy veg fried rice", priceHalf: 69, priceFull: 119 },
+                { id: 28, name: "veg schezwan fried rice", priceHalf: 79, priceFull: 149 }
+            ]
+        },
+        {
+            category: "Paratha & More",
+            items: [
+                { id: 29, name: "Aloo paratha (2pc)", price: 49 },
+                { id: 30, name: "Aloo pyaz paratha (2pc)", price: 59 },
+                { id: 31, name: "Gobhi paratha (2pc)", price: 69 },
+                { id: 32, name: "paneer paratha (2pc)", price: 79 },
+                { id: 33, name: "Plain curd", price: 20 },
+                { id: 34, name: "Boondi Raita", price: 39 },
+                { id: 35, name: "Cold coffee", price: 59 },
+                { id: 36, name: "Sweet lassi", price: 49 }
+            ]
+        }
     ];
 
     let cart = [];
 
     function renderMenu() {
-        const grid = document.getElementById('menu-grid');
-        grid.innerHTML = menuItems.map(item => `
-            <div class="menu-item">
-                <div class="item-name">${item.name}</div>
-                <div class="price-text">₹${item.price}</div>
-                <div class="action-area" id="ctrls-${item.id}">
-                    <button class="add-btn" onclick="handleInitialAdd(${item.id})">Add to Cart</button>
-                </div>
-            </div>`).join('');
+        const container = document.getElementById('menu-container');
+        container.innerHTML = menuData.map(section => `
+            <h2 class="category-title">${section.category}</h2>
+            <div class="menu-grid">
+                ${section.items.map(item => {
+                    const isDual = item.priceHalf !== undefined;
+                    return `
+                    <div class="menu-item">
+                        <div class="item-name">${item.name}</div>
+                        <div class="price-text">${isDual ? `H: ₹${item.priceHalf} / F: ₹${item.priceFull}` : `₹${item.price}`}</div>
+                        <div class="action-area">
+                            ${isDual ? `
+                                <div id="ctrls-${item.id}-Half" style="width:100%"><button class="add-btn" style="width:100%" onclick="handleInitialAdd(${item.id}, 'Half')">Add Half</button></div>
+                                <div id="ctrls-${item.id}-Full" style="width:100%"><button class="add-btn" style="width:100%" onclick="handleInitialAdd(${item.id}, 'Full')">Add Full</button></div>
+                            ` : `
+                                <div id="ctrls-${item.id}-Normal" style="width:100%"><button class="add-btn" style="width:100%" onclick="handleInitialAdd(${item.id}, 'Normal')">Add to Cart</button></div>
+                            `}
+                        </div>
+                    </div>`;
+                }).join('')}
+            </div>
+        `).join('');
     }
 
-    function handleInitialAdd(id) {
-        addToCart(id);
-        updateItemControls(id);
+    function handleInitialAdd(id, size) {
+        addToCart(id, size);
+        updateItemControls(id, size);
     }
 
-    function updateItemControls(id) {
-        const container = document.getElementById(`ctrls-${id}`);
+    function updateItemControls(id, size) {
+        const container = document.getElementById(`ctrls-${id}-${size}`);
         if (!container) return;
-        const itemInCart = cart.find(c => c.id === id);
+        const cartKey = `${id}-${size}`;
+        const itemInCart = cart.find(c => c.cartKey === cartKey);
 
         if (itemInCart && itemInCart.qty > 0) {
             container.innerHTML = `
                 <div class="qty-selector">
-                    <button class="ctrl-btn" onclick="updateQty(${id}, -1)">-</button>
+                    <button class="ctrl-btn" onclick="updateQty('${cartKey}', -1)">-</button>
                     <span class="qty-display">${itemInCart.qty}</span>
-                    <button class="ctrl-btn" onclick="updateQty(${id}, 1)">+</button>
+                    <button class="ctrl-btn" onclick="updateQty('${cartKey}', 1)">+</button>
                 </div>
             `;
         } else {
-            container.innerHTML = `<button class="add-btn" onclick="handleInitialAdd(${id})">Add to Cart</button>`;
+            const label = size === 'Normal' ? 'Add to Cart' : `Add ${size}`;
+            container.innerHTML = `<button class="add-btn" style="width:100%" onclick="handleInitialAdd(${id}, '${size}')">${label}</button>`;
         }
     }
 
-    function addToCart(id) {
-        const item = menuItems.find(m => m.id === id);
-        const existing = cart.find(c => c.id === id);
-        if (existing) {
-            existing.qty++;
-        } else {
-            cart.push({ ...item, qty: 1 });
-        }
+    function addToCart(id, size) {
+        let itemRef;
+        menuData.forEach(cat => {
+            const found = cat.items.find(i => i.id === id);
+            if(found) itemRef = found;
+        });
+
+        const price = size === 'Half' ? itemRef.priceHalf : (size === 'Full' ? itemRef.priceFull : itemRef.price);
+        const cartKey = `${id}-${size}`;
+        const existing = cart.find(c => c.cartKey === cartKey);
+
+        if (existing) existing.qty++;
+        else cart.push({ ...itemRef, size, price, qty: 1, cartKey });
+        
         updateCartUI();
     }
 
-    function updateQty(id, delta) {
-        const index = cart.findIndex(c => c.id === id);
+    function updateQty(cartKey, delta) {
+        const index = cart.findIndex(c => c.cartKey === cartKey);
         if (index > -1) {
             cart[index].qty += delta;
+            const itemId = cart[index].id;
+            const size = cart[index].size;
             if (cart[index].qty <= 0) cart.splice(index, 1);
-            updateItemControls(id);
+            updateItemControls(itemId, size);
         }
         updateCartUI();
     }
@@ -311,18 +410,19 @@
         let total = 0, count = 0;
 
         if (cart.length === 0) {
-            container.innerHTML = "<p style='text-align:center; color:#333;'>Your cart is empty</p>";
+            container.innerHTML = "<p style='text-align:center; padding: 20px; color:#666;'>No items in bill.</p>";
         } else {
             container.innerHTML = `<p style="font-weight:bold; margin-bottom:10px; color:#000;">Order sumary:</p>` + 
             cart.map(item => {
                 const subtotal = item.price * item.qty;
                 total += subtotal; count += item.qty;
+                const sizeLabel = item.size !== 'Normal' ? ` (${item.size})` : '';
                 return `
                     <div class="cart-row">
-                        <div style="color:#000">${item.name} x${item.qty} = ₹${subtotal}</div>
-                        <div class="qty-selector">
-                             <button class="ctrl-btn" style="width:25px; height:25px;" onclick="updateQty(${item.id}, -1)">-</button>
-                             <button class="ctrl-btn" style="width:25px; height:25px;" onclick="updateQty(${item.id}, 1)">+</button>
+                        <div style="color:#000; font-size: 0.9rem;">${item.name}${sizeLabel} x${item.qty} = ₹${subtotal}</div>
+                        <div style="display:flex; gap: 10px;">
+                             <button class="add-btn" style="padding: 2px 8px;" onclick="updateQty('${item.cartKey}', -1)">-</button>
+                             <button class="add-btn" style="padding: 2px 8px;" onclick="updateQty('${item.cartKey}', 1)">+</button>
                         </div>
                     </div>`;
             }).join('');
@@ -336,25 +436,24 @@
         document.getElementById('cust-address').style.display = (type === 'Take Away') ? 'block' : 'none';
     }
 
-    function toggleCart(show) {
-        document.getElementById('cart-modal').style.display = show ? 'flex' : 'none';
+    function toggleCart(show) { 
+        document.getElementById('cart-modal').style.display = show ? 'flex' : 'none'; 
     }
 
     function placeOrder() {
-        if (cart.length === 0) return;
+        if (cart.length === 0) {
+            alert("Add some items first!");
+            return;
+        }
         const phone = document.getElementById('cust-phone').value;
-        const total = document.getElementById('grand-total').innerText;
-
         if (!phone) { alert("Please enter WhatsApp number."); return; }
         
-        // Exact format as requested (No customer details in message)
-        let msg = `SAFFRON FOOD\n\n`;
-        msg += `Order sumary:\n`;
+        let msg = `SAFFRON FOOD\n\nOrder sumary:\n`;
         cart.forEach(item => {
-            msg += `${item.name} x${item.qty} = ₹${item.price * item.qty}\n`;
+            const sizeLabel = item.size !== 'Normal' ? ` (${item.size})` : '';
+            msg += `${item.name}${sizeLabel} x${item.qty} = ₹${item.price * item.qty}\n`;
         });
-        msg += `\nTOTAL: ₹${total}\n`;
-        msg += `Thanks for visiting ❣️`;
+        msg += `\nTOTAL: ₹${document.getElementById('grand-total').innerText}\nThanks for visiting ❣️`;
 
         const cleanPhone = phone.replace(/\D/g, '');
         window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, '_blank');
