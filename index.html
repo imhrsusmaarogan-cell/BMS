@@ -1,328 +1,362 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Saffron POS</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium POS System</title>
+    <style>
+        :root {
+            --baby-pink: #fce4ec;
+            --premium-pink: #f8bbd0;
+            --sky-blue: #e3f2fd;
+            --accent-blue: #0288d1;
+            --zomato-yellow: #ffd600;
+            --dark-bg: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #ffffff;
+            --text-dim: #b0b0b0;
+        }
 
-<style>
-body{margin:0;font-family:'Segoe UI';background:#000;color:#fff;display:flex;justify-content:center}
-.app{width:100%;max-width:420px;min-height:100vh}
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
 
-header{
-text-align:center;
-padding:15px;
-background:#ffb6c1;
-}
-header h1{
-color:#000;
-font-size:18px;
-}
+        body {
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
 
-.container{padding:10px}
+        /* Desktop to Mobile Constraint */
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--dark-bg);
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            padding-bottom: 80px;
+        }
 
-/* ITEM CARD */
-.item{
-background:#151515;
-padding:14px;
-border-radius:14px;
-margin-bottom:12px;
-}
+        header {
+            background-color: var(--baby-pink);
+            padding: 20px;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            color: #d81b60;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
 
-/* 🔥 EXACT BUTTON STYLE */
-.addBtn{
-background:#ffd600;
-color:#000;
-border:none;
-padding:8px 14px;
-border-radius:8px;
-font-size:14px;
-cursor:pointer;
-margin-top:8px;
-}
+        /* Menu Styles */
+        .menu-container { padding: 15px; }
+        
+        .menu-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #333;
+        }
 
-/* KEEP OLD QTY STYLE (not removed) */
-.qtyBox{
-display:flex;
-align-items:center;
-background:#222;
-border-radius:20px;
-padding:3px 6px;
-gap:8px;
-margin-top:8px;
-}
+        .item-info h3 { color: var(--text-main); font-size: 1.1rem; margin-bottom: 5px; }
+        .item-info p { color: var(--text-dim); font-size: 0.9rem; }
 
-.qtyBox button{
-background:#ffb6c1;
-border:none;
-color:#000;
-width:28px;
-height:28px;
-border-radius:50%;
-}
+        .price-tag { color: var(--zomato-yellow); font-weight: 700; margin-top: 4px; }
 
-/* MODAL */
-.modal{
-position:fixed;
-width:100%;
-height:100%;
-top:0;
-left:0;
-display:none;
-background:rgba(0,0,0,0.85);
-justify-content:center;
-align-items:center;
-z-index:999;
-}
+        .add-btn {
+            background-color: var(--zomato-yellow);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            color: #000;
+        }
 
-.modal-box{
-background:#111;
-padding:15px;
-border-radius:12px;
-width:90%;
-max-width:400px;
-}
+        .add-btn:active { transform: scale(0.95); }
 
-/* CART BLUE */
-#cartModal .modal-box{
-background:#87ceeb;
-color:#000;
-}
+        /* Cart Popup Styles */
+        #cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: flex-end;
+        }
 
-.cartBox{
-background:#e6f7ff;
-border-radius:10px;
-padding:10px;
-margin-bottom:10px;
-}
+        .cart-content {
+            background: var(--sky-blue);
+            width: 100%;
+            max-width: 480px;
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+            padding: 25px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
 
-.cartRow{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:8px 0;
-border-bottom:1px solid #ccc;
-}
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            color: var(--accent-blue);
+        }
 
-button{
-background:#ffb6c1;
-border:none;
-padding:10px;
-border-radius:8px;
-}
+        .billing-box {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
 
-.cartBtn{
-position:fixed;
-bottom:20px;
-right:20px;
-padding:15px;
-border-radius:50px;
-background:#ffb6c1;
-color:#000;
-}
+        .cart-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed #ccc;
+        }
 
-input,select{
-width:100%;
-padding:10px;
-margin:6px 0;
-background:#fff;
-border:none;
-color:#000;
-border-radius:8px;
-}
-</style>
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qty-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--accent-blue);
+            background: transparent;
+            color: var(--accent-blue);
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Form Styles */
+        .order-form { margin-top: 20px; }
+        .order-form input, .order-form select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .place-order-btn {
+            background: #25d366;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        .view-cart-trigger {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 430px;
+            background: var(--zomato-yellow);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 900;
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="app">
-<header><h1>SAFFRON FOOD</h1></header>
-<div class="container" id="menu"></div>
+<div class="app-container">
+    <header>
+        <h1>PREMIUM POS</h1>
+    </header>
+
+    <div class="menu-container" id="menu-list">
+        </div>
+
+    <div class="view-cart-trigger" id="view-cart-btn" onclick="toggleCart(true)">
+        View Cart (<span id="cart-count">0</span>)
+    </div>
 </div>
 
-<button class="cartBtn" onclick="openCart()">Cart</button>
+<div id="cart-modal">
+    <div class="cart-content">
+        <div class="cart-header">
+            <h2>Your Bill</h2>
+            <button onclick="toggleCart(false)" style="background:none; border:none; font-size:1.5rem;">✕</button>
+        </div>
 
-<!-- CART -->
-<div class="modal" id="cartModal">
-<div class="modal-box">
+        <div class="billing-box" id="cart-items-container">
+            </div>
 
-<h3>🛒 Cart</h3>
+        <div class="order-form">
+            <input type="text" id="cust-name" placeholder="Customer Name">
+            <input type="text" id="cust-address" placeholder="Delivery Address">
+            <input type="tel" id="cust-phone" placeholder="Phone Number">
+            <select id="payment-method">
+                <option value="Cash">Cash on Delivery</option>
+                <option value="UPI">UPI / Online</option>
+            </select>
+            <input type="number" id="discount-val" placeholder="Discount Amount (₹)" value="0">
+            
+            <div style="margin-top: 15px; font-weight: bold; font-size: 1.2rem; text-align: right;">
+                Total: ₹<span id="grand-total">0</span>
+            </div>
 
-<div class="cartBox" id="cartItems"></div>
-
-<h3>Total: ₹<span id="cartTotal">0</span></h3>
-
-<input id="name" placeholder="Client Name">
-<input id="address" placeholder="Address">
-<input id="phone" placeholder="Phone">
-
-<select id="payment">
-<option>Cash</option>
-<option>Online</option>
-</select>
-
-<input id="discount" type="number" placeholder="Discount %" oninput="calc()">
-
-<button onclick="placeOrder()">PLACE ORDER</button>
-<button onclick="closeCart()">Close</button>
-
-</div>
-</div>
-
-<!-- TYPE -->
-<div class="modal" id="modal">
-<div class="modal-box">
-<h3>Select Type</h3>
-<button onclick="selectType('half')">Half</button>
-<button onclick="selectType('full')">Full</button>
-</div>
+            <button class="place-order-btn" onclick="placeOrder()">Place Order via WhatsApp</button>
+        </div>
+    </div>
 </div>
 
 <script>
+    const menuItems = [
+        { id: 1, name: "Classic Burger", priceHalf: 80, priceFull: 150, category: "Fast Food" },
+        { id: 2, name: "Paneer Pizza", priceHalf: 120, priceFull: 220, category: "Pizza" },
+        { id: 3, name: "French Fries", priceFull: 90, category: "Sides" },
+        { id: 4, name: "Cold Coffee", priceFull: 60, category: "Beverages" },
+        { id: 5, name: "Veg Momos", priceHalf: 50, priceFull: 90, category: "Snacks" }
+    ];
 
-const modal = document.getElementById('modal');
-const cartModal = document.getElementById('cartModal');
+    let cart = [];
 
-function openCart(){cartModal.style.display='flex';updateCart();calc();}
-function closeCart(){cartModal.style.display='none';}
+    function renderMenu() {
+        const menuList = document.getElementById('menu-list');
+        menuList.innerHTML = menuItems.map(item => `
+            <div class="menu-item">
+                <div class="item-info">
+                    <h3>${item.name}</h3>
+                    <p>${item.category}</p>
+                    <div class="price-tag">
+                        ${item.priceHalf ? `Half: ₹${item.priceHalf} | ` : ''} Full: ₹${item.priceFull}
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    ${item.priceHalf ? `<button class="add-btn" onclick="addToCart(${item.id}, 'Half')">Add Half</button>` : ''}
+                    <button class="add-btn" onclick="addToCart(${item.id}, 'Full')">Add Full</button>
+                </div>
+            </div>
+        `).join('');
+    }
 
-const menuDiv = document.getElementById('menu');
-const phoneInput = document.getElementById('phone');
+    function addToCart(id, size) {
+        const item = menuItems.find(m => m.id === id);
+        const price = size === 'Half' ? item.priceHalf : item.priceFull;
+        const cartKey = `${id}-${size}`;
+        
+        const existing = cart.find(c => c.cartKey === cartKey);
+        if (existing) {
+            existing.qty++;
+        } else {
+            cart.push({ ...item, size, price, qty: 1, cartKey });
+        }
+        updateCartUI();
+    }
 
-const menu=[
-{name:"Aloo tikki burger",half:39,full:39},
-{name:"Classic veg burger",half:49,full:49},
-{name:"Veg cheese burger",half:59,full:59},
-{name:"Double patty veg burger",half:79,full:79},
-{name:"Saffron Burger",half:99,full:99},
-{name:"French fries",half:45,full:79},
-{name:"Chilli potato",half:59,full:109},
-{name:"Honey chilli potato",half:69,full:119},
-{name:"Plain Veg Noodles",half:59,full:109},
-{name:"Veg Hakka Noodles",half:69,full:119},
-{name:"Veg Schezwan Noodles",half:79,full:139},
-{name:"Veg Chilli Garlic Noodle",half:89,full:159},
-{name:"Aloo Grilled sandwich",half:49,full:49},
-{name:"Veg grilled sandwich",half:69,full:69},
-{name:"Veg cheese grilled sandwich",half:79,full:79},
-{name:"Cheese Corn Grilled Sandwich",half:89,full:89},
-{name:"Paneer & cheese Grilled Sandwich",half:99,full:99},
-{name:"veg Red sauce pasta",half:59,full:59},
-{name:"veg white sauce pasta",half:69,full:69},
-{name:"veg momos steam",half:39,full:69},
-{name:"veg momos fried",half:49,full:79},
-{name:"paneer momos steam",half:49,full:89},
-{name:"paneer momos fried",half:69,full:119},
-{name:"Aloo paratha",half:49,full:49},
-{name:"Aloo pyaz paratha",half:59,full:59},
-{name:"Gobhi paratha",half:69,full:69},
-{name:"paneer paratha",half:79,full:79},
-{name:"Plain maggi",half:39,full:39},
-{name:"Veg maggi",half:49,full:49},
-{name:"Veg fried rice",half:59,full:109},
-{name:"Classic spicy veg fried rice",half:69,full:119},
-{name:"veg schezwan fried rice",half:79,full:149},
-{name:"Cold coffee",half:59,full:59},
-{name:"Sweet lassi",half:49,full:49}
-];
+    function updateQty(cartKey, delta) {
+        const index = cart.findIndex(c => c.cartKey === cartKey);
+        if (index > -1) {
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) cart.splice(index, 1);
+        }
+        updateCartUI();
+    }
 
-let order={},selected;
+    function updateCartUI() {
+        const container = document.getElementById('cart-items-container');
+        const countSpan = document.getElementById('cart-count');
+        const totalSpan = document.getElementById('grand-total');
+        
+        let total = 0;
+        let count = 0;
 
-/* 🔥 ONLY UI CHANGE HERE */
-function render(){
-let html="";
-menu.forEach((m,i)=>{
-html+=`<div class='item'>
-<div>${m.name}<br>₹${m.half}/${m.full}</div>
-<button class="addBtn" onclick='add(${i})'>Add to Cart</button>
-<div class="qtyBox">
-<button onclick='dec(${i})'>-</button>
-<span id='q${i}'>0</span>
-<button onclick='add(${i})'>+</button>
-</div>
-</div>`;
-});
-menuDiv.innerHTML=html;
-}
+        if (cart.length === 0) {
+            container.innerHTML = "<p style='text-align:center; color:#666;'>Cart is empty</p>";
+        } else {
+            container.innerHTML = cart.map(item => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                count += item.qty;
+                return `
+                    <div class="cart-row">
+                        <div>
+                            <div style="font-weight:bold;">${item.name} (${item.size})</div>
+                            <div style="font-size:0.8rem; color:#666;">₹${item.price} x ${item.qty}</div>
+                        </div>
+                        <div class="qty-controls">
+                            <button class="qty-btn" onclick="updateQty('${item.cartKey}', -1)">-</button>
+                            <span>${item.qty}</span>
+                            <button class="qty-btn" onclick="updateQty('${item.cartKey}', 1)">+</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
-function add(i){
-let m=menu[i];
-if(m.half!==m.full){selected=i;modal.style.display='flex';}
-else{if(!order[i]) order[i]={qty:0,type:'full'};order[i].qty++;update(i);}
-}
+        const discount = parseFloat(document.getElementById('discount-val').value) || 0;
+        const finalTotal = Math.max(0, total - discount);
+        
+        countSpan.innerText = count;
+        totalSpan.innerText = finalTotal;
+    }
 
-function selectType(t){
-if(!order[selected]) order[selected]={qty:0,type:t};
-order[selected].qty++;
-order[selected].type=t;
-modal.style.display='none';
-update(selected);
-}
+    function toggleCart(show) {
+        document.getElementById('cart-modal').style.display = show ? 'flex' : 'none';
+    }
 
-function dec(i){
-if(order[i]){order[i].qty--;if(order[i].qty<=0) delete order[i];}
-update(i);
-}
+    function placeOrder() {
+        if (cart.length === 0) return alert("Cart is empty!");
+        
+        const name = document.getElementById('cust-name').value || "Guest";
+        const addr = document.getElementById('cust-address').value || "N/A";
+        const phone = document.getElementById('cust-phone').value || "N/A";
+        const pay = document.getElementById('payment-method').value;
+        const discount = document.getElementById('discount-val').value || 0;
+        const total = document.getElementById('grand-total').innerText;
 
-function update(i){
-document.getElementById('q'+i).innerText=order[i]?order[i].qty:0;
-calc();updateCart();
-}
+        let message = `*NEW ORDER FROM POS*\n\n`;
+        message += `*Customer:* ${name}\n`;
+        message += `*Phone:* ${phone}\n`;
+        message += `*Address:* ${addr}\n`;
+        message += `*Payment:* ${pay}\n`;
+        message += `--------------------------\n`;
+        
+        cart.forEach(item => {
+            message += `${item.name} (${item.size}) x ${item.qty} - ₹${item.price * item.qty}\n`;
+        });
 
-function calc(){
-let total=0;
-Object.keys(order).forEach(i=>{
-let m=menu[i],o=order[i];
-let p=o.type==='full'?m.full:m.half;
-total+=p*o.qty;
-});
-let d=parseFloat(document.getElementById('discount').value)||0;
-total-=total*d/100;
-document.getElementById('cartTotal').innerText=Math.round(total);
-}
+        message += `--------------------------\n`;
+        if(discount > 0) message += `Discount: -₹${discount}\n`;
+        message += `*FINAL TOTAL BILL: ₹${total}*`;
 
-function updateCart(){
-let html="";
-Object.keys(order).forEach(i=>{
-let m=menu[i],o=order[i];
-html+=`
-<div class="cartRow">
-<span>${m.name} (${o.type})</span>
-<div class="qtyBox">
-<button onclick="dec(${i})">-</button>
-<span>${o.qty}</span>
-<button onclick="add(${i})">+</button>
-</div>
-</div>`;
-});
-document.getElementById('cartItems').innerHTML=html||"No items";
-}
+        const encodedMsg = encodeURIComponent(message);
+        window.open(`https://wa.me/?text=${encodedMsg}`, '_blank');
+    }
 
-function placeOrder(){
-let phone=phoneInput.value;
-let total=document.getElementById('cartTotal').innerText;
-
-let bill="SAFFRON FOOD\n\nOrder:\n";
-Object.keys(order).forEach(i=>{
-let m=menu[i],o=order[i];
-let p=o.type==='full'?m.full:m.half;
-bill+=`${m.name} x${o.qty} = ₹${p*o.qty}\n`;
-});
-bill+=`\nTOTAL: ₹${total}`;
-
-window.location.href=`https://wa.me/91${phone}?text=${encodeURIComponent(bill)}`;
-
-reset();closeCart();
-}
-
-function reset(){
-order={};render();
-document.getElementById('cartItems').innerHTML="";
-document.getElementById('cartTotal').innerText=0;
-}
-
-render();
-
+    // Initial render
+    renderMenu();
+    document.getElementById('discount-val').addEventListener('input', updateCartUI);
 </script>
 
 </body>
