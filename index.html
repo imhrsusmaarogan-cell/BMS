@@ -82,7 +82,6 @@
             font-size: 1rem;
         }
 
-        /* Button Logic Styles */
         .action-area {
             height: 40px;
             display: flex;
@@ -126,7 +125,6 @@
             font-size: 1.1rem;
         }
 
-        /* Cart Popup Styles */
         #cart-modal {
             display: none;
             position: fixed;
@@ -208,8 +206,7 @@
     <header><h1>PREMIUM POS</h1></header>
     
     <h2 class="category-title">Appetizers</h2>
-    <div class="menu-grid" id="menu-grid">
-        </div>
+    <div class="menu-grid" id="menu-grid"></div>
 
     <div class="view-cart-trigger" onclick="toggleCart(true)">
         View Cart (<span id="cart-count">0</span>)
@@ -228,7 +225,7 @@
         <div class="order-form">
             <input type="text" id="cust-name" placeholder="Name">
             <input type="text" id="cust-address" placeholder="Address">
-            <input type="tel" id="cust-phone" placeholder="Phone">
+            <input type="tel" id="cust-phone" placeholder="WhatsApp Number (With Country Code e.g. 91...)">
             <select id="payment-method">
                 <option value="Cash">Cash</option>
                 <option value="Online">Online</option>
@@ -259,10 +256,8 @@
                 <div class="menu-item">
                     <div class="item-name">${item.name}</div>
                     <div class="price-text">Half ₹${item.priceHalf} / Full ₹${item.priceFull}</div>
-                    <div class="action-area">
-                        <div id="ctrls-${item.id}">
-                            <button class="add-btn" onclick="handleInitialAdd(${item.id}, 'Full')">Add to Cart</button>
-                        </div>
+                    <div class="action-area" id="ctrls-${item.id}">
+                        <button class="add-btn" onclick="handleInitialAdd(${item.id}, 'Full')">Add to Cart</button>
                     </div>
                 </div>`;
             } else {
@@ -285,6 +280,7 @@
 
     function updateItemControls(id, size) {
         const container = document.getElementById(`ctrls-${id}`);
+        if (!container) return;
         const cartKey = `${id}-${size}`;
         const itemInCart = cart.find(c => c.cartKey === cartKey);
 
@@ -297,7 +293,6 @@
                 </div>
             `;
         } else {
-            const item = menuItems.find(m => m.id === id);
             container.innerHTML = `<button class="add-btn" onclick="handleInitialAdd(${id}, '${size}')">Add to Cart</button>`;
         }
     }
@@ -322,9 +317,12 @@
             cart[index].qty += delta;
             const itemId = cart[index].id;
             const size = cart[index].size;
-            if (cart[index].qty <= 0) cart.splice(index, 1);
-            
-            updateItemControls(itemId, size);
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+                updateItemControls(itemId, size);
+            } else {
+                updateItemControls(itemId, size);
+            }
         }
         updateCartUI();
     }
@@ -350,9 +348,9 @@
                             <small>₹${item.price} x ${item.qty}</small>
                         </div>
                         <div class="qty-selector">
-                             <button class="ctrl-btn" style="width:25px; height:25px;" onclick="updateQty('${item.cartKey}', -1)">-</button>
+                             <button class="ctrl-btn" style="width:25px; height:25px; color:black" onclick="updateQty('${item.cartKey}', -1)">-</button>
                              <span style="color:black">${item.qty}</span>
-                             <button class="ctrl-btn" style="width:25px; height:25px;" onclick="updateQty('${item.cartKey}', 1)">+</button>
+                             <button class="ctrl-btn" style="width:25px; height:25px; color:black" onclick="updateQty('${item.cartKey}', 1)">+</button>
                         </div>
                     </div>
                 `;
@@ -367,16 +365,41 @@
     }
 
     function placeOrder() {
-        if (cart.length === 0) return;
-        const name = document.getElementById('cust-name').value || "Guest";
+        if (cart.length === 0) {
+            alert("Please add items to cart first.");
+            return;
+        }
+
+        const name = document.getElementById('cust-name').value;
+        const addr = document.getElementById('cust-address').value;
+        const phone = document.getElementById('cust-phone').value;
+        const pay = document.getElementById('payment-method').value;
         const total = document.getElementById('grand-total').innerText;
+
+        if (!phone) {
+            alert("Please enter a WhatsApp number to send the order to.");
+            return;
+        }
         
-        let msg = `*Order from ${name}*\n---\n`;
+        let msg = `*Order Details*\n`;
+        msg += `*Name:* ${name || 'N/A'}\n`;
+        msg += `*Address:* ${addr || 'N/A'}\n`;
+        msg += `*Payment:* ${pay}\n`;
+        msg += `--------------------------\n`;
+        
         cart.forEach(item => {
-            msg += `${item.name} x${item.qty} - ₹${item.price * item.qty}\n`;
+            msg += `• ${item.name} (${item.size}) x${item.qty} - ₹${item.price * item.qty}\n`;
         });
-        msg += `---\n*TOTAL: ₹${total}*`;
-        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+        
+        msg += `--------------------------\n`;
+        msg += `*FINAL TOTAL BILL: ₹${total}*`;
+
+        // Clean the phone number (remove non-digits)
+        const cleanPhone = phone.replace(/\D/g, '');
+        
+        // WhatsApp API link with target number and message
+        const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
+        window.open(waUrl, '_blank');
     }
 
     renderMenu();
