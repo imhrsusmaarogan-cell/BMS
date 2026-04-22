@@ -7,6 +7,7 @@
     <style>
         :root {
             --baby-pink: #fce4ec;
+            --premium-pink: #f8bbd0;
             --sky-blue: #e3f2fd;
             --accent-blue: #0288d1;
             --zomato-yellow: #ffd600;
@@ -16,13 +17,14 @@
             --text-dim: #b0b0b0;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
 
         body {
             background-color: #000;
             display: flex;
             justify-content: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .app-container {
@@ -32,6 +34,7 @@
             min-height: 100vh;
             position: relative;
             padding-bottom: 120px;
+            transition: all 0.3s ease;
         }
 
         header {
@@ -42,86 +45,105 @@
             border-bottom-right-radius: 20px;
             color: #d81b60;
             font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .category-title {
             color: var(--zomato-yellow);
-            padding: 20px 15px 5px;
-            font-size: 1.4rem;
+            padding: 25px 15px 5px;
+            font-size: 1.5rem;
             text-transform: uppercase;
-            border-bottom: 1px solid #333;
-            margin: 0 15px 10px;
+            letter-spacing: 1px;
+            margin: 0 15px;
         }
 
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 15px;
             padding: 15px;
         }
 
         .menu-item {
             background: var(--card-bg);
-            border-radius: 15px;
-            padding: 15px;
+            border-radius: 20px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: 160px;
+            min-height: 170px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .menu-item:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            border-color: #333;
         }
 
         .item-name {
             color: var(--text-main);
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: bold;
             margin-bottom: 10px;
-            line-height: 1.2;
+            line-height: 1.3;
         }
 
         .price-text {
             color: var(--zomato-yellow);
             font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 0.85rem;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
         }
 
         /* Fixed Add Button Size from original design */
         .add-btn {
             background-color: var(--zomato-yellow);
             border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
+            padding: 10px 20px;
+            border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
             color: #000;
             font-size: 0.9rem;
             width: fit-content;
+            transition: background-color 0.2s ease;
+        }
+
+        .add-btn:active {
+            background-color: #e6c200;
         }
 
         .qty-selector {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
         }
 
         .ctrl-btn {
             background-color: var(--zomato-yellow);
             border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #000;
+            transition: background-color 0.2s ease;
         }
 
-        .qty-display { color: white; font-weight: bold; font-size: 1.1rem; }
+        .ctrl-btn:active {
+            background-color: #e6c200;
+        }
 
-        /* Pop-up / Modals */
+        .qty-display { color: white; font-weight: bold; font-size: 1.2rem; }
+
+        /* General Modal Overlay */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -130,28 +152,53 @@
             z-index: 2000;
             justify-content: center;
             align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
+        .modal-overlay.open {
+            opacity: 1;
+        }
+
+        /* Updated Compact Size Popup (Sky Blue & Baby Pink) */
         .compact-popup {
-            background: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            width: 280px;
+            background-color: var(--sky-blue);
+            padding: 25px;
+            border-radius: 25px;
+            width: 300px;
             text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            border: 3px solid var(--baby-pink);
+        }
+
+        .modal-overlay.open .compact-popup {
+            transform: scale(1);
         }
 
         .size-option {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            border: 1px solid #eee;
-            margin: 10px 0;
-            border-radius: 10px;
+            padding: 18px;
+            background-color: white;
+            border: 2px solid #eee;
+            margin: 12px 0;
+            border-radius: 15px;
             cursor: pointer;
             font-weight: bold;
+            color: #333;
+            transition: all 0.2s ease;
         }
 
+        .size-option:active {
+            background-color: var(--baby-pink);
+            border-color: var(--premium-pink);
+            transform: translateY(2px);
+        }
+
+        /* Cart Modal */
         #cart-modal {
             display: none;
             position: fixed;
@@ -160,50 +207,84 @@
             z-index: 1000;
             justify-content: center;
             align-items: flex-end;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #cart-modal.open {
+            opacity: 1;
         }
 
         .cart-content {
             background: var(--sky-blue);
             width: 100%;
             max-width: 480px;
-            border-top-left-radius: 25px;
-            border-top-right-radius: 25px;
-            padding: 20px;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            padding: 25px;
             max-height: 90vh;
             overflow-y: auto;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        #cart-modal.open .cart-content {
+            transform: translateY(0);
         }
 
         .billing-box {
             background: white;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
             color: #000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
         .cart-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
+            padding: 12px 0;
             border-bottom: 1px solid #eee;
         }
 
         .order-form input, .order-form select {
-            width: 100%; padding: 10px; margin-bottom: 8px;
-            border: 1px solid #ccc; border-radius: 6px;
+            width: 100%; padding: 12px; margin-bottom: 10px;
+            border: 1px solid #ddd; border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .order-form input:focus, .order-form select:focus {
+            border-color: var(--accent-blue);
+            outline: none;
         }
 
         .place-order-btn {
-            background: #25d366; color: white; width: 100%; padding: 15px;
-            border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
+            background: #25d366; color: white; width: 100%; padding: 18px;
+            border: none; border-radius: 15px; font-weight: bold; cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .place-order-btn:active {
+            background-color: #1eb954;
+            transform: scale(0.98);
         }
 
         .view-cart-trigger {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 440px; background: var(--zomato-yellow);
-            padding: 15px; border-radius: 12px; text-align: center; font-weight: bold;
-            color: #000; z-index: 999;
+            padding: 18px; border-radius: 15px; text-align: center; font-weight: bold;
+            color: #000; z-index: 999; font-size: 1.1rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .view-cart-trigger:active {
+            transform: translateX(-50%) scale(0.97);
+            background-color: #e6c200;
         }
     </style>
 </head>
@@ -219,21 +300,21 @@
 
 <div id="size-popup" class="modal-overlay" onclick="closeSizePopup(event)">
     <div class="compact-popup" onclick="event.stopPropagation()">
-        <h3 id="popup-item-name" style="margin-bottom:15px; color:#333">Select Size</h3>
+        <h3 id="popup-item-name" style="margin-bottom:20px; color:#d81b60; font-size:1.3rem;">Select Size</h3>
         <div id="size-options-list"></div>
-        <button onclick="closeSizePopup()" style="margin-top:10px; background:none; border:none; color:red; font-weight:bold;">Cancel</button>
+        <button onclick="closeSizePopup()" style="margin-top:15px; background:none; border:none; color:#d81b60; font-weight:bold; font-size:1rem; cursor:pointer; opacity:0.8;">Cancel</button>
     </div>
 </div>
 
 <div id="cart-modal">
     <div class="cart-content">
-        <div style="display:flex; justify-content:space-between; margin-bottom:10px; color:#0288d1;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; color:#0288d1;">
             <h2>SAFFRON FOOD</h2>
-            <button onclick="toggleCart(false)" style="background:none; border:none; font-size:1.5rem;">✕</button>
+            <button onclick="toggleCart(false)" style="background:none; border:none; font-size:2rem; cursor:pointer;">✕</button>
         </div>
         <div class="billing-box" id="cart-items-container"></div>
         <div class="order-form">
-            <p style="font-weight:bold; margin-bottom:5px;">Internal Details:</p>
+            <p style="font-weight:bold; margin-bottom:8px; color:#333;">Customer Info (Internal):</p>
             <input type="text" id="cust-name" placeholder="Customer Name">
             <input type="tel" id="cust-phone" placeholder="WhatsApp Number (e.g. 91...)">
             <select id="order-type" onchange="toggleAddress()">
@@ -245,7 +326,7 @@
                 <option value="Cash">Cash</option>
                 <option value="Online">Online</option>
             </select>
-            <div style="text-align:right; font-weight:bold; font-size:1.2rem; margin:10px 0; color:#000;">
+            <div style="text-align:right; font-weight:bold; font-size:1.4rem; margin:15px 0; color:#000;">
                 TOTAL: ₹<span id="grand-total">0</span>
             </div>
             <button class="place-order-btn" onclick="placeOrder()">Place Order ❣️</button>
@@ -375,7 +456,11 @@
                 <span>Full</span><span>₹${item.priceFull}</span>
             </div>
         `;
-        document.getElementById('size-popup').style.display = 'flex';
+        const overlay = document.getElementById('size-popup');
+        overlay.style.display = 'flex';
+        // Force reflow for transition
+        overlay.offsetHeight; 
+        overlay.classList.add('open');
     }
 
     function selectFromPopup(id, size) {
@@ -384,7 +469,14 @@
     }
 
     function closeSizePopup() {
-        document.getElementById('size-popup').style.display = 'none';
+        const overlay = document.getElementById('size-popup');
+        overlay.classList.remove('open');
+        // Wait for transition to end before hiding
+        setTimeout(() => {
+            if (!overlay.classList.contains('open')) {
+                overlay.style.display = 'none';
+            }
+        }, 300);
     }
 
     function addToCart(id, size) {
@@ -445,20 +537,20 @@
         let total = 0, count = 0;
 
         if (cart.length === 0) {
-            container.innerHTML = "<p style='text-align:center;'>Cart is empty</p>";
+            container.innerHTML = "<p style='text-align:center; padding: 20px; color:#666;'>Cart is empty.</p>";
         } else {
-            container.innerHTML = `<p style="font-weight:bold; margin-bottom:10px;">Order sumary:</p>` + 
+            container.innerHTML = `<p style="font-weight:bold; margin-bottom:10px; color:#333;">Order sumary:</p>` + 
             cart.map(item => {
                 const subtotal = item.price * item.qty;
                 total += subtotal; count += item.qty;
                 const sizeLabel = item.size !== 'Normal' ? ` (${item.size})` : '';
                 return `
                     <div class="cart-row">
-                        <div>${item.name}${sizeLabel} x${item.qty} = ₹${subtotal}</div>
+                        <div style="color:#000; font-size: 0.95rem;">${item.name}${sizeLabel} x${item.qty} = ₹${subtotal}</div>
                         <div class="qty-selector">
-                             <button class="ctrl-btn" style="width:25px; height:25px;" onclick="updateQty('${item.cartKey}', -1)">-</button>
-                             <span style="color:#000">${item.qty}</span>
-                             <button class="ctrl-btn" style="width:25px; height:25px;" onclick="updateQty('${item.cartKey}', 1)">+</button>
+                             <button class="ctrl-btn" style="width:28px; height:28px;" onclick="updateQty('${item.cartKey}', -1)">-</button>
+                             <span style="color:#000; font-size: 1rem;">${item.qty}</span>
+                             <button class="ctrl-btn" style="width:28px; height:28px;" onclick="updateQty('${item.cartKey}', 1)">+</button>
                         </div>
                     </div>`;
             }).join('');
@@ -472,12 +564,29 @@
         document.getElementById('cust-address').style.display = (type === 'Take Away') ? 'block' : 'none';
     }
 
-    function toggleCart(show) { document.getElementById('cart-modal').style.display = show ? 'flex' : 'none'; }
+    function toggleCart(show) { 
+        const modal = document.getElementById('cart-modal');
+        if (show) {
+            modal.style.display = 'flex';
+            modal.offsetHeight; // Reflow
+            modal.classList.add('open');
+        } else {
+            modal.classList.remove('open');
+            setTimeout(() => {
+                if (!modal.classList.contains('open')) {
+                    modal.style.display = 'none';
+                }
+            }, 300);
+        }
+    }
 
     function placeOrder() {
-        if (cart.length === 0) return;
+        if (cart.length === 0) {
+            alert("Please add items to cart first.");
+            return;
+        }
         const phone = document.getElementById('cust-phone').value;
-        if (!phone) { alert("Please enter WhatsApp number."); return; }
+        if (!phone) { alert("Please enter a WhatsApp number."); return; }
         
         let msg = `SAFFRON FOOD\n\nOrder sumary:\n`;
         cart.forEach(item => {
