@@ -1,0 +1,15 @@
+{
+  "name": "Seff-Tech POS",
+  "short_name": "Seff-Tech",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#e3f2fd",
+  "icons": [
+    {
+      "src": "logo.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
