@@ -109,10 +109,10 @@
 
         .cart-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
 
-        /* FIXED ZOOM ISSUE HERE */
+        /* No-Zoom Fix for Safari */
         .order-form input, .order-form select { 
             width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; 
-            font-size: 16px; /* Critical for Safari */
+            font-size: 16px; 
         }
 
         .place-order-btn {
@@ -289,33 +289,42 @@
         else { modal.classList.remove('open'); setTimeout(() => { if (!modal.classList.contains('open')) modal.style.display = 'none'; }, 300); }
     }
 
+    // --- PLACE ORDER (WITH RESET) ---
     function placeOrder() {
         if (cart.length === 0) return;
-        const name = document.getElementById('cust-name').value;
-        const phone = document.getElementById('cust-phone').value;
-        const type = document.getElementById('order-type').value;
-        const addr = document.getElementById('cust-address').value || "N/A";
-        const pay = document.getElementById('payment-method').value;
-        const total = document.getElementById('grand-total').innerText;
+        
+        const nameInp = document.getElementById('cust-name');
+        const phoneInp = document.getElementById('cust-phone');
+        const typeInp = document.getElementById('order-type');
+        const addrInp = document.getElementById('cust-address');
+        const payInp = document.getElementById('payment-method');
+        const totalVal = document.getElementById('grand-total').innerText;
 
-        if (!phone || !name) { alert("Please fill Name and Phone."); return; }
+        if (!phoneInp.value || !nameInp.value) { alert("Please fill Name and Phone."); return; }
 
         const itemsSummary = cart.map(i => `${i.name}${i.size!=='Normal'?'('+i.size+')':''} x${i.qty}`).join(", ");
-        const orderData = { name, phone, orderType: type, address: addr, payment: pay, total, items: itemsSummary };
+        const orderData = { 
+            name: nameInp.value, phone: phoneInp.value, orderType: typeInp.value, 
+            address: addrInp.value || "N/A", payment: payInp.value, total: totalVal, items: itemsSummary 
+        };
+
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyPOmqmx3q3YZceUk8XR4uQPgiWx4F8ZchcH7pZYmg-5FPkOwSeIlgzmND2zfaHUoc/exec';
 
-        fetch(scriptURL, {
-            method: 'POST',
-            mode: 'no-cors',
-            keepalive: true,
-            body: JSON.stringify(orderData)
-        });
+        fetch(scriptURL, { method: 'POST', mode: 'no-cors', keepalive: true, body: JSON.stringify(orderData) });
 
         setTimeout(() => {
             let msg = `SAFFRON FOOD\n\nOrder summary:\n`;
             cart.forEach(item => { msg += `${item.name}${item.size!=='Normal'?'('+item.size+')':''} x${item.qty} = ₹${item.price * item.qty}\n`; });
-            msg += `\nTOTAL: ₹${total}\nThanks for visiting ❣️`;
-            window.open(`https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
+            msg += `\nTOTAL: ₹${totalVal}\nThanks for visiting ❣️`;
+            window.open(`https://wa.me/${phoneInp.value.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
+
+            // --- RESET EVERYTHING ---
+            nameInp.value = ""; phoneInp.value = ""; addrInp.value = ""; 
+            typeInp.value = "Dining"; payInp.value = "Cash";
+            cart = [];
+            renderMenu();
+            updateCartUI();
+            toggleCart(false);
         }, 100);
     }
 
