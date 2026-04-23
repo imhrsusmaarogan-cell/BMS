@@ -42,8 +42,6 @@
             min-height: 170px; transition: transform 0.2s ease; border: 1px solid transparent;
         }
 
-        .menu-item:active { transform: scale(0.98); border-color: #333; }
-
         .item-name { color: var(--text-main); font-size: 1rem; font-weight: bold; margin-bottom: 10px; line-height: 1.3; }
 
         .price-text { color: var(--zomato-yellow); font-weight: 600; margin-bottom: 12px; font-size: 0.9rem; }
@@ -78,16 +76,6 @@
             transform: scale(0.9); transition: transform 0.3s ease; border: 3px solid var(--baby-pink);
         }
 
-        .modal-overlay.open .compact-popup { transform: scale(1); }
-
-        .size-option {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 18px; background-color: white; border: 2px solid #eee;
-            margin: 12px 0; border-radius: 15px; cursor: pointer; font-weight: bold; color: #333;
-        }
-
-        .size-option:active { background-color: var(--baby-pink); transform: translateY(2px); }
-
         #cart-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: flex-end;
@@ -103,16 +91,13 @@
             transform: translateY(100%); transition: transform 0.3s ease;
         }
 
-        #cart-modal.open .cart-content { transform: translateY(0); }
-
         .billing-box { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; color: #000; }
 
         .cart-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
 
-        /* No-Zoom Fix for Safari */
         .order-form input, .order-form select { 
             width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; 
-            font-size: 16px; 
+            font-size: 16px; /* Zoom Fix */
         }
 
         .place-order-btn {
@@ -156,7 +141,7 @@
         <div class="order-form">
             <p style="font-weight:bold; margin-bottom:8px; color:#333;">Customer Info (Internal):</p>
             <input type="text" id="cust-name" placeholder="Customer Name">
-            <input type="tel" id="cust-phone" placeholder="WhatsApp Number (e.g. 91...)">
+            <input type="tel" id="cust-phone" placeholder="WhatsApp Number">
             <select id="order-type" onchange="toggleAddress()">
                 <option value="Dining">Dining</option>
                 <option value="Take Away">Take Away</option>
@@ -184,26 +169,13 @@
             { id: 9, name: "Plain Veg Noodles", priceHalf: 59, priceFull: 109 }, { id: 10, name: "Veg Hakka Noodles", priceHalf: 69, priceFull: 119 },
             { id: 11, name: "Veg Schezwan Noodles", priceHalf: 79, priceFull: 139 }, { id: 12, name: "Veg Chilli Garlic Noodle", priceHalf: 89, priceFull: 159 }
         ]},
-        { category: "Sandwiches", items: [
-            { id: 13, name: "Aloo Grilled sandwich", price: 49 }, { id: 14, name: "Veg grilled sandwich", price: 69 },
-            { id: 15, name: "Veg cheese grilled sandwich", price: 79 }, { id: 16, name: "Cheese Corn Grilled Sandwich", price: 89 },
-            { id: 17, name: "Paneer & cheese Grilled Sandwich", price: 99 }
-        ]},
-        { category: "Pasta", items: [{ id: 18, name: "veg Red souce pasta", price: 59 }, { id: 19, name: "veg white souce pasta", price: 69 }]},
         { category: "Momos", items: [
             { id: 20, name: "veg momos steam", priceHalf: 39, priceFull: 69 }, { id: 21, name: "veg momos fried", priceHalf: 49, priceFull: 79 },
             { id: 22, name: "paneer momos steam", priceHalf: 49, priceFull: 89 }, { id: 23, name: "paneer momos fried", priceHalf: 69, priceFull: 119 }
         ]},
-        { category: "Maggi", items: [{ id: 24, name: "Plain maggi", price: 39 }, { id: 25, name: "Veg maggi", price: 49 }]},
         { category: "Rice", items: [
             { id: 26, name: "Veg fried rice", priceHalf: 59, priceFull: 109 }, { id: 27, name: "Classic spicy veg fried rice", priceHalf: 69, priceFull: 119 },
             { id: 28, name: "veg schezwan fried rice", priceHalf: 79, priceFull: 149 }
-        ]},
-        { category: "Paratha & More", items: [
-            { id: 29, name: "Aloo paratha (2pc)", price: 49 }, { id: 30, name: "Aloo pyaz paratha (2pc)", price: 59 },
-            { id: 31, name: "Gobhi paratha (2pc)", price: 69 }, { id: 32, name: "paneer paratha (2pc)", price: 79 },
-            { id: 33, name: "Plain curd", price: 20 }, { id: 34, name: "Boondi Raita", price: 39 },
-            { id: 35, name: "Cold coffee", price: 59 }, { id: 36, name: "Sweet lassi", price: 49 }
         ]}
     ];
 
@@ -248,6 +220,7 @@
 
     function updateItemControls(id, size) {
         const container = document.getElementById(`ctrls-${id}`);
+        if(!container) return;
         const cartKey = `${id}-${size}`;
         const itemInCart = cart.find(c => c.cartKey === cartKey);
         if (itemInCart && itemInCart.qty > 0) {
@@ -271,15 +244,17 @@
     function updateCartUI() {
         const container = document.getElementById('cart-items-container');
         let total = 0, count = 0;
-        if (cart.length === 0) { container.innerHTML = "<p style='text-align:center; padding: 20px; color:#666;'>Cart is empty.</p>"; } 
-        else {
+        if (cart.length === 0) { 
+            container.innerHTML = "<p style='text-align:center; padding: 20px; color:#666;'>Cart is empty.</p>"; 
+        } else {
             container.innerHTML = `<p style="font-weight:bold; margin-bottom:10px; color:#333;">Order summary:</p>` + 
             cart.map(item => {
                 const subtotal = item.price * item.qty; total += subtotal; count += item.qty;
                 return `<div class="cart-row"><div style="color:#000; font-size: 0.95rem;">${item.name}${item.size!=='Normal'?'('+item.size+')':''} x${item.qty} = ₹${subtotal}</div><div class="qty-selector"><button class="ctrl-btn" style="width:28px; height:28px;" onclick="updateQty('${item.cartKey}', -1)">-</button><span style="color:#000;">${item.qty}</span><button class="ctrl-btn" style="width:28px; height:28px;" onclick="updateQty('${item.cartKey}', 1)">+</button></div></div>`;
             }).join('');
         }
-        document.getElementById('cart-count').innerText = count; document.getElementById('grand-total').innerText = total;
+        document.getElementById('cart-count').innerText = count; 
+        document.getElementById('grand-total').innerText = total;
     }
 
     function toggleAddress() { document.getElementById('cust-address').style.display = (document.getElementById('order-type').value === 'Take Away') ? 'block' : 'none'; }
@@ -289,45 +264,39 @@
         else { modal.classList.remove('open'); setTimeout(() => { if (!modal.classList.contains('open')) modal.style.display = 'none'; }, 300); }
     }
 
-    // --- PLACE ORDER (WITH RESET) ---
     function placeOrder() {
         if (cart.length === 0) return;
-        
-        const nameInp = document.getElementById('cust-name');
-        const phoneInp = document.getElementById('cust-phone');
-        const typeInp = document.getElementById('order-type');
-        const addrInp = document.getElementById('cust-address');
-        const payInp = document.getElementById('payment-method');
-        const totalVal = document.getElementById('grand-total').innerText;
+        const nInp = document.getElementById('cust-name');
+        const pInp = document.getElementById('cust-phone');
+        const tInp = document.getElementById('order-type');
+        const aInp = document.getElementById('cust-address');
+        const mInp = document.getElementById('payment-method');
+        const grandTotal = document.getElementById('grand-total').innerText;
 
-        if (!phoneInp.value || !nameInp.value) { alert("Please fill Name and Phone."); return; }
+        if (!pInp.value || !nInp.value) { alert("Please fill Name and Phone."); return; }
 
         const itemsSummary = cart.map(i => `${i.name}${i.size!=='Normal'?'('+i.size+')':''} x${i.qty}`).join(", ");
-        const orderData = { 
-            name: nameInp.value, phone: phoneInp.value, orderType: typeInp.value, 
-            address: addrInp.value || "N/A", payment: payInp.value, total: totalVal, items: itemsSummary 
-        };
+        const orderData = { name: nInp.value, phone: pInp.value, orderType: tInp.value, address: aInp.value || "N/A", payment: mInp.value, total: grandTotal, items: itemsSummary };
 
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyPOmqmx3q3YZceUk8XR4uQPgiWx4F8ZchcH7pZYmg-5FPkOwSeIlgzmND2zfaHUoc/exec';
-
-        fetch(scriptURL, { method: 'POST', mode: 'no-cors', keepalive: true, body: JSON.stringify(orderData) });
+        fetch('https://script.google.com/macros/s/AKfycbyPOmqmx3q3YZceUk8XR4uQPgiWx4F8ZchcH7pZYmg-5FPkOwSeIlgzmND2zfaHUoc/exec', {
+            method: 'POST', mode: 'no-cors', keepalive: true, body: JSON.stringify(orderData)
+        });
 
         setTimeout(() => {
             let msg = `SAFFRON FOOD\n\nOrder summary:\n`;
             cart.forEach(item => { msg += `${item.name}${item.size!=='Normal'?'('+item.size+')':''} x${item.qty} = ₹${item.price * item.qty}\n`; });
-            msg += `\nTOTAL: ₹${totalVal}\nThanks for visiting ❣️`;
-            window.open(`https://wa.me/${phoneInp.value.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
+            msg += `\nTOTAL: ₹${grandTotal}\nThanks for visiting ❣️`;
+            window.open(`https://wa.me/${pInp.value.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
 
-            // --- RESET EVERYTHING ---
-            nameInp.value = ""; phoneInp.value = ""; addrInp.value = ""; 
-            typeInp.value = "Dining"; payInp.value = "Cash";
-            cart = [];
-            renderMenu();
-            updateCartUI();
-            toggleCart(false);
+            // --- FULL RESET LOGIC ---
+            nInp.value = ""; pInp.value = ""; aInp.value = ""; 
+            tInp.value = "Dining"; mInp.value = "Cash";
+            cart = []; // Cart Array खाली करें
+            renderMenu(); // Menu Buttons वापस 'Add' करें
+            updateCartUI(); // Summary और Total 0 करें
+            toggleCart(false); // Popup बंद करें
         }, 100);
     }
-
     renderMenu();
 </script>
 </body>
