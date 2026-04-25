@@ -277,7 +277,6 @@
         if (existing) existing.qty++; else cart.push({ ...itemRef, size, price, qty: 1, cartKey });
         updateItemControls(id, size); updateCartUI();
         
-        // Visual Feedback (Bounce)
         const cartBtn = document.querySelector('.view-cart-trigger');
         cartBtn.style.transform = 'translateX(-50%) scale(1.08)';
         setTimeout(() => { cartBtn.style.transform = 'translateX(-50%) scale(1)'; }, 200);
@@ -336,18 +335,34 @@
         if (!pInp.value || !nInp.value) { alert("Please fill Name and Phone."); return; }
 
         const itemsSummary = cart.map(i => `${i.name}${i.size!=='Normal'?'('+i.size+')':''} x${i.qty}`).join(", ");
-        const orderData = { name: nInp.value, phone: pInp.value, orderType: tInp.value, address: aInp.value || "N/A", payment: mInp.value, total: grandTotal, items: itemsSummary };
+        
+        // Detailed data for Google Sheets
+        const orderData = { 
+            name: nInp.value, 
+            phone: pInp.value, 
+            orderType: tInp.value, 
+            address: aInp.value || "N/A", 
+            payment: mInp.value, 
+            total: grandTotal, 
+            items: itemsSummary 
+        };
 
+        // G-Sheet Integration
         fetch('https://script.google.com/macros/s/AKfycbyPOmqmx3q3YZceUk8XR4uQPgiWx4F8ZchcH7pZYmg-5FPkOwSeIlgzmND2zfaHUoc/exec', {
             method: 'POST', mode: 'no-cors', keepalive: true, body: JSON.stringify(orderData)
         });
 
         setTimeout(() => {
-            let msg = `*SAFFRON FOOD*\n\n*Order Summary:*\n`;
-            cart.forEach(item => { msg += `• ${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x${item.qty} = ₹${item.price * item.qty}\n`; });
-            msg += `\n*TOTAL: ₹${grandTotal}*\n\nCustomer: ${nInp.value}\nPayment: ${mInp.value}\nThanks for visiting ❣️`;
+            // Personalized WhatsApp Message
+            let msg = `*SAFFRON FOOD*\nmr. ${nInp.value}\nyour order placed\n\n*Order Summary:*\n`;
+            cart.forEach(item => { 
+                msg += `* ${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x${item.qty} = ₹${item.price * item.qty}\n`; 
+            });
+            msg += `\n*TOTAL: ₹${grandTotal}*\n\nThanks for visiting ❣️`;
+            
             window.open(`https://wa.me/${pInp.value.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
 
+            // Reset Form
             nInp.value = ""; pInp.value = ""; aInp.value = ""; 
             tInp.value = "Dining"; mInp.value = "Cash";
             cart = [];
