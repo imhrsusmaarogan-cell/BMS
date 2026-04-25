@@ -305,9 +305,20 @@
         });
 
         setTimeout(() => {
-            let msg = `*SAFFRON FOOD*\n\n*Order Summary:*\n`;
-            cart.forEach(item => { msg += `• ${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x${item.qty} = ₹${item.price * item.qty}\n`; });
-            msg += `\n*TOTAL: ₹${grandTotal}*\n\nCustomer: ${nInp.value}\nPayment: ${mInp.value}\nThanks for visiting ❣️`;
+            // Build item summary
+let itemsText = "";
+cart.forEach(item => {
+    itemsText += `* ${item.name}${item.size !== 'Normal' ? ' (' + item.size + ')' : ''} x${item.qty} = ₹${item.price * item.qty}\n`;
+});
+
+// Message 1 (internal / full)
+let msg1 = `SAFFRON FOOD\n\nOrder Summary:\n${itemsText}\nTOTAL: ₹${grandTotal}\n\nCustomer: ${nInp.value}\nPayment: ${mInp.value}\nThanks for visiting ❣️`;
+
+// Message 2 (customer clean)
+let msg2 = `SAFFRON FOOD\nMr. ${nInp.value} your order has been placed\n\nOrder Summary:\n${itemsText}\nTOTAL: ₹${grandTotal}\n\nThanks for visiting ❣️`;
+
+// Send customer message
+window.open(`https://wa.me/${pInp.value.replace(/\D/g, '')}?text=${encodeURIComponent(msg2)}`, '_blank');
             window.open(`https://wa.me/${pInp.value.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
 
             nInp.value = ""; pInp.value = ""; aInp.value = ""; 
