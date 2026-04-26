@@ -293,7 +293,19 @@
             container.innerHTML = `<button class="add-btn" onclick="handleItemClick(${id})">Add</button>`;
         }
     }
+// ===== UPI LINK =====
+function generateUPILink(orderId, amount, name) {
+    const upiId = "ajaydagaur382-2@okaxis";
+    const shopName = "Saffron Food";
+    return `upi://pay?pa=${upiId}&pn=${encodeURIComponent(shopName)}&am=${amount}&cu=INR&tn=ORDER_${orderId}_${name}`;
+}
 
+// ===== PAYMENT STATUS =====
+function savePaymentStatus(orderId, status) {
+    let data = JSON.parse(localStorage.getItem("payments") || "{}");
+    data[orderId] = status;
+    localStorage.setItem("payments", JSON.stringify(data));
+}
     function updateQty(cartKey, delta) {
         const index = cart.findIndex(c => c.cartKey === cartKey);
         if (index > -1) {
