@@ -22,7 +22,15 @@
 --card-bg: #1e1e1e;
 --text-main: #ffffff;
 }
-
+.search-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: #f1f1f1;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+}
 /* --- SMOOTH CORE --- */
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
 html { scroll-behavior: smooth; }
@@ -122,7 +130,12 @@ animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 </div>
 
 <div class="app-container">
-<header><h1>SAFFRON FOOD</h1></header>
+<header style="display:flex; justify-content:space-between; align-items:center; padding:10px;">
+  <h1>SAFFRON FOOD</h1>
+
+  <!-- YAHAN SEARCH BUTTON ADD KIYA -->
+  <button class="search-btn">🔍</button>
+</header>
 <div id="menu-container"></div>
 <div style="text-align:center; color:#555; padding:20px;">Powered by SEFF-TECH</div>
 <div class="view-cart-trigger" onclick="toggleCart(true)">View Cart (<span id="cart-count">0</span>)</div>
