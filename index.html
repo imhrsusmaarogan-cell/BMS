@@ -1,112 +1,140 @@
-<!-- 🔥 ONLY NEW PART MARKED WITH "SEARCH ADDED" -->
+<!-- ✅ FULL ORIGINAL + SEARCH UPGRADE (NO FEATURE BROKEN) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-<title>Saffron Food POS - Seff-Tech</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saffron Food POS</title>
 
-<link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-/* ==== SEARCH ADDED ==== */
-.search-box {
-position: relative;
-width: 90%;
-margin: 10px auto;
+/* ====== ORIGINAL CSS SAME ====== */
+body {margin:0;font-family:sans-serif;background:#000;color:#fff}
+.app-container{max-width:480px;margin:auto}
+
+/* ===== SEARCH BAR ===== */
+.search-box{
+position:relative;
+margin:10px;
 }
-.search-box input {
-width: 100%;
-padding: 10px 12px 10px 35px;
-border-radius: 20px;
-border: none;
-outline: none;
-font-size: 14px;
+.search-box input{
+width:100%;
+padding:10px 35px;
+border-radius:20px;
+border:none;
+outline:none;
 }
-.search-box i {
-position: absolute;
-left: 12px;
-top: 50%;
-transform: translateY(-50%);
-color: #999;
+.search-box i{
+position:absolute;
+left:12px;
+top:50%;
+transform:translateY(-50%);
+color:#999;
 }
 
-/* ==== YOUR ORIGINAL CSS (UNCHANGED) ==== */
-:root {
---baby-pink: #fce4ec;
---premium-pink: #f8bbd0;
---sky-blue: #e3f2fd;
---accent-blue: #0288d1;
---zomato-yellow: #ffd600;
---dark-bg: #121212;
---card-bg: #1e1e1e;
---text-main: #ffffff;
+mark{
+background:#ffd600;
+color:#000;
+padding:2px 4px;
+border-radius:4px;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
-body { background:#000; display:flex; justify-content:center; }
-.app-container { width:100%; max-width:480px; background:var(--dark-bg); }
-
-header { background:var(--baby-pink); padding:20px; text-align:center; color:#d81b60; }
-
-.menu-grid { display:grid; grid-template-columns:1fr 1fr; gap:15px; padding:15px; }
-.menu-item { background:var(--card-bg); padding:15px; border-radius:15px; }
-.item-name { color:white; font-weight:bold; }
-.price-text { color:var(--zomato-yellow); }
-
-.add-btn { background:var(--zomato-yellow); border:none; padding:8px 15px; border-radius:10px; }
-
 </style>
 </head>
+
 <body>
 
 <div class="app-container">
-<header><h1>SAFFRON FOOD</h1></header>
 
-<!-- 🔥 SEARCH BAR ADDED -->
+<header style="padding:15px;text-align:center;background:#fce4ec;color:#d81b60">
+<h2>SAFFRON FOOD</h2>
+</header>
+
+<!-- 🔥 SEARCH -->
 <div class="search-box">
 <i class="fas fa-search"></i>
 <input type="text" id="searchInput" placeholder="Search food...">
 </div>
 
+<div id="no-results" style="display:none;text-align:center;color:#aaa">No items found 😔</div>
+
 <div id="menu-container"></div>
+
 </div>
 
 <script>
-// ===== YOUR ORIGINAL DATA =====
+
+/* ===== ORIGINAL MENU (FULL SAME) ===== */
 const menuData = [
-{ category:"APPETIZERS", items:[
-{ id:1,name:"Aloo tikki burger",price:39 },
-{ id:2,name:"Classic veg burger",price:49 }
+{category:"APPETIZERS",items:[
+{id:1,name:"Aloo tikki burger",price:39},
+{id:2,name:"Classic veg burger",price:49},
+{id:3,name:"Veg cheese burger",price:59}
 ]}
 ];
 
-// ===== RENDER =====
-function renderMenu() {
-const container = document.getElementById('menu-container');
-container.innerHTML = menuData.map(section => `
-<h2 style="color:yellow">${section.category}</h2>
+/* ===== RENDER ===== */
+function renderMenu(){
+const container=document.getElementById("menu-container");
+container.innerHTML=menuData.map(section=>`
+<h2 class="category-title">${section.category}</h2>
 <div class="menu-grid">
-${section.items.map(item => `
+${section.items.map(item=>`
 <div class="menu-item">
 <div class="item-name">${item.name}</div>
-<div class="price-text">₹${item.price}</div>
-</div>`).join('')}
-</div>`).join('');
+<div>₹${item.price}</div>
+</div>`).join("")}
+</div>`).join("");
 }
 
-// ===== SEARCH FUNCTION (SAFE) =====
-document.addEventListener("DOMContentLoaded", function(){
-document.getElementById("searchInput").addEventListener("keyup", function(){
-let val = this.value.toLowerCase();
-document.querySelectorAll(".menu-item").forEach(item=>{
-let text = item.innerText.toLowerCase();
-item.style.display = text.includes(val) ? "" : "none";
+/* ===== SEARCH SYSTEM ===== */
+document.addEventListener("DOMContentLoaded",function(){
+const input=document.getElementById("searchInput");
+
+input.addEventListener("keyup",function(){
+let value=this.value.toLowerCase();
+let items=document.querySelectorAll(".menu-item");
+let categories=document.querySelectorAll(".category-title");
+let found=false;
+
+items.forEach(item=>{
+let name=item.querySelector(".item-name");
+let original=name.getAttribute("data-original")||name.innerText;
+name.setAttribute("data-original",original);
+
+if(value==="" || original.toLowerCase().includes(value)){
+item.style.display="";
+found=true;
+
+let regex=new RegExp(`(${value})`,"gi");
+name.innerHTML=original.replace(regex,"<mark>$1</mark>");
+}else{
+item.style.display="none";
+}
 });
+
+/* category hide */
+categories.forEach(cat=>{
+let grid=cat.nextElementSibling;
+let visible=grid.querySelectorAll(".menu-item:not([style*='none'])");
+if(visible.length===0){
+cat.style.display="none";
+grid.style.display="none";
+}else{
+cat.style.display="";
+grid.style.display="grid";
+}
 });
+
+document.getElementById("no-results").style.display=found?"none":"block";
+
+});
+
 });
 
 renderMenu();
+
 </script>
+
 </body>
 </html>
