@@ -195,6 +195,14 @@ animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 </div>
 
 <script>
+    function filterMenu() {
+    const query = document.getElementById('menu-search').value.toLowerCase();
+    const menuItems = document.querySelectorAll('.menu-item');
+    menuItems.forEach(item => {
+        const itemName = item.querySelector('.item-name').innerText.toLowerCase();
+        item.style.display = itemName.includes(query) ? "flex" : "none";
+    });
+}
 // Premium Login Logic
 function checkLogin() {
 const user = document.getElementById('user-id').value;
