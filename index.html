@@ -1,4 +1,3 @@
-<!-- ✅ YOUR FULL CODE + SEARCH (NO BREAK) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,74 +7,108 @@
 
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Seff-Tech">
 <link rel="apple-touch-icon" href="logo.jpeg">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <style>
-/* ===== ORIGINAL CSS SAME ===== */
 :root {
---baby-pink:#fce4ec;
---premium-pink:#f8bbd0;
---sky-blue:#e3f2fd;
---accent-blue:#0288d1;
---zomato-yellow:#ffd600;
---dark-bg:#121212;
---card-bg:#1e1e1e;
---text-main:#fff;
+--baby-pink: #fce4ec;
+--premium-pink: #f8bbd0;
+--sky-blue: #e3f2fd;
+--accent-blue: #0288d1;
+--zomato-yellow: #ffd600;
+--dark-bg: #121212;
+--card-bg: #1e1e1e;
+--text-main: #ffffff;
 }
 
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Roboto,sans-serif;}
-body{background:#000;display:flex;justify-content:center;}
-.app-container{width:100%;max-width:480px;background:var(--dark-bg);min-height:100vh;padding-bottom:120px;}
+/* --- SMOOTH CORE --- */
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+html { scroll-behavior: smooth; }
+body { background-color: #000; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
 
-header{background:var(--baby-pink);padding:20px;text-align:center;color:#d81b60;font-weight:bold;}
+.app-container { width: 100%; max-width: 480px; background-color: var(--dark-bg); min-height: 100vh; position: relative; padding-bottom: 120px; }
 
-/* ===== 🔥 SEARCH ADDED ===== */
-.search-box{
-position:relative;
-width:90%;
-margin:10px auto;
+/* --- ULTRA PREMIUM LOGIN OVERLAY --- */
+#login-overlay {
+position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+background: rgba(0,0,0,0.95); backdrop-filter: blur(12px);
+z-index: 9999; display: flex; justify-content: center; align-items: center;
 }
-.search-box input{
-width:100%;
-padding:10px 35px;
-border-radius:20px;
-border:none;
-outline:none;
+.login-box {
+background: var(--card-bg); padding: 40px 30px; border-radius: 30px;
+width: 90%; max-width: 350px; text-align: center;
+border: 2px solid var(--zomato-yellow); box-shadow: 0 0 40px rgba(255, 214, 0, 0.15);
+animation: fadeIn 0.6s ease-in-out;
 }
-.search-box i{
-position:absolute;
-left:12px;
-top:50%;
-transform:translateY(-50%);
-color:#999;
+.login-box h2 { color: var(--zomato-yellow); margin-bottom: 25px; letter-spacing: 2px; font-size: 1.5rem; }
+.login-box input {
+width: 100%; padding: 15px; margin-bottom: 15px;
+background: #252525; border: 1px solid #444; border-radius: 12px;
+color: white; font-size: 16px; outline: none; transition: 0.3s;
 }
-mark{
-background:#ffd600;
-color:#000;
-padding:2px 4px;
-border-radius:4px;
+.login-box input:focus { border-color: var(--zomato-yellow); }
+.login-btn {
+width: 100%; padding: 15px; background: var(--zomato-yellow);
+border: none; border-radius: 12px; font-weight: bold; font-size: 1.1rem;
+cursor: pointer; transition: 0.3s; color: #000;
 }
-#no-results{
-display:none;
-text-align:center;
-color:#aaa;
-padding:10px;
+.login-btn:active { transform: scale(0.95); }
+
+/* --- UI ELEMENTS WITH SMOOTH FEEL --- */
+header { background-color: var(--baby-pink); padding: 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color: #d81b60; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+.category-title { color: var(--zomato-yellow); padding: 25px 15px 5px; font-size: 1.5rem; text-transform: uppercase; margin: 0 15px; border-bottom: 1px solid #333; }
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+
+.menu-item {
+background: var(--card-bg); border-radius: 20px; padding: 20px; display: flex; flex-direction: column;
+justify-content: space-between; min-height: 170px; border: 1px solid transparent;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.menu-item:active { transform: scale(0.92); filter: brightness(0.9); }
+
+.item-name { color: var(--text-main); font-size: 1rem; font-weight: bold; margin-bottom: 10px; line-height: 1.3; }
+.price-text { color: var(--zomato-yellow); font-weight: 600; margin-bottom: 12px; font-size: 0.9rem; }
+
+.add-btn, .ctrl-btn, .place-order-btn, .view-cart-trigger {
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+cursor: pointer;
+}
+.add-btn { background-color: var(--zomato-yellow); border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; color: #000; font-size: 0.9rem; width: fit-content; }
+.add-btn:active { transform: scale(0.9); }
+
+.qty-selector { display: flex; align-items: center; gap: 15px; }
+.ctrl-btn { background-color: var(--zomato-yellow); border: none; width: 35px; height: 35px; border-radius: 8px; font-weight: bold; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; color: #000; }
+.qty-display { color: white; font-weight: bold; font-size: 1.2rem; }
+
+/* --- POPUPS & CART ANIMATIONS --- */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
+.compact-popup { background-color: var(--sky-blue); padding: 25px; border-radius: 25px; width: 300px; text-align: center; border: 3px solid var(--baby-pink); animation: fadeIn 0.3s ease-out; }
+
+#cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: flex-end; }
+.cart-content {
+background: var(--sky-blue); width: 100%; max-width: 480px; border-top-left-radius: 30px; border-top-right-radius: 30px;
+padding: 25px; max-height: 90vh; overflow-y: auto;
+animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ===== REST ORIGINAL CSS ===== */
-.category-title{color:var(--zomato-yellow);padding:20px 15px 5px;font-size:1.4rem;}
-.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;padding:15px;}
-.menu-item{background:var(--card-bg);border-radius:20px;padding:20px;}
-.item-name{color:#fff;font-weight:bold;}
-.price-text{color:var(--zomato-yellow);}
+.billing-box { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; color: #000; }
+.cart-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
 
-.add-btn{background:var(--zomato-yellow);border:none;padding:10px;border-radius:10px;}
-.view-cart-trigger{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--zomato-yellow);padding:15px;border-radius:10px;color:#000;}
+.order-form input, .order-form select { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; transition: 0.3s; }
+.order-form input:focus { border-color: var(--accent-blue); outline: none; }
+
+.place-order-btn { background: #25d366; color: white; width: 100%; padding: 18px; border: none; border-radius: 15px; font-weight: bold; font-size: 1.1rem; }
+.place-order-btn:active { transform: scale(0.95); }
+
+.view-cart-trigger { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 440px; background: var(--zomato-yellow); padding: 18px; border-radius: 15px; text-align: center; font-weight: bold; color: #000; z-index: 999; font-size: 1.1rem; box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
+
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 </style>
 </head>
-
 <body>
 
 <div id="login-overlay">
@@ -84,113 +117,263 @@ padding:10px;
 <input type="text" id="user-id" placeholder="User ID">
 <input type="password" id="user-pass" placeholder="Password">
 <button class="login-btn" onclick="checkLogin()">LOGIN</button>
-<p id="login-error" style="color:red;display:none;">Invalid Credentials!</p>
+<p id="login-error" style="color: #ff5252; margin-top: 15px; font-size: 0.9rem; display: none;">Invalid Credentials!</p>
 </div>
 </div>
 
 <div class="app-container">
 <header><h1>SAFFRON FOOD</h1></header>
-
-<!-- 🔥 SEARCH -->
-<div class="search-box">
-<i class="fas fa-search"></i>
-<input type="text" id="searchInput" placeholder="Search food...">
+<div id="menu-container"></div>
+<div style="text-align:center; color:#555; padding:20px;">Powered by SEFF-TECH</div>
+<div class="view-cart-trigger" onclick="toggleCart(true)">View Cart (<span id="cart-count">0</span>)</div>
 </div>
 
-<div id="no-results">No items found 😔</div>
+<div id="size-popup" class="modal-overlay" onclick="closeSizePopup()">
+<div class="compact-popup" onclick="event.stopPropagation()">
+<h3 id="popup-item-name" style="margin-bottom:20px; color:#d81b60;">Select Size</h3>
+<div id="size-options-list"></div>
+<button onclick="closeSizePopup()" style="margin-top:15px; background:none; border:none; color:#d81b60; font-weight:bold;">Cancel</button>
+</div>
+</div>
 
-<div id="menu-container"></div>
-
-<div class="view-cart-trigger" onclick="toggleCart(true)">
-View Cart (<span id="cart-count">0</span>)
+<div id="cart-modal" class="modal-overlay" onclick="toggleCart(false)">
+<div class="cart-content" onclick="event.stopPropagation()">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+<h2 style="color:#0288d1;">ORDER SUMMARY</h2>
+<button onclick="toggleCart(false)" style="background:none; border:none; font-size:2rem;">✕</button>
+</div>
+<div class="billing-box" id="cart-items-container"></div>
+<div class="order-form">
+<input type="text" id="cust-name" placeholder="Customer Name">
+<input type="tel" id="cust-phone" placeholder="WhatsApp Number">
+<select id="order-type" onchange="toggleAddress()">
+<option value="Dining">Dining</option>
+<option value="Take Away">Take Away</option>
+</select>
+<input type="text" id="cust-address" placeholder="Delivery Address" style="display:none;">
+<select id="payment-method">
+<option value="Cash">Cash</option>
+<option value="Online">Online</option>
+</select>
+<div style="text-align:right; font-weight:bold; font-size:1.4rem; margin:15px 0; color:#000;">TOTAL: ₹<span id="grand-total">0</span></div>
+<button class="place-order-btn" onclick="placeOrder()">Place Order ❣️</button>
+</div>
 </div>
 </div>
 
 <script>
+// Premium Login Logic
+function checkLogin() {
+const user = document.getElementById('user-id').value;
+const pass = document.getElementById('user-pass').value;
+const error = document.getElementById('login-error');
+if (user === "Saffron" && pass === "258000") {
+document.getElementById('login-overlay').style.display = 'none';
+sessionStorage.setItem('isLoggedIn', 'true');
+} else {
+error.style.display = 'block';
+setTimeout(() => { error.style.display = 'none'; }, 2000);
+}
+}
 
-/* ===== LOGIN SAME ===== */
-function checkLogin(){
-const u=document.getElementById('user-id').value;
-const p=document.getElementById('user-pass').value;
-if(u==="Saffron"&&p==="258000"){
-document.getElementById('login-overlay').style.display='none';
-sessionStorage.setItem('isLoggedIn','true');
-}else{
-document.getElementById('login-error').style.display='block';
-}
-}
-window.onload=function(){
-if(sessionStorage.getItem('isLoggedIn')==='true'){
-document.getElementById('login-overlay').style.display='none';
+window.onload = function() {
+if (sessionStorage.getItem('isLoggedIn') === 'true') {
+document.getElementById('login-overlay').style.display = 'none';
 }
 };
 
-/* ===== FULL MENU SAME ===== */
-const menuData = [...YOUR SAME DATA...]; // 👈 yaha apna full menuData paste karo (unchanged)
+// Full 37 Items Data
+const menuData = [
+{ category: "APPETIZERS", items: [
+{ id: 1, name: "Aloo tikki burger", price: 39 },
+{ id: 2, name: "Classic veg burger", price: 49 },
+{ id: 3, name: "Veg cheese burger", price: 59 },
+{ id: 4, name: "Double patty veg burger", price: 79 },
+{ id: 5, name: "Saffron Burger", price: 99 },
+{ id: 6, name: "French fries", priceHalf: 45, priceFull: 79 },
+{ id: 7, name: "Chilli potato", priceHalf: 59, priceFull: 109 },
+{ id: 8, name: "Honey chilli potato", priceHalf: 69, priceFull: 119 },
+{ id: 9, name: "Plain Veg Noodles", priceHalf: 59, priceFull: 109 },
+{ id: 10, name: "Veg Hakka Noodles", priceHalf: 69, priceFull: 119 },
+{ id: 11, name: "Veg Schezwan Noodles", priceHalf: 79, priceFull: 139 },
+{ id: 12, name: "Veg Chilli Garlic Noodle", priceHalf: 89, priceFull: 159 }
+]},
+{ category: "SANDWICHES", items: [
+{ id: 13, name: "Aloo Grilled sandwich", price: 49 },
+{ id: 14, name: "Veg grilled sandwich", price: 69 },
+{ id: 15, name: "Veg cheese grilled sandwich", price: 79 },
+{ id: 16, name: "Cheese Corn Grilled Sandwich", price: 89 },
+{ id: 17, name: "Paneer & cheese Grilled Sandwich", price: 99 }
+]},
+{ category: "PASTA", items: [
+{ id: 18, name: "veg Red souce pasta", price: 59 },
+{ id: 19, name: "veg white souce pasta", price: 69 }
+]},
+{ category: "MOMOS", items: [
+{ id: 20, name: "veg momos steam", priceHalf: 39, priceFull: 69 },
+{ id: 21, name: "veg momos fried", priceHalf: 49, priceFull: 79 },
+{ id: 22, name: "paneer momos steam", priceHalf: 49, priceFull: 89 },
+{ id: 23, name: "paneer momos fried", priceHalf: 69, priceFull: 119 }
+]},
+{ category: "PARATHA'S", items: [
+{ id: 24, name: "Aloo paratha (2pc)", price: 49 },
+{ id: 25, name: "Aloo pyaz paratha (2pc)", price: 59 },
+{ id: 26, name: "Gobhi paratha (2pc)", price: 69 },
+{ id: 27, name: "paneer paratha (2pc)", price: 79 },
+{ id: 28, name: "Plain curd", price: 20 },
+{ id: 29, name: "Boondi Raita", price: 39 },
+{ id: 30, name: "Sweet lassi", price: 49 }
+]},
+{ category: "MAGGI", items: [
+{ id: 31, name: "Plain maggi", price: 39 },
+{ id: 32, name: "Veg maggi", price: 49 }
+]},
+{ category: "RICE", items: [
+{ id: 33, name: "Veg fried rice", priceHalf: 59, priceFull: 109 },
+{ id: 34, name: "Classic spicy veg fried rice", priceHalf: 69, priceFull: 119 },
+{ id: 35, name: "veg schezwan fried rice", priceHalf: 79, priceFull: 149 }
+]},
+{ category: "BEVERAGES", items: [
+{ id: 36, name: "Cold coffee", price: 59 },
+{ id: 37, name: "Sweet lassi", price: 49 }
+]}
+];
 
-let cart=[];
+let cart = [];
 
-/* ===== RENDER SAME ===== */
-function renderMenu(){
-const container=document.getElementById('menu-container');
-container.innerHTML=menuData.map(section=>`
+function renderMenu() {
+const container = document.getElementById('menu-container');
+container.innerHTML = menuData.map(section => `
 <h2 class="category-title">${section.category}</h2>
-<div class="menu-grid">
-${section.items.map(item=>`
+<div class="menu-grid">${section.items.map(item => `
 <div class="menu-item">
 <div class="item-name">${item.name}</div>
-<div class="price-text">${item.priceHalf?`H: ₹${item.priceHalf}/F: ₹${item.priceFull}`:`₹${item.price}`}</div>
-<div id="ctrls-${item.id}">
-<button class="add-btn" onclick="handleItemClick(${item.id})">Add</button>
-</div>
-</div>`).join('')}
-</div>`).join('');
+<div class="price-text">${item.priceHalf ? `H: ₹${item.priceHalf} / F: ₹${item.priceFull}` : `₹${item.price}`}</div>
+<div class="action-area" id="ctrls-${item.id}"><button class="add-btn" onclick="handleItemClick(${item.id})">Add</button></div>
+</div>`).join('')}</div>`).join('');
 }
 
-/* ===== 🔥 ADVANCED SEARCH ===== */
-document.addEventListener("DOMContentLoaded",function(){
-const input=document.getElementById("searchInput");
-
-input.addEventListener("keyup",function(){
-let value=this.value.toLowerCase();
-let items=document.querySelectorAll(".menu-item");
-let categories=document.querySelectorAll(".category-title");
-let found=false;
-
-items.forEach(item=>{
-let name=item.querySelector(".item-name");
-let original=name.getAttribute("data-original")||name.innerText;
-name.setAttribute("data-original",original);
-
-if(value===""||original.toLowerCase().includes(value)){
-item.style.display="";
-found=true;
-
-let regex=new RegExp(`(${value})`,"gi");
-name.innerHTML=original.replace(regex,"<mark>$1</mark>");
-}else{
-item.style.display="none";
+function handleItemClick(id) {
+let itemRef; menuData.forEach(cat => { const found = cat.items.find(i => i.id === id); if(found) itemRef = found; });
+if (itemRef.priceHalf) openSizePopup(itemRef); else addToCart(id, 'Normal');
 }
-});
 
-categories.forEach(cat=>{
-let grid=cat.nextElementSibling;
-let visible=grid.querySelectorAll(".menu-item:not([style*='none'])");
-if(visible.length===0){
-cat.style.display="none";
-grid.style.display="none";
-}else{
-cat.style.display="";
-grid.style.display="grid";
+function openSizePopup(item) {
+document.getElementById('popup-item-name').innerText = item.name;
+document.getElementById('size-options-list').innerHTML = `
+<div style="padding:15px; background:white; border-radius:10px; margin-bottom:10px; font-weight:bold; color:#333; cursor:pointer;" onclick="selectFromPopup(${item.id}, 'Half')">Half - ₹${item.priceHalf}</div>
+<div style="padding:15px; background:white; border-radius:10px; font-weight:bold; color:#333; cursor:pointer;" onclick="selectFromPopup(${item.id}, 'Full')">Full - ₹${item.priceFull}</div>`;
+document.getElementById('size-popup').style.display = 'flex';
 }
+
+function selectFromPopup(id, size) { addToCart(id, size); closeSizePopup(); }
+function closeSizePopup() { document.getElementById('size-popup').style.display = 'none'; }
+
+function addToCart(id, size) {
+let itemRef; menuData.forEach(cat => { const found = cat.items.find(i => i.id === id); if(found) itemRef = found; });
+const price = size === 'Half' ? itemRef.priceHalf : (size === 'Full' ? itemRef.priceFull : itemRef.price);
+const cartKey = `${id}-${size}`;
+const existing = cart.find(c => c.cartKey === cartKey);
+if (existing) existing.qty++; else cart.push({ ...itemRef, size, price, qty: 1, cartKey });
+updateItemControls(id, size); updateCartUI();
+
+const cartBtn = document.querySelector('.view-cart-trigger');
+cartBtn.style.transform = 'translateX(-50%) scale(1.08)';
+setTimeout(() => { cartBtn.style.transform = 'translateX(-50%) scale(1)'; }, 200);
+}
+
+function updateItemControls(id, size) {
+const container = document.getElementById(`ctrls-${id}`);
+if(!container) return;
+const cartKey = `${id}-${size}`;
+const itemInCart = cart.find(c => c.cartKey === cartKey);
+if (itemInCart && itemInCart.qty > 0) {
+container.innerHTML = `<div class="qty-selector"><button class="ctrl-btn" onclick="updateQty('${cartKey}', -1)">-</button><span class="qty-display">${itemInCart.qty}</span><button class="ctrl-btn" onclick="updateQty('${cartKey}', 1)">+</button></div>`;
+} else {
+container.innerHTML = `<button class="add-btn" onclick="handleItemClick(${id})">Add</button>`;
+}
+}
+
+function updateQty(cartKey, delta) {
+const index = cart.findIndex(c => c.cartKey === cartKey);
+if (index > -1) {
+cart[index].qty += delta;
+const itemId = cart[index].id; const size = cart[index].size;
+if (cart[index].qty <= 0) cart.splice(index, 1);
+updateItemControls(itemId, size);
+}
+updateCartUI();
+}
+
+function updateCartUI() {
+const container = document.getElementById('cart-items-container');
+let total = 0, count = 0;
+if (cart.length === 0) { container.innerHTML = "<p style='text-align:center; padding: 20px; color:#666;'>Cart is empty.</p>"; }
+else {
+container.innerHTML = `<p style="font-weight:bold; margin-bottom:10px;">Items Selected:</p>` +
+cart.map(item => {
+const subtotal = item.price * item.qty; total += subtotal; count += item.qty;
+return `<div class="cart-row"><div>${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x${item.qty}</div><div style="font-weight:bold;">₹${subtotal}</div></div>`;
+}).join('');
+}
+document.getElementById('cart-count').innerText = count;
+document.getElementById('grand-total').innerText = total;
+}
+
+function toggleAddress() { document.getElementById('cust-address').style.display = (document.getElementById('order-type').value === 'Take Away') ? 'block' : 'none'; }
+function toggleCart(show) { document.getElementById('cart-modal').style.display = show ? 'flex' : 'none'; }
+
+function placeOrder() {
+if (cart.length === 0) return;
+const nInp = document.getElementById('cust-name');
+const pInp = document.getElementById('cust-phone');
+const tInp = document.getElementById('order-type');
+const aInp = document.getElementById('cust-address');
+const mInp = document.getElementById('payment-method');
+const grandTotal = document.getElementById('grand-total').innerText;
+
+if (!pInp.value || !nInp.value) { alert("Please fill Name and Phone."); return; }
+
+const itemsSummary = cart.map(i => `${i.name}${i.size!=='Normal'?'('+i.size+')':''} x${i.qty}`).join(", ");
+
+// Detailed data for Google Sheets
+const orderData = {
+name: nInp.value,
+phone: pInp.value,
+orderType: tInp.value,
+address: aInp.value || "N/A",
+payment: mInp.value,
+total: grandTotal,
+items: itemsSummary
+};
+
+// G-Sheet Integration
+fetch('https://script.google.com/macros/s/AKfycbyPOmqmx3q3YZceUk8XR4uQPgiWx4F8ZchcH7pZYmg-5FPkOwSeIlgzmND2zfaHUoc/exec', {
+method: 'POST', mode: 'no-cors', keepalive: true, body: JSON.stringify(orderData)
 });
 
-document.getElementById("no-results").style.display=found?"none":"block";
+setTimeout(() => {
+// Personalized WhatsApp Message
+let msg = `*SAFFRON FOOD*\nmr. ${nInp.value}\nyour order placed\n\n*Order Summary:*\n`;
+cart.forEach(item => {
+msg += `* ${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x${item.qty} = ₹${item.price * item.qty}\n`;
 });
-});
+msg += `\n*TOTAL: ₹${grandTotal}*\n\nThanks for visiting ❣️`;
 
+window.open(`https://wa.me/${pInp.value.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
+
+// Reset Form
+nInp.value = ""; pInp.value = ""; aInp.value = "";
+tInp.value = "Dining"; mInp.value = "Cash";
+cart = [];
 renderMenu();
+updateCartUI();
+toggleCart(false);
+}, 100);
+}
 
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+renderMenu();
 </script>
 </body>
 </html>
