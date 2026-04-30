@@ -22,37 +22,32 @@
             --card-bg: #1e1e1e;
             --text-main: #ffffff;
         }
-/* --- HAMBURGER MENU BUTTON --- */
-.menu-btn {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 5px;
-}
 
-.bar {
-    width: 25px;
-    height: 3px;
-    background-color: #d81b60; /* हेडर के टेक्स्ट कलर से मैच करेगा */
-    border-radius: 2px;
-    transition: 0.3s;
-}
+        .menu-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 5px;
+        }
 
-/* बटन पर क्लिक करने पर हल्का सा असर (बाद के लिए) */
-.menu-btn:active {
-    opacity: 0.5;
-}
+        .bar {
+            width: 25px;
+            height: 3px;
+            background-color: #d81b60;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
         body { background-color: #000; min-height: 100vh; overflow-x: hidden; }
         
         .app-container { width: 100%; max-width: 480px; background-color: var(--dark-bg); min-height: 100vh; position: relative; padding-bottom: 120px; margin: 0 auto; }
 
-        /* --- LOGIN OVERLAY --- */
         #login-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); backdrop-filter: blur(12px);
@@ -73,105 +68,40 @@
             border: none; border-radius: 12px; font-weight: bold; cursor: pointer; color: #000;
         }
 
-        /* --- COMPACT HEADER --- */
-        header { 
-            background-color: var(--baby-pink); 
-            padding: 10px 0; 
-            text-align: center; 
-            border-bottom-left-radius: 20px; 
-            border-bottom-right-radius: 20px; 
-            color: #d81b60; 
-        }
+        header { background-color: var(--baby-pink); padding: 10px 0; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color: #d81b60; }
         header h1 { font-size: 1.4rem; margin: 0; font-weight: bold; }
 
-        /* --- ROUND SEARCH BAR --- */
         .search-container { padding: 2px 15px 5px 15px; margin-bottom: 10px; background-color: transparent; width: 100%; }
-        .search-wrapper {
-            display: flex; align-items: center; background: white;
-            border-radius: 25px; padding: 8px 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-        .search-wrapper input {
-            border: none; outline: none; width: 100%; font-size: 16px; margin-left: 10px; color: #333;
-        }
+        .search-wrapper { display: flex; align-items: center; background: white; border-radius: 25px; padding: 8px 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .search-wrapper input { border: none; outline: none; width: 100%; font-size: 16px; margin-left: 10px; color: #333; }
 
-        /* --- UI ELEMENTS --- */
         .category-title { color: var(--zomato-yellow); padding: 1px 15px 5px; font-size: 1.3rem; text-transform: uppercase; border-bottom: 5px solid #333; }
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
-        
-        .menu-item { 
-            background: var(--card-bg); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; 
-            justify-content: space-between; min-height: 160px;
-        }
+        .menu-item { background: var(--card-bg); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; }
         .item-name { color: var(--text-main); font-size: 0.95rem; font-weight: bold; margin-bottom: 5px; }
         .price-text { color: var(--zomato-yellow); font-weight: 600; font-size: 0.85rem; }
-        
         .add-btn { background-color: var(--zomato-yellow); border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; color: #000; margin-top: 10px; cursor: pointer; }
         .qty-selector { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
         .ctrl-btn { background-color: var(--zomato-yellow); border: none; width: 30px; height: 30px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* --- MODALS --- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
         .compact-popup { background-color: var(--sky-blue); padding: 25px; border-radius: 25px; width: 300px; text-align: center; }
         
         #cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: flex-end; }
-        .cart-content { 
-            background: var(--sky-blue); width: 100%; max-width: 480px; border-top-left-radius: 30px; border-top-right-radius: 30px; 
-            padding: 25px; max-height: 90vh; overflow-y: auto;
-        }
-        
+        .cart-content { background: var(--sky-blue); width: 100%; max-width: 480px; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 25px; max-height: 90vh; overflow-y: auto; }
         .billing-box { background: white; border-radius: 20px; padding: 15px; margin-bottom: 15px; color: #000; }
         .cart-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
-        
         .order-form input, .order-form select { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; }
         .place-order-btn { background: #25d366; color: white; width: 100%; padding: 15px; border: none; border-radius: 15px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
 
         .view-cart-trigger { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 440px; background: var(--zomato-yellow); padding: 15px; border-radius: 15px; text-align: center; font-weight: bold; color: #000; z-index: 999; }
-    /* --- Sales Dashboard Sidebar CSS --- */
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: -280px;
-    width: 280px;
-    height: 100%;
-    background: #1a1a1a;
-    color: white;
-    z-index: 10000;
-    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
-}
 
-.sidebar.active {
-    left: 0;
-}
-
-.sidebar-header {
-    padding: 25px 20px;
-    background: #d81b60;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.sale-card {
-    background: #2b2b2b;
-    padding: 20px;
-    border-radius: 15px;
-    margin: 15px;
-    border-left: 5px solid #ffd600;
-}
-
-#sidebar-overlay {
-    display: none; 
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7);
-    z-index: 9999;
-}
+        /* Sidebar CSS */
+        .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #1a1a1a; color: white; z-index: 10000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: 5px 0 15px rgba(0,0,0,0.5); }
+        .sidebar.active { left: 0; }
+        .sidebar-header { padding: 25px 20px; background: #d81b60; display: flex; justify-content: space-between; align-items: center; }
+        .sale-card { background: #2b2b2b; padding: 20px; border-radius: 15px; margin: 15px; border-left: 5px solid #ffd600; }
+        #sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; }
     </style>
 </head>
 <body>
@@ -187,33 +117,33 @@
 </div>
 
 <div class="app-container">
-    
     <header style="position: relative;">
-    <h1>SAFFRON FOOD</h1>
-    <!-- 3-Line Menu Button -->
-    <div class="menu-btn" onclick="toggleSidebar()">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-    </div>
-</header>
+        <h1>SAFFRON FOOD</h1>
+        <div class="menu-btn" onclick="toggleSidebar()">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </header>
+
     <div id="sidebar" class="sidebar">
-    <div class="sidebar-header">
-        <h3 style="color:white; margin:0;">Sales Dashboard</h3>
-        <span class="close-btn" style="color:white; cursor:pointer; font-size:24px;" onclick="toggleSidebar()">✕</span>
-    </div>
-    <div class="sidebar-content" style="padding:20px;">
-        <div class="sale-card" style="background:#252525; padding:15px; border-radius:12px; margin-bottom:15px; border-left:5px solid #ffd600;">
-            <span style="color:#aaa; font-size:12px;">DTD (Aaj ki Sale)</span>
-            <h2 id="dtd-value" style="color:#ffd600; margin:5px 0 0 0;">₹0</h2>
+        <div class="sidebar-header">
+            <h3 style="color:white; margin:0;">Sales Dashboard</h3>
+            <span class="close-btn" style="color:white; cursor:pointer; font-size:24px;" onclick="toggleSidebar()">✕</span>
         </div>
-        <div class="sale-card" style="background:#252525; padding:15px; border-radius:12px; border-left:5px solid #ffd600;">
-            <span style="color:#aaa; font-size:12px;">MTD (Mahine ki Sale)</span>
-            <h2 id="mtd-value" style="color:#ffd600; margin:5px 0 0 0;">₹0</h2>
+        <div class="sidebar-content" style="padding:20px;">
+            <div class="sale-card">
+                <span style="color:#aaa; font-size:12px;">DTD (Aaj ki Sale)</span>
+                <h2 id="dtd-value" style="color:#ffd600; margin:5px 0 0 0;">₹0</h2>
+            </div>
+            <div class="sale-card">
+                <span style="color:#aaa; font-size:12px;">MTD (Mahine ki Sale)</span>
+                <h2 id="mtd-value" style="color:#ffd600; margin:5px 0 0 0;">₹0</h2>
+            </div>
         </div>
     </div>
-</div>
-<div id="sidebar-overlay" onclick="toggleSidebar()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9998;"></div>
+    <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
     <div class="search-container">
         <div class="search-wrapper">
             <span>🔍</span>
@@ -226,6 +156,7 @@
     <div class="view-cart-trigger" onclick="toggleCart(true)">View Cart (<span id="cart-count">0</span>)</div>
 </div>
 
+<!-- All Popups and Modals remain same -->
 <div id="size-popup" class="modal-overlay" onclick="closeSizePopup()">
     <div class="compact-popup" onclick="event.stopPropagation()">
         <h3 id="popup-item-name" style="margin-bottom:20px; color:#d81b60;">Select Size</h3>
@@ -260,7 +191,8 @@
 </div>
 
 <script>
-    // Login Logic
+    const G_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyropeBOjRp-iJMpBG_eugzQmHOdiIf8LgqHuvpK89jmRrBOVwKnMMw7Jkk5V3j5V_r/exec';
+
     function checkLogin() {
         const user = document.getElementById('user-id').value;
         const pass = document.getElementById('user-pass').value;
@@ -279,7 +211,6 @@
         renderMenu();
     };
 
-    // Full 37 Items Data
     const menuData = [
         { category: "APPETIZERS", items: [
             { id: 1, name: "Aloo tikki burger", price: 39 },
@@ -415,7 +346,6 @@
     function filterMenu() {
         const query = document.getElementById('menu-search').value.toLowerCase();
         const items = document.querySelectorAll('.menu-item');
-        const titles = document.querySelectorAll('.category-title');
         items.forEach(item => {
             const name = item.querySelector('.item-name').innerText.toLowerCase();
             item.style.display = name.includes(query) ? "flex" : "none";
@@ -424,6 +354,28 @@
 
     function toggleAddress() { document.getElementById('cust-address').style.display = (document.getElementById('order-type').value === 'Take Away') ? 'block' : 'none'; }
     function toggleCart(show) { document.getElementById('cart-modal').style.display = show ? 'flex' : 'none'; }
+
+    async function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        
+        sidebar.classList.toggle('active');
+        overlay.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
+
+        if (sidebar.classList.contains('active')) {
+            document.getElementById('dtd-value').innerText = "Loading...";
+            document.getElementById('mtd-value').innerText = "Loading...";
+            try {
+                const res = await fetch(G_SCRIPT_URL);
+                const data = await res.json();
+                document.getElementById('dtd-value').innerText = `₹${data.dtd.toLocaleString('en-IN')}`;
+                document.getElementById('mtd-value').innerText = `₹${data.mtd.toLocaleString('en-IN')}`;
+            } catch (e) {
+                document.getElementById('dtd-value').innerText = "Error";
+                document.getElementById('mtd-value').innerText = "Error";
+            }
+        }
+    }
 
     function placeOrder() {
         if (cart.length === 0) return;
@@ -442,51 +394,21 @@
             total: grandTotal, items: cart.map(i => `${i.name}(${i.size})x${i.qty}`).join(", ") 
         };
 
-// G-Sheet पर डेटा भेजना
-        fetch('https://script.google.com/macros/s/AKfycbyropeBOjRp-iJMpBG_eugzQmHOdiIf8LgqHuvpK89jmRrBOVwKnMMw7Jkk5V3j5V_r/exec', {
+        fetch(G_SCRIPT_URL, {
             method: 'POST', 
             mode: 'no-cors', 
             body: JSON.stringify(orderData)
         });
-        // WhatsApp New Format
+
         let msg = `*SAFFRON FOOD*\nDear ${nInp.value}\nyour order placed\n\n*Order Summary:*\n`;
         cart.forEach(item => { msg += `* ${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x${item.qty} = ₹${item.price * item.qty}\n`; });
         msg += `\n*TOTAL: ₹${grandTotal}*\n\nThanks for visiting ❣️`;
         
         window.open(`https://wa.me/${pInp.value.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
+        
         setTimeout(() => {
-            // Sidebar को खोलने और बंद करने का फंक्शन
-async function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
-    const G_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyropeBOjRp-iJMpBG_eugzQmHOdiIf8LgqHuvpK89jmRrBOVwKnMMw7Jkk5V3j5V_r/exec';
-    
-    sidebar.classList.toggle('active');
-    
-    // अगर साइडबार खुला है तो ओवरले दिखाएँ, वरना छुपाएँ
-    if (sidebar.classList.contains('active')) {
-        overlay.style.display = 'block';
-        
-        // सेल्स डेटा लोड करना शुरू करें
-        document.getElementById('dtd-value').innerText = "Loading...";
-        document.getElementById('mtd-value').innerText = "Loading...";
-        
-        try {
-            const res = await fetch(G_SCRIPT_URL);
-            const data = await res.json();
-            document.getElementById('dtd-value').innerText = `₹${data.dtd.toLocaleString('en-IN')}`;
-            document.getElementById('mtd-value').innerText = `₹${data.mtd.toLocaleString('en-IN')}`;
-        } catch (e) {
-            document.getElementById('dtd-value').innerText = "Error";
-            document.getElementById('mtd-value').innerText = "Error";
-            console.error("Sales fetch error:", e);
-        }
-    } else {
-        overlay.style.display = 'none';
-    }
-
-            cart = []; // 
-            location.reload(); // 
+            cart = []; 
+            location.reload(); 
         }, 1000);
     }
 </script>
