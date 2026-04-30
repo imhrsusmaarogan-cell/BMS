@@ -22,7 +22,31 @@
             --card-bg: #1e1e1e;
             --text-main: #ffffff;
         }
+/* --- HAMBURGER MENU BUTTON --- */
+.menu-btn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 5px;
+}
 
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: #d81b60; /* हेडर के टेक्स्ट कलर से मैच करेगा */
+    border-radius: 2px;
+    transition: 0.3s;
+}
+
+/* बटन पर क्लिक करने पर हल्का सा असर (बाद के लिए) */
+.menu-btn:active {
+    opacity: 0.5;
+}
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
         body { background-color: #000; min-height: 100vh; overflow-x: hidden; }
         
