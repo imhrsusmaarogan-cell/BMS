@@ -390,7 +390,10 @@
         msg += `\n*TOTAL: ₹${grandTotal}*\n\nThanks for visiting ❣️`;
         
         window.open(`https://wa.me/${pInp.value.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
-        location.reload(); // Reset after order
+        setTimeout(() => {
+            cart = []; // 
+            location.reload(); // 
+        }, 1000);
     }
 </script>
 </body>
