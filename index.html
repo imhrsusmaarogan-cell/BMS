@@ -126,6 +126,52 @@
         .place-order-btn { background: #25d366; color: white; width: 100%; padding: 15px; border: none; border-radius: 15px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
 
         .view-cart-trigger { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 440px; background: var(--zomato-yellow); padding: 15px; border-radius: 15px; text-align: center; font-weight: bold; color: #000; z-index: 999; }
+    /* --- Sales Dashboard Sidebar CSS --- */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100%;
+    background: #1a1a1a;
+    color: white;
+    z-index: 10000;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar-header {
+    padding: 25px 20px;
+    background: #d81b60;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sale-card {
+    background: #2b2b2b;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 15px;
+    border-left: 5px solid #ffd600;
+}
+
+#sidebar-overlay {
+    display: none; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 9999;
+}
     </style>
 </head>
 <body>
@@ -409,6 +455,36 @@
         
         window.open(`https://wa.me/${pInp.value.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
         setTimeout(() => {
+            // Sidebar को खोलने और बंद करने का फंक्शन
+async function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    const G_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyropeBOjRp-iJMpBG_eugzQmHOdiIf8LgqHuvpK89jmRrBOVwKnMMw7Jkk5V3j5V_r/exec';
+    
+    sidebar.classList.toggle('active');
+    
+    // अगर साइडबार खुला है तो ओवरले दिखाएँ, वरना छुपाएँ
+    if (sidebar.classList.contains('active')) {
+        overlay.style.display = 'block';
+        
+        // सेल्स डेटा लोड करना शुरू करें
+        document.getElementById('dtd-value').innerText = "Loading...";
+        document.getElementById('mtd-value').innerText = "Loading...";
+        
+        try {
+            const res = await fetch(G_SCRIPT_URL);
+            const data = await res.json();
+            document.getElementById('dtd-value').innerText = `₹${data.dtd.toLocaleString('en-IN')}`;
+            document.getElementById('mtd-value').innerText = `₹${data.mtd.toLocaleString('en-IN')}`;
+        } catch (e) {
+            document.getElementById('dtd-value').innerText = "Error";
+            document.getElementById('mtd-value').innerText = "Error";
+            console.error("Sales fetch error:", e);
+        }
+    } else {
+        overlay.style.display = 'none';
+    }
+
             cart = []; // 
             location.reload(); // 
         }, 1000);
