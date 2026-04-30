@@ -55,7 +55,34 @@ border: none; border-radius: 12px; font-weight: bold; font-size: 1.1rem;
 cursor: pointer; transition: 0.3s; color: #000;
 }
 .login-btn:active { transform: scale(0.95); }
-
+/* --- PREMIUM SEARCH BAR (FLIPKART STYLE) --- */
+.search-container {
+    padding: 10px 15px;
+    background-color: var(--baby-pink); /* Header के साथ मैच करेगा */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 8px;
+    padding: 8px 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.search-wrapper input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 16px;
+    margin-left: 10px;
+    color: #333;
+}
+.search-icon {
+    color: #999;
+    font-size: 1.2rem;
+}
 /* --- UI ELEMENTS WITH SMOOTH FEEL --- */
 header { background-color: var(--baby-pink); padding: 20px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color: #d81b60; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
 .category-title { color: var(--zomato-yellow); padding: 25px 15px 5px; font-size: 1.5rem; text-transform: uppercase; margin: 0 15px; border-bottom: 1px solid #333; }
