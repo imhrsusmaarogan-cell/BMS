@@ -56,7 +56,7 @@
         .final-total-row { display: flex; justify-content: space-between; padding: 10px 0; border-top: 2px dashed #ddd; margin-top: 10px; font-weight: 800; font-size: 1.3rem; color: #d81b60; }
 
         .order-form input, .order-form select { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 12px; font-size: 16px; outline: none; }
-        #address-input { display: none; } /* Hidden by default */
+        #address-input { display: none; }
         .place-order-btn { background: #25d366; color: white; width: 100%; padding: 16px; border: none; border-radius: 15px; font-weight: bold; font-size: 1.2rem; cursor: pointer; }
 
         .view-cart-trigger { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 440px; background: var(--zomato-yellow); padding: 18px; border-radius: 20px; text-align: center; font-weight: bold; color: #000; z-index: 999; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
@@ -87,7 +87,7 @@
     </div>
 </div>
 
-<!-- Size Selection -->
+<!-- Size Selection Popup -->
 <div id="size-popup" class="modal-overlay" onclick="closeSizePopup()">
     <div class="compact-popup" onclick="event.stopPropagation()">
         <h3 id="popup-item-name" style="margin-bottom:20px; color:#d81b60;">Select Size</h3>
@@ -114,17 +114,12 @@
         <div class="order-form">
             <input type="text" id="cust-name" placeholder="Enter Your Name">
             <input type="tel" id="cust-phone" placeholder="WhatsApp Number">
-            
-            <!-- Order Type with Home Delivery -->
             <select id="order-type" onchange="checkOrderType()">
                 <option value="Dining">Dining</option>
                 <option value="Take Away">Take Away</option>
                 <option value="Home Delivery">Home Delivery 🛵</option>
             </select>
-            
-            <!-- Address field (only shows for delivery) -->
             <input type="text" id="address-input" placeholder="Enter Your Full Address">
-            
             <select id="payment-method">
                 <option value="Online">Online</option>
                 <option value="Cash">Cash</option>
@@ -136,6 +131,7 @@
 
 <script>
     const WHATSAPP_NUM = "918506996505";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwL8vNIjL8zEGFA4Gbr2D78HuyW6PHbohdj9ZPTujcW127udS4L41D1ZKbgVEsoWklc/exec"; //
 
     const menuData = [
         { category: "APPETIZERS", items: [
@@ -147,17 +143,24 @@
             { id: 6, name: "French fries", priceHalf: 45, priceFull: 79 },
             { id: 7, name: "Chilli potato", priceHalf: 59, priceFull: 109 },
             { id: 8, name: "Honey chilli potato", priceHalf: 69, priceFull: 119 }
+        ]},
+        { category: "SANDWICHES", items: [
+            { id: 13, name: "Aloo Grilled sandwich", price: 49 },
+            { id: 14, name: "Veg grilled sandwich", price: 69 },
+            { id: 15, name: "Veg cheese grilled sandwich", price: 79 },
+            { id: 16, name: "Cheese Corn Grilled Sandwich", price: 89 }
+        ]},
+        { category: "MOMOS", items: [
+            { id: 20, name: "veg momos steam", priceHalf: 39, priceFull: 69 },
+            { id: 21, name: "veg momos fried", priceHalf: 49, priceFull: 79 }
         ]}
-        // बाकी आइटम्स यहाँ जोड़ें
     ];
 
     let cart = [];
 
-    // CHECK FOR DELIVERY
     function checkOrderType() {
         const type = document.getElementById('order-type').value;
-        const addr = document.getElementById('address-input');
-        addr.style.display = (type === "Home Delivery") ? "block" : "none";
+        document.getElementById('address-input').style.display = (type === "Home Delivery") ? "block" : "none";
     }
 
     function renderMenu() {
@@ -267,26 +270,35 @@
         const name = document.getElementById('cust-name').value;
         const type = document.getElementById('order-type').value;
         const address = document.getElementById('address-input').value;
+        const finalTotal = document.getElementById('grand-total').innerText;
         const subtotal = document.getElementById('sub-total').innerText;
         const discount = document.getElementById('discount-amt').innerText;
-        const finalTotal = document.getElementById('grand-total').innerText;
+        const payment = document.getElementById('payment-method').value;
 
         if (!name) { alert("Please enter your name!"); return; }
-        if (type === "Home Delivery" && !address) { alert("Please enter your delivery address!"); return; }
+        if (type === "Home Delivery" && !address) { alert("Address please!"); return; }
 
-        let msg = `*Saffron Food*\n*Order Summary*\n\n`;
-        cart.forEach(item => {
-            msg += `• ${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x ${item.qty} = ₹${item.price * item.qty}\n`;
+        // Send to G-Sheet
+        const orderDetails = cart.map(item => `${item.name}${item.size!=='Normal'?'('+item.size+')':''} x${item.qty}`).join(', ');
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify({
+                name: name,
+                order_details: orderDetails,
+                grand_total: finalTotal,
+                order_type: type,
+                payment: payment,
+                address: address || "N/A"
+            })
         });
-        msg += `\n--------------------------\n`;
-        msg += `Subtotal: ₹${subtotal}\n`;
-        msg += `*Discount (10%): -₹${discount}*\n`;
-        msg += `*Grand Total: ₹${finalTotal}*\n`;
-        msg += `--------------------------\n`;
-        msg += `\n*Order Mode:* ${type}\n`;
-        if (type === "Home Delivery") msg += `*Address:* ${address}\n`;
-        msg += `*Payment:* ${document.getElementById('payment-method').value}\n`;
-        msg += `*Customer:* ${name}`;
+
+        // WhatsApp Message
+        let msg = `*Saffron Food*\n*Order Summary*\n\n`;
+        cart.forEach(item => { msg += `• ${item.name} x ${item.qty} = ₹${item.price * item.qty}\n`; });
+        msg += `\nSubtotal: ₹${subtotal}\n*Discount (10%): -₹${discount}*\n*Grand Total: ₹${finalTotal}*\n`;
+        msg += `\n*Order Mode:* ${type}\n*Payment:* ${payment}\n*Customer:* ${name}`;
+        if (type === "Home Delivery") msg += `\n*Address:* ${address}`;
 
         window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, '_blank');
         setTimeout(() => { location.reload(); }, 1500);
