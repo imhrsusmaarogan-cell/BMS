@@ -39,14 +39,31 @@
         .qty-selector { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; background: #252525; border-radius: 10px; padding: 5px; }
         .ctrl-btn { background-color: var(--zomato-yellow); border: none; width: 32px; height: 32px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.2rem; }
 
+        /* Premium Discount Badge */
+        .discount-banner {
+            background: linear-gradient(45deg, #ffd600, #ff9100);
+            color: #000;
+            padding: 8px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(255, 214, 0, 0.3);
+        }
+
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
         .compact-popup { background-color: var(--sky-blue); padding: 25px; border-radius: 25px; width: 300px; text-align: center; }
         
         #cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: flex-end; }
         .cart-content { background: var(--sky-blue); width: 100%; max-width: 480px; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 25px; max-height: 85vh; overflow-y: auto; }
         .billing-box { background: white; border-radius: 20px; padding: 15px; margin-bottom: 15px; color: #000; }
-        .cart-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-weight: 500; }
+        .cart-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 500; font-size: 0.9rem; }
         
+        .bill-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.9rem; color: #444; }
+        .final-total-row { display: flex; justify-content: space-between; padding: 10px 0; border-top: 2px dashed #ddd; margin-top: 10px; font-weight: 800; font-size: 1.3rem; color: #d81b60; }
+
         .order-form input, .order-form select { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 12px; font-size: 16px; outline: none; }
         .place-order-btn { background: #25d366; color: white; width: 100%; padding: 16px; border: none; border-radius: 15px; font-weight: bold; font-size: 1.2rem; cursor: pointer; }
 
@@ -78,7 +95,7 @@
     </div>
 </div>
 
-<!-- Size Selection -->
+<!-- Size Selection Popup -->
 <div id="size-popup" class="modal-overlay" onclick="closeSizePopup()">
     <div class="compact-popup" onclick="event.stopPropagation()">
         <h3 id="popup-item-name" style="margin-bottom:20px; color:#d81b60;">Select Size</h3>
@@ -90,10 +107,20 @@
 <!-- Cart Modal -->
 <div id="cart-modal" class="modal-overlay" onclick="toggleCart(false)">
     <div class="cart-content" onclick="event.stopPropagation()">
-        <h2 style="color:#d81b60; margin-bottom:20px;">YOUR ORDER</h2>
-        <div class="billing-box" id="cart-items-container"></div>
+        <div class="discount-banner">✨ FLAT 10% OFF FOR TODAY ✨</div>
+        <h2 style="color:#d81b60; margin-bottom:15px; font-size: 1.2rem;">YOUR ORDER</h2>
+        
+        <div class="billing-box">
+            <div id="cart-items-container"></div>
+            <div style="margin-top:15px; border-top: 1px solid #eee; padding-top:10px;">
+                <div class="bill-row"><span>Items Subtotal:</span><span>₹<span id="sub-total">0</span></span></div>
+                <div class="bill-row" style="color: #2e7d32; font-weight: bold;"><span>Discount (10%):</span><span>- ₹<span id="discount-amt">0</span></span></div>
+                <div class="final-total-row"><span>To Pay:</span><span>₹<span id="grand-total">0</span></span></div>
+            </div>
+        </div>
+
         <div class="order-form">
-            <input type="text" id="cust-name" placeholder="Your Name">
+            <input type="text" id="cust-name" placeholder="Enter Your Name">
             <input type="tel" id="cust-phone" placeholder="WhatsApp Number">
             <select id="order-type">
                 <option value="Dining">Dining</option>
@@ -103,14 +130,13 @@
                 <option value="Online">Online</option>
                 <option value="Cash">Cash</option>
             </select>
-            <div style="text-align:right; font-weight:bold; font-size:1.5rem; margin:15px 0; color:#000;">Total: ₹<span id="grand-total">0</span></div>
-            <button class="place-order-btn" onclick="placeOrder()">Order via WhatsApp 🟢</button>
+            <button class="place-order-btn" onclick="placeOrder()">Place Order via WhatsApp 🟢</button>
         </div>
     </div>
 </div>
 
 <script>
-    const WHATSAPP_NUM = "918506996505"; // आपका सही नंबर
+    const WHATSAPP_NUM = "918506996505";
 
     const menuData = [
         { category: "APPETIZERS", items: [
@@ -136,7 +162,6 @@
             { id: 21, name: "veg momos fried", priceHalf: 49, priceFull: 79 },
             { id: 22, name: "paneer momos steam", priceHalf: 49, priceFull: 89 }
         ]}
-        // आप यहाँ अपने बाकी 37 आइटम्स जोड़ सकते हैं
     ];
 
     let cart = [];
@@ -206,31 +231,37 @@
     function updateCartUI() {
         const container = document.getElementById('cart-items-container');
         const floatBtn = document.getElementById('cart-float-btn');
-        let total = 0, count = 0;
-        if (cart.length === 0) { 
-            container.innerHTML = "<p style='text-align:center; padding:20px;'>Your cart is empty!</p>"; 
+        let subtotal = 0, count = 0;
+
+        if (cart.length === 0) {
+            container.innerHTML = "<p style='text-align:center; padding:10px;'>Your cart is empty!</p>";
             floatBtn.style.display = 'none';
         } else {
             container.innerHTML = cart.map(item => {
-                const subtotal = item.price * item.qty; total += subtotal; count += item.qty;
-                return `<div class="cart-row"><div>${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x${item.qty}</div><div>₹${subtotal}</div></div>`;
+                const itemTotal = item.price * item.qty;
+                subtotal += itemTotal;
+                count += item.qty;
+                return `<div class="cart-row"><div>${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x${item.qty}</div><div>₹${itemTotal}</div></div>`;
             }).join('');
             floatBtn.style.display = 'block';
         }
-        document.getElementById('cart-count').innerText = count; 
-        document.getElementById('float-total').innerText = total;
-        document.getElementById('grand-total').innerText = total;
+
+        const discount = Math.round(subtotal * 0.10);
+        const finalPayable = subtotal - discount;
+
+        document.getElementById('cart-count').innerText = count;
+        document.getElementById('float-total').innerText = finalPayable;
+        document.getElementById('sub-total').innerText = subtotal;
+        document.getElementById('discount-amt').innerText = discount;
+        document.getElementById('grand-total').innerText = finalPayable;
     }
 
-    // FIXED SEARCH BAR LOGIC
     function filterMenu() {
         const query = document.getElementById('menu-search').value.toLowerCase().trim();
         const blocks = document.querySelectorAll('.category-block');
-
         blocks.forEach(block => {
             const items = block.querySelectorAll('.menu-item');
             let hasVisibleItems = false;
-
             items.forEach(item => {
                 const itemName = item.querySelector('.item-name').innerText.toLowerCase();
                 if (itemName.includes(query)) {
@@ -240,8 +271,6 @@
                     item.style.display = "none";
                 }
             });
-
-            // पूरी कैटेगरी छुपाना अगर कोई मैच न मिले
             block.style.display = hasVisibleItems ? "block" : "none";
         });
     }
@@ -250,19 +279,24 @@
 
     function placeOrder() {
         const name = document.getElementById('cust-name').value;
-        const type = document.getElementById('order-type').value;
-        const pay = document.getElementById('payment-method').value;
-        const total = document.getElementById('grand-total').innerText;
+        const subtotal = document.getElementById('sub-total').innerText;
+        const discount = document.getElementById('discount-amt').innerText;
+        const finalTotal = document.getElementById('grand-total').innerText;
         if (!name) { alert("Please enter your name!"); return; }
 
         let msg = `*Saffron Food*\n`;
         msg += `*Order Summary*\n\n`;
-        cart.forEach(item => { 
-            msg += `${item.name}${item.size!=='Normal'?' ('+item.size+')':''} *${item.qty}= ${item.price * item.qty}\n`; 
+        cart.forEach(item => {
+            msg += `• ${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x ${item.qty} = ₹${item.price * item.qty}\n`;
         });
-        msg += `\n*Order type-* ${type}\n`;
-        msg += `*Payment -* ${pay}\n`;
-        msg += `*Total Amount:* ₹${total}`;
+        msg += `\n--------------------------\n`;
+        msg += `Subtotal: ₹${subtotal}\n`;
+        msg += `*Discount (10%): -₹${discount}*\n`;
+        msg += `*Grand Total: ₹${finalTotal}*\n`;
+        msg += `--------------------------\n`;
+        msg += `\n*Order Mode:* ${document.getElementById('order-type').value}\n`;
+        msg += `*Payment:* ${document.getElementById('payment-method').value}\n`;
+        msg += `*Customer:* ${name}`;
 
         window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, '_blank');
         setTimeout(() => { location.reload(); }, 1500);
