@@ -45,7 +45,10 @@
         
         #cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: flex-end; }
         .cart-content { background: var(--sky-blue); width: 100%; max-width: 480px; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 25px; max-height: 85vh; overflow-y: auto; color: #000; }
+        
         .billing-box { background: white; border-radius: 20px; padding: 15px; margin-bottom: 15px; }
+        .bill-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.9rem; color: #444; }
+        .final-total-row { display: flex; justify-content: space-between; padding: 10px 0; border-top: 2px dashed #ddd; margin-top: 10px; font-weight: 800; font-size: 1.2rem; color: #d81b60; }
 
         .order-form input, .order-form select { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 12px; font-size: 16px; }
         .place-order-btn { background: #25d366; color: white; width: 100%; padding: 16px; border: none; border-radius: 15px; font-weight: bold; font-size: 1.2rem; }
@@ -83,9 +86,15 @@
 
 <div id="cart-modal" class="modal-overlay" onclick="toggleCart(false)">
     <div class="cart-content" onclick="event.stopPropagation()">
-        <h2 style="margin-bottom:15px;">Your Order</h2>
-        <div class="billing-box" id="cart-items-container"></div>
-        <div style="font-weight:bold; margin-bottom:20px;">Total (After 10% Off): ₹<span id="grand-total">0</span></div>
+        <h2 style="margin-bottom:15px; font-size: 1.1rem; color: #d81b60;">YOUR ORDER</h2>
+        <div class="billing-box">
+            <div id="cart-items-container"></div>
+            <div style="margin-top:10px; border-top: 1px solid #eee; padding-top:10px;">
+                <div class="bill-row"><span>Subtotal:</span><span>₹<span id="sub-total">0</span></span></div>
+                <div class="bill-row" style="color: #2e7d32; font-weight: bold;"><span>Offer Discount (10%):</span><span>- ₹<span id="discount-amt">0</span></span></div>
+                <div class="final-total-row"><span>Total Payable:</span><span>₹<span id="grand-total">0</span></span></div>
+            </div>
+        </div>
 
         <div class="order-form">
             <input type="text" id="cust-name" placeholder="Full Name">
@@ -103,7 +112,7 @@
 
 <script>
     const WHATSAPP_NUM = "918506996505";
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRV-USefv2ri4XbOcKbq8kW_vz2A3_q5k5o_lX-lG-cNTnZW9iIkDDzfKl6U869yK8/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRV94G5GbgF2G58T2SdujhZlVrYl1Ly-gD8gS7c8BPFiWeidlSh1jXekj2v36kCdc/exec";
 
     const menuData = [
         { category: "APPETIZERS", items: [
@@ -156,31 +165,33 @@
     function updateCart(item, size, price, change) {
         const key = item.id + size;
         const index = cart.findIndex(c => c.key === key);
-        
         if (index > -1) {
             cart[index].qty += change;
             if (cart[index].qty <= 0) cart.splice(index, 1);
         } else if (change > 0) {
             cart.push({ ...item, key, size, price, qty: 1 });
         }
-        
         updateUI(item.id);
     }
 
     function updateUI(lastId) {
-        let total = 0, count = 0;
+        let subtotal = 0, count = 0;
         const cartItemsDiv = document.getElementById('cart-items-container');
         cartItemsDiv.innerHTML = cart.map(c => {
-            total += (c.price * c.qty); count += c.qty;
-            return `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #eee">
+            subtotal += (c.price * c.qty); count += c.qty;
+            return `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #eee; font-size:0.9rem">
                 <span>${c.name}(${c.size}) x${c.qty}</span><span>₹${c.price*c.qty}</span>
             </div>`;
         }).join('');
 
-        const discountTotal = Math.round(total * 0.9);
+        const discount = Math.round(subtotal * 0.10);
+        const grandTotal = subtotal - discount;
+        
         document.getElementById('cart-count').innerText = count;
-        document.getElementById('float-total').innerText = discountTotal;
-        document.getElementById('grand-total').innerText = discountTotal;
+        document.getElementById('float-total').innerText = grandTotal;
+        document.getElementById('sub-total').innerText = subtotal;
+        document.getElementById('discount-amt').innerText = discount;
+        document.getElementById('grand-total').innerText = grandTotal;
         document.getElementById('cart-float-btn').style.display = count > 0 ? 'block' : 'none';
 
         if(lastId) {
@@ -215,7 +226,7 @@
         const details = cart.map(c => `${c.name}(${c.size})x${c.qty}`).join(', ');
         const total = document.getElementById('grand-total').innerText;
         new Image().src = `${SCRIPT_URL}?name=${encodeURIComponent(name)}&order_details=${encodeURIComponent(details)}&grand_total=${total}&order_type=${document.getElementById('order-type').value}&payment=Cash&address=${encodeURIComponent(document.getElementById('address-input').value || 'N/A')}`;
-        window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent('New Order: ' + details + ' Total: ₹' + total)}`);
+        window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent('Order: ' + details + ' Total: ₹' + total)}`);
         setTimeout(() => location.reload(), 2000);
     }
 
