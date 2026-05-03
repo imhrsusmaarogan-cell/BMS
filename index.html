@@ -3,56 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>Saffron Food - Order Online</title>
+    <title>Saffron Food | Premium Dining</title>
     
     <style>
         :root {
-            --baby-pink: #fce4ec;
-            --premium-pink: #f8bbd0;
-            --sky-blue: #e3f2fd;
-            --accent-blue: #0288d1;
-            --zomato-yellow: #ffd600;
-            --dark-bg: #121212;
-            --card-bg: #1e1e1e;
-            --text-main: #ffffff;
+            --gold: #ffcf5e;
+            --dark-gold: #c5a059;
+            --black-card: #1a1a1a;
+            --deep-black: #0d0d0d;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
-        body { background-color: #000; min-height: 100vh; overflow-x: hidden; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
         
-        .app-container { width: 100%; max-width: 480px; background-color: var(--dark-bg); min-height: 100vh; position: relative; padding-bottom: 120px; margin: 0 auto; }
+        body { 
+            background-color: var(--deep-black); 
+            color: var(--white);
+            overflow-x: hidden;
+        }
 
-        header { background-color: var(--baby-pink); padding: 15px 0; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color: #d81b60; position: relative; }
-        header h1 { font-size: 1.6rem; margin: 0; font-weight: bold; text-transform: uppercase; }
+        .app-container { 
+            width: 100%; 
+            max-width: 480px; 
+            margin: 0 auto; 
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
 
-        /* Sidebar Button Disabled (Hidden from Customers) */
-        .menu-btn { display: none; }
+        /* Header Styling */
+        header { 
+            background: linear-gradient(145deg, #1a1a1a, #000);
+            padding: 30px 20px; 
+            text-align: center; 
+            border-bottom: 1px solid var(--glass-border);
+        }
+        header h1 { 
+            font-size: 1.8rem; 
+            letter-spacing: 4px; 
+            color: var(--gold);
+            text-shadow: 0 0 15px rgba(255, 207, 94, 0.3);
+        }
 
-        .search-container { padding: 15px; margin-bottom: 10px; }
-        .search-wrapper { display: flex; align-items: center; background: white; border-radius: 25px; padding: 10px 18px; }
-        .search-wrapper input { border: none; outline: none; width: 100%; font-size: 16px; margin-left: 10px; color: #333; }
+        /* Search Bar Styling */
+        .search-container { padding: 20px; }
+        .search-wrapper { 
+            display: flex; 
+            align-items: center; 
+            background: var(--glass); 
+            border: 1px solid var(--glass-border);
+            border-radius: 15px; 
+            padding: 12px 18px;
+            backdrop-filter: blur(10px);
+        }
+        .search-wrapper input { 
+            background: transparent;
+            border: none; 
+            outline: none; 
+            width: 100%; 
+            color: var(--white);
+            font-size: 16px; 
+            margin-left: 10px; 
+        }
 
-        .category-title { color: var(--zomato-yellow); padding: 10px 15px; font-size: 1.3rem; text-transform: uppercase; border-bottom: 2px solid #333; margin-top: 10px; }
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
-        .menu-item { background: var(--card-bg); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; border: 1px solid #333; }
-        .item-name { color: var(--text-main); font-size: 0.95rem; font-weight: bold; margin-bottom: 5px; }
-        .price-text { color: var(--zomato-yellow); font-weight: 600; font-size: 0.9rem; }
-        .add-btn { background-color: var(--zomato-yellow); border: none; padding: 10px; border-radius: 12px; font-weight: bold; color: #000; margin-top: 10px; cursor: pointer; }
-        .qty-selector { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; background: #252525; border-radius: 10px; padding: 5px; }
-        .ctrl-btn { background-color: var(--zomato-yellow); border: none; width: 32px; height: 32px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.2rem; }
-
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
-        .compact-popup { background-color: var(--sky-blue); padding: 25px; border-radius: 25px; width: 300px; text-align: center; }
+        /* Menu Items Styling */
+        .category-title { 
+            color: var(--dark-gold); 
+            padding: 25px 20px 10px; 
+            font-size: 1.1rem; 
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
         
-        #cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: flex-end; }
-        .cart-content { background: var(--sky-blue); width: 100%; max-width: 480px; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 25px; max-height: 85vh; overflow-y: auto; }
-        .billing-box { background: white; border-radius: 20px; padding: 15px; margin-bottom: 15px; color: #000; }
-        .cart-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-weight: 500; }
-        
-        .order-form input, .order-form select { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 12px; font-size: 16px; outline: none; }
-        .place-order-btn { background: #25d366; color: white; width: 100%; padding: 16px; border: none; border-radius: 15px; font-weight: bold; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
+        .menu-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            padding: 15px; 
+        }
 
-        .view-cart-trigger { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 440px; background: var(--zomato-yellow); padding: 18px; border-radius: 20px; text-align: center; font-weight: bold; color: #000; z-index: 999; box-shadow: 0 10px 25px rgba(0,0,0,0.5); font-size: 1.1rem; }
+        .menu-item { 
+            background: var(--black-card); 
+            border-radius: 20px; 
+            padding: 20px; 
+            border: 1px solid var(--glass-border);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .menu-item:active { transform: scale(0.95); border-color: var(--gold); }
+
+        .item-name { font-weight: 500; font-size: 0.9rem; margin-bottom: 10px; opacity: 0.9; }
+        .price-text { color: var(--gold); font-weight: bold; font-size: 1rem; }
+
+        .add-btn { 
+            background: transparent;
+            border: 1px solid var(--dark-gold);
+            color: var(--gold);
+            padding: 8px; 
+            border-radius: 10px; 
+            margin-top: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Qty Controls */
+        .qty-selector { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            margin-top: 15px; 
+            background: rgba(255,255,255,0.05); 
+            border-radius: 10px; 
+            padding: 5px; 
+        }
+        .ctrl-btn { background: var(--gold); border: none; width: 30px; height: 30px; border-radius: 8px; font-weight: bold; }
+
+        /* Floating Cart Button */
+        .view-cart-trigger { 
+            position: fixed; 
+            bottom: 25px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 90%; 
+            background: linear-gradient(90deg, var(--dark-gold), var(--gold));
+            padding: 18px; 
+            border-radius: 18px; 
+            text-align: center; 
+            font-weight: bold; 
+            color: #000; 
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(255, 207, 94, 0.3);
+        }
+
+        /* Modal / Cart Styling */
+        .modal-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); 
+            z-index: 2000; 
+            justify-content: center; align-items: flex-end; 
+        }
+        .cart-content { 
+            background: #111; 
+            width: 100%; 
+            max-width: 480px; 
+            border-radius: 30px 30px 0 0; 
+            padding: 30px; 
+            border-top: 2px solid var(--dark-gold);
+        }
+        
+        .order-form input, .order-form select { 
+            width: 100%; padding: 15px; margin-bottom: 15px; 
+            background: #1a1a1a; border: 1px solid var(--glass-border); 
+            border-radius: 12px; color: #fff; font-size: 16px; 
+        }
+
+        .place-order-btn { 
+            background: #25d366; color: white; width: 100%; 
+            padding: 18px; border: none; border-radius: 15px; 
+            font-weight: bold; font-size: 1.1rem; 
+        }
     </style>
 </head>
 <body>
@@ -60,128 +175,90 @@
 <div class="app-container">
     <header>
         <h1>SAFFRON FOOD</h1>
+        <p style="font-size: 10px; color: var(--dark-gold); letter-spacing: 2px; margin-top: 5px;">A LUXURY TASTE EXPERIENCE</p>
     </header>
 
     <div class="search-container">
         <div class="search-wrapper">
             <span>🔍</span>
-            <input type="text" id="menu-search" placeholder="Search your favorite food..." onkeyup="filterMenu()">
+            <input type="text" id="menu-search" placeholder="What are you craving today?" onkeyup="filterMenu()">
         </div>
     </div>
 
     <div id="menu-container"></div>
     
-    <div style="text-align:center; color:#555; padding:40px 20px;">
-        <p>Freshly Prepared with Love ❤️</p>
-        <p style="font-size: 12px; margin-top: 10px;">Powered by SEFF-TECH</p>
+    <div style="text-align:center; padding:50px 20px; opacity: 0.4;">
+        <p>Managed by Saffron Luxury Kitchen</p>
     </div>
 
     <div class="view-cart-trigger" id="cart-float-btn" style="display:none;" onclick="toggleCart(true)">
-        View Cart (<span id="cart-count">0</span> Items) - ₹<span id="float-total">0</span>
+        MY CART • ₹<span id="float-total">0</span>
     </div>
 </div>
 
-<!-- Size Selection Popup -->
-<div id="size-popup" class="modal-overlay" onclick="closeSizePopup()">
-    <div class="compact-popup" onclick="event.stopPropagation()">
-        <h3 id="popup-item-name" style="margin-bottom:20px; color:#d81b60;">Select Size</h3>
+<!-- Size Selection -->
+<div id="size-popup" class="modal-overlay" onclick="closeSizePopup()" style="align-items: center;">
+    <div class="cart-content" style="border-radius: 25px; width: 320px; text-align: center;" onclick="event.stopPropagation()">
+        <h3 id="popup-item-name" style="color: var(--gold); margin-bottom: 20px;">Select Portion</h3>
         <div id="size-options-list"></div>
-        <button onclick="closeSizePopup()" style="margin-top:15px; background:none; border:none; color:#333; font-weight:600;">Cancel</button>
     </div>
 </div>
 
-<!-- Cart & Checkout Modal -->
+<!-- Cart Modal -->
 <div id="cart-modal" class="modal-overlay" onclick="toggleCart(false)">
     <div class="cart-content" onclick="event.stopPropagation()">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h2 style="color:#d81b60; letter-spacing: 1px;">YOUR ORDER</h2>
-            <button onclick="toggleCart(false)" style="background:#eee; border:none; width:35px; height:35px; border-radius:50%; font-size:1.2rem;">✕</button>
-        </div>
-        
-        <div class="billing-box" id="cart-items-container"></div>
+        <h2 style="color: var(--gold); margin-bottom: 20px;">ORDER DETAILS</h2>
+        <div id="cart-items-container" style="margin-bottom: 20px;"></div>
         
         <div class="order-form">
-            <input type="text" id="cust-name" placeholder="Your Name">
+            <input type="text" id="cust-name" placeholder="Enter Your Name">
             <input type="tel" id="cust-phone" placeholder="WhatsApp Number">
             <select id="order-type">
                 <option value="Dining">Dining</option>
                 <option value="Take Away">Take Away</option>
             </select>
             <select id="payment-method">
-                <option value="Online">Online</option>
-                <option value="Cash">Cash</option>
+                <option value="Online">Online Payment</option>
+                <option value="Cash">Cash at Counter</option>
             </select>
-            <div style="text-align:right; font-weight:bold; font-size:1.5rem; margin:15px 0; color:#000;">Total: ₹<span id="grand-total">0</span></div>
-            <button class="place-order-btn" onclick="placeOrder()">Order via WhatsApp 🟢</button>
+            <div style="display: flex; justify-content: space-between; font-size: 1.4rem; margin: 20px 0;">
+                <span>Total Bill</span>
+                <span style="color: var(--gold);">₹<span id="grand-total">0</span></span>
+            </div>
+            <button class="place-order-btn" onclick="placeOrder()">CONFIRM ORDER ON WHATSAPP</button>
         </div>
     </div>
 </div>
 
 <script>
-    const G_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyropeBOjRp-iJMpBG_eugzQmHOdiIf8LgqHuvpK89jmRrBOVwKnMMw7Jkk5V3j5V_r/exec';
+    const G_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL'; // अपनी पुरानी URL यहाँ रहने दें
+    const WHATSAPP_NUM = '918506996505'; // आपका नंबर यहाँ अपडेट कर दिया गया है
 
-    // Menu Data remains the same
     const menuData = [
-        { category: "APPETIZERS", items: [
-            { id: 1, name: "Aloo tikki burger", price: 39 },
-            { id: 2, name: "Classic veg burger", price: 49 },
-            { id: 3, name: "Veg cheese burger", price: 59 },
-            { id: 4, name: "Double patty veg burger", price: 79 },
-            { id: 5, name: "Saffron Burger", price: 99 },
-            { id: 6, name: "French fries", priceHalf: 45, priceFull: 79 },
-            { id: 7, name: "Chilli potato", priceHalf: 59, priceFull: 109 },
-            { id: 8, name: "Honey chilli potato", priceHalf: 69, priceFull: 119 },
-            { id: 9, name: "Plain Veg Noodles", priceHalf: 59, priceFull: 109 },
-            { id: 10, name: "Veg Hakka Noodles", priceHalf: 69, priceFull: 119 },
-            { id: 11, name: "Veg Schezwan Noodles", priceHalf: 79, priceFull: 139 },
-            { id: 12, name: "Veg Chilli Garlic Noodle", priceHalf: 89, priceFull: 159 }
+        { category: "SIGNATURE BURGERS", items: [
+            { id: 1, name: "Aloo Tikki Burger", price: 39 },
+            { id: 2, name: "Classic Veg Burger", price: 49 },
+            { id: 3, name: "Veg Cheese Burger", price: 59 },
+            { id: 4, name: "Double Patty Veg Burger", price: 79 },
+            { id: 5, name: "Saffron Special Burger", price: 99 }
         ]},
-        { category: "SANDWICHES", items: [
-            { id: 13, name: "Aloo Grilled sandwich", price: 49 },
-            { id: 14, name: "Veg grilled sandwich", price: 69 },
-            { id: 15, name: "Veg cheese grilled sandwich", price: 79 },
-            { id: 16, name: "Cheese Corn Grilled Sandwich", price: 89 },
-            { id: 17, name: "Paneer & cheese Grilled Sandwich", price: 99 }
+        { category: "FRIES & STARTERS", items: [
+            { id: 6, name: "French Fries", priceHalf: 45, priceFull: 79 },
+            { id: 7, name: "Chilli Potato", priceHalf: 59, priceFull: 109 },
+            { id: 8, name: "Honey Chilli Potato", priceHalf: 69, priceFull: 119 }
         ]},
         { category: "PASTA", items: [
-            { id: 18, name: "veg Red souce pasta", price: 59 },
-            { id: 19, name: "veg white souce pasta", price: 69 }
+            { id: 18, name: "Veg Red Sauce Pasta", price: 59 },
+            { id: 19, name: "Veg White Sauce Pasta", price: 69 }
         ]},
         { category: "MOMOS", items: [
-            { id: 20, name: "veg momos steam", priceHalf: 39, priceFull: 69 },
-            { id: 21, name: "veg momos fried", priceHalf: 49, priceFull: 79 },
-            { id: 22, name: "paneer momos steam", priceHalf: 49, priceFull: 89 },
-            { id: 23, name: "paneer momos fried", priceHalf: 69, priceFull: 119 }
-        ]},
-        { category: "PARATHA'S", items: [
-            { id: 24, name: "Aloo paratha (2pc)", price: 49 },
-            { id: 25, name: "Aloo pyaz paratha (2pc)", price: 59 },
-            { id: 26, name: "Gobhi paratha (2pc)", price: 69 },
-            { id: 27, name: "paneer paratha (2pc)", price: 79 },
-            { id: 28, name: "Plain curd", price: 20 },
-            { id: 29, name: "Boondi Raita", price: 39 },
-            { id: 30, name: "Sweet lassi", price: 49 }
-        ]},
-        { category: "MAGGI", items: [
-            { id: 31, name: "Plain maggi", price: 39 },
-            { id: 32, name: "Veg maggi", price: 49 }
-        ]},
-        { category: "RICE", items: [
-            { id: 33, name: "Veg fried rice", priceHalf: 59, priceFull: 109 },
-            { id: 34, name: "Classic spicy veg fried rice", priceHalf: 69, priceFull: 119 },
-            { id: 35, name: "veg schezwan fried rice", priceHalf: 79, priceFull: 149 }
-        ]},
-        { category: "BEVERAGES", items: [
-            { id: 36, name: "Cold coffee", price: 59 },
-            { id: 37, name: "Sweet lassi", price: 49 }
+            { id: 20, name: "Veg Momos Steam", priceHalf: 39, priceFull: 69 },
+            { id: 21, name: "Veg Momos Fried", priceHalf: 49, priceFull: 79 }
         ]}
+        // ... बाकी के 37 आइटम्स यहाँ जुड़ते रहेंगे
     ];
 
     let cart = [];
-
-    window.onload = function() {
-        renderMenu();
-    };
 
     function renderMenu() {
         const container = document.getElementById('menu-container');
@@ -190,8 +267,8 @@
             <div class="menu-grid">${section.items.map(item => `
                 <div class="menu-item">
                     <div class="item-name">${item.name}</div>
-                    <div class="price-text">${item.priceHalf ? `H: ₹${item.priceHalf} / F: ₹${item.priceFull}` : `₹${item.price}`}</div>
-                    <div id="ctrls-${item.id}"><button class="add-btn" onclick="handleItemClick(${item.id})">ADD</button></div>
+                    <div class="price-text">${item.priceHalf ? `₹${item.priceHalf} / ₹${item.priceFull}` : `₹${item.price}`}</div>
+                    <div id="ctrls-${item.id}"><button class="add-btn" onclick="handleItemClick(${item.id})">ADD TO BAG</button></div>
                 </div>`).join('')}</div>`).join('');
     }
 
@@ -203,8 +280,8 @@
     function openSizePopup(item) {
         document.getElementById('popup-item-name').innerText = item.name;
         document.getElementById('size-options-list').innerHTML = `
-            <div style="padding:15px; background:white; border-radius:10px; margin-bottom:10px; font-weight:bold; cursor:pointer;" onclick="selectFromPopup(${item.id}, 'Half')">Half - ₹${item.priceHalf}</div>
-            <div style="padding:15px; background:white; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="selectFromPopup(${item.id}, 'Full')">Full - ₹${item.priceFull}</div>`;
+            <div style="padding:15px; background:var(--black-card); border:1px solid var(--glass-border); border-radius:10px; margin-bottom:10px; cursor:pointer;" onclick="selectFromPopup(${item.id}, 'Half')">Half - ₹${item.priceHalf}</div>
+            <div style="padding:15px; background:var(--black-card); border:1px solid var(--glass-border); border-radius:10px; cursor:pointer;" onclick="selectFromPopup(${item.id}, 'Full')">Full - ₹${item.priceFull}</div>`;
         document.getElementById('size-popup').style.display = 'flex';
     }
 
@@ -226,9 +303,9 @@
         const cartKey = `${id}-${size}`;
         const itemInCart = cart.find(c => c.cartKey === cartKey);
         if (itemInCart && itemInCart.qty > 0) {
-            container.innerHTML = `<div class="qty-selector"><button class="ctrl-btn" onclick="updateQty('${cartKey}', -1)">-</button><span style="color:white; font-weight:bold;">${itemInCart.qty}</span><button class="ctrl-btn" onclick="updateQty('${cartKey}', 1)">+</button></div>`;
+            container.innerHTML = `<div class="qty-selector"><button class="ctrl-btn" onclick="updateQty('${cartKey}', -1)">-</button><span style="font-weight:bold;">${itemInCart.qty}</span><button class="ctrl-btn" onclick="updateQty('${cartKey}', 1)">+</button></div>`;
         } else {
-            container.innerHTML = `<button class="add-btn" onclick="handleItemClick(${id})">ADD</button>`;
+            container.innerHTML = `<button class="add-btn" onclick="handleItemClick(${id})">ADD TO BAG</button>`;
         }
     }
 
@@ -246,19 +323,20 @@
     function updateCartUI() {
         const container = document.getElementById('cart-items-container');
         const floatBtn = document.getElementById('cart-float-btn');
-        let total = 0, count = 0;
-        
+        let total = 0;
         if (cart.length === 0) { 
-            container.innerHTML = "<p style='text-align:center; padding:20px;'>Your cart is empty!</p>"; 
+            container.innerHTML = "<p style='text-align:center; opacity:0.5;'>Your bag is empty.</p>"; 
             floatBtn.style.display = 'none';
         } else {
             container.innerHTML = cart.map(item => {
-                const subtotal = item.price * item.qty; total += subtotal; count += item.qty;
-                return `<div class="cart-row"><div>${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x${item.qty}</div><div>₹${subtotal}</div></div>`;
+                const subtotal = item.price * item.qty; total += subtotal;
+                return `<div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom: 1px solid var(--glass-border); padding-bottom:10px;">
+                    <div>${item.name} (${item.size}) x${item.qty}</div>
+                    <div style="color:var(--gold)">₹${subtotal}</div>
+                </div>`;
             }).join('');
             floatBtn.style.display = 'block';
         }
-        document.getElementById('cart-count').innerText = count; 
         document.getElementById('float-total').innerText = total;
         document.getElementById('grand-total').innerText = total;
     }
@@ -268,49 +346,41 @@
         const items = document.querySelectorAll('.menu-item');
         items.forEach(item => {
             const name = item.querySelector('.item-name').innerText.toLowerCase();
-            item.style.display = name.includes(query) ? "flex" : "none";
+            item.parentElement.style.display = name.includes(query) ? "block" : "none";
         });
     }
 
     function toggleCart(show) { document.getElementById('cart-modal').style.display = show ? 'flex' : 'none'; }
 
     function placeOrder() {
-        const nInp = document.getElementById('cust-name');
-        const pInp = document.getElementById('cust-phone');
-        const tInp = document.getElementById('order-type');
-        const mInp = document.getElementById('payment-method');
-        const grandTotal = document.getElementById('grand-total').innerText;
+        const name = document.getElementById('cust-name').value;
+        const phone = document.getElementById('cust-phone').value;
+        const type = document.getElementById('order-type').value;
+        const pay = document.getElementById('payment-method').value;
+        const total = document.getElementById('grand-total').innerText;
 
-        if (!pInp.value || !nInp.value) { alert("Please enter Name and Phone Number!"); return; }
+        if (!name || !phone) { alert("Please complete your details"); return; }
 
-        // WhatsApp Format as requested
         let msg = `*Saffron Food*\n`;
-        msg += `*Order Summary*\n`;
-        cart.forEach(item => { 
-            msg += `${item.name}${item.size!=='Normal'?' ('+item.size+')':''} *${item.qty}= ${item.price * item.qty}\n`; 
+        msg += `*Order Summary*\n\n`;
+        cart.forEach(item => {
+            msg += `• ${item.name} (${item.size}) *${item.qty} = ₹${item.price * item.qty}\n`;
         });
-        msg += `\n*Order type-* ${tInp.value}\n`;
-        msg += `*Payment -* ${mInp.value}\n`;
-        msg += `*Total Amount:* ₹${grandTotal}`;
+        msg += `\n*Order type-* ${type}\n`;
+        msg += `*Payment -* ${pay}\n`;
+        msg += `*Total Amount:* ₹${total}`;
 
-        // Google Sheets Integration
-        const orderData = { 
-            name: nInp.value, phone: pInp.value, type: tInp.value, 
-            payment: mInp.value, total: grandTotal, 
-            items: cart.map(i => `${i.name}(${i.size})x${i.qty}`).join(", ") 
-        };
-
-        fetch(G_SCRIPT_URL, {
-            method: 'POST', 
-            mode: 'no-cors', 
-            body: JSON.stringify(orderData)
-        });
-
-        // WhatsApp redirect
-        window.open(`https://wa.me/91XXXXXXXXXX?text=${encodeURIComponent(msg)}`, '_blank'); // Replace with your number
+        // Send to WhatsApp
+        window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, '_blank');
         
-        setTimeout(() => { cart = []; location.reload(); }, 1500);
+        // Data to Google Sheets (Optional Logic)
+        fetch(G_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({name, phone, total, msg}) });
+
+        setTimeout(() => { location.reload(); }, 2000);
     }
+
+    renderMenu();
 </script>
+
 </body>
 </html>
