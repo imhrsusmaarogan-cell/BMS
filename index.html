@@ -34,7 +34,6 @@
         
         .add-btn { background: var(--zomato-yellow); border: none; padding: 10px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
         
-        /* --- PLUS MINUS BUTTON UI --- */
         .qty-selector { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; background: #252525; border-radius: 12px; padding: 5px; border: 1px solid var(--zomato-yellow); }
         .ctrl-btn { background: var(--zomato-yellow); border: none; width: 30px; height: 30px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.2rem; }
         .qty-num { color: white; font-weight: bold; }
@@ -75,7 +74,6 @@
     </div>
 </div>
 
-<!-- Size Popup -->
 <div id="size-popup" class="modal-overlay" onclick="closeSizePopup()">
     <div class="compact-popup" onclick="event.stopPropagation()">
         <h3 id="popup-item-name" style="margin-bottom:20px; color:#d81b60;">Select Size</h3>
@@ -83,7 +81,6 @@
     </div>
 </div>
 
-<!-- Cart Modal -->
 <div id="cart-modal" class="modal-overlay" onclick="toggleCart(false)">
     <div class="cart-content" onclick="event.stopPropagation()">
         <h2 style="margin-bottom:15px;">Your Order</h2>
@@ -128,7 +125,9 @@
             <div class="menu-grid">${section.items.map(item => `
                 <div class="menu-item">
                     <div style="font-weight:bold; color:white;">${item.name}</div>
-                    <div style="color:var(--zomato-yellow);">${item.price ? '₹'+item.price : '₹'+item.priceHalf + '+'}</div>
+                    <div style="color:var(--zomato-yellow); font-size: 0.85rem;">
+                        ${item.price ? '₹'+item.price : 'H: ₹'+item.priceHalf + ' / F: ₹'+item.priceFull}
+                    </div>
                     <div id="btn-container-${item.id}">
                         <button class="add-btn" onclick="handleItemClick(${item.id})">ADD</button>
                     </div>
@@ -184,7 +183,6 @@
         document.getElementById('grand-total').innerText = discountTotal;
         document.getElementById('cart-float-btn').style.display = count > 0 ? 'block' : 'none';
 
-        // Update Button to +/- if item is in cart
         if(lastId) {
             const btnCont = document.getElementById(`btn-container-${lastId}`);
             const itemInCart = cart.find(c => c.id === lastId);
@@ -214,14 +212,9 @@
     function placeOrder() {
         const name = document.getElementById('cust-name').value;
         if(!name) return alert("Enter Name");
-        
         const details = cart.map(c => `${c.name}(${c.size})x${c.qty}`).join(', ');
         const total = document.getElementById('grand-total').innerText;
-
-        // SHEET
         new Image().src = `${SCRIPT_URL}?name=${encodeURIComponent(name)}&order_details=${encodeURIComponent(details)}&grand_total=${total}&order_type=${document.getElementById('order-type').value}&payment=Cash&address=${encodeURIComponent(document.getElementById('address-input').value || 'N/A')}`;
-
-        // WHATSAPP
         window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent('New Order: ' + details + ' Total: ₹' + total)}`);
         setTimeout(() => location.reload(), 2000);
     }
