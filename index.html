@@ -34,8 +34,8 @@
         .menu-item { background: var(--card-bg); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; border: 1px solid #333; }
         .item-name { color: var(--text-main); font-size: 0.95rem; font-weight: bold; margin-bottom: 5px; }
         .price-text { color: var(--zomato-yellow); font-weight: 600; font-size: 0.9rem; }
-        .add-btn { background-color: var(--zomato-yellow); border: none; padding: 10px; border-radius: 12px; font-weight: bold; color: #000; margin-top: 10px; cursor: pointer; }
         
+        .add-btn { background-color: var(--zomato-yellow); border: none; padding: 10px; border-radius: 12px; font-weight: bold; color: #000; margin-top: 10px; cursor: pointer; }
         .qty-selector { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; background: #252525; border-radius: 10px; padding: 5px; }
         .ctrl-btn { background-color: var(--zomato-yellow); border: none; width: 32px; height: 32px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.2rem; }
 
@@ -78,7 +78,7 @@
     </div>
 </div>
 
-<!-- Size Selection Popup -->
+<!-- Size Selection -->
 <div id="size-popup" class="modal-overlay" onclick="closeSizePopup()">
     <div class="compact-popup" onclick="event.stopPropagation()">
         <h3 id="popup-item-name" style="margin-bottom:20px; color:#d81b60;">Select Size</h3>
@@ -110,7 +110,7 @@
 </div>
 
 <script>
-    const WHATSAPP_NUM = "918506996505"; // आपका नंबर अपडेटेड है
+    const WHATSAPP_NUM = "918506996505"; // आपका सही नंबर
 
     const menuData = [
         { category: "APPETIZERS", items: [
@@ -119,9 +119,24 @@
             { id: 3, name: "Veg cheese burger", price: 59 },
             { id: 4, name: "Double patty veg burger", price: 79 },
             { id: 5, name: "Saffron Burger", price: 99 },
-            { id: 6, name: "French fries", priceHalf: 45, priceFull: 79 }
-            // ... (बकी आइटम्स पुराने कोड के अनुसार रहेंगे)
+            { id: 6, name: "French fries", priceHalf: 45, priceFull: 79 },
+            { id: 7, name: "Chilli potato", priceHalf: 59, priceFull: 109 },
+            { id: 8, name: "Honey chilli potato", priceHalf: 69, priceFull: 119 },
+            { id: 9, name: "Plain Veg Noodles", priceHalf: 59, priceFull: 109 },
+            { id: 10, name: "Veg Hakka Noodles", priceHalf: 69, priceFull: 119 }
+        ]},
+        { category: "SANDWICHES", items: [
+            { id: 13, name: "Aloo Grilled sandwich", price: 49 },
+            { id: 14, name: "Veg grilled sandwich", price: 69 },
+            { id: 15, name: "Veg cheese grilled sandwich", price: 79 },
+            { id: 16, name: "Cheese Corn Grilled Sandwich", price: 89 }
+        ]},
+        { category: "MOMOS", items: [
+            { id: 20, name: "veg momos steam", priceHalf: 39, priceFull: 69 },
+            { id: 21, name: "veg momos fried", priceHalf: 49, priceFull: 79 },
+            { id: 22, name: "paneer momos steam", priceHalf: 49, priceFull: 89 }
         ]}
+        // आप यहाँ अपने बाकी 37 आइटम्स जोड़ सकते हैं
     ];
 
     let cart = [];
@@ -129,13 +144,15 @@
     function renderMenu() {
         const container = document.getElementById('menu-container');
         container.innerHTML = menuData.map(section => `
-            <h2 class="category-title">${section.category}</h2>
-            <div class="menu-grid">${section.items.map(item => `
-                <div class="menu-item">
-                    <div class="item-name">${item.name}</div>
-                    <div class="price-text">${item.priceHalf ? `H: ₹${item.priceHalf} / F: ₹${item.priceFull}` : `₹${item.price}`}</div>
-                    <div id="ctrls-${item.id}"><button class="add-btn" onclick="handleItemClick(${item.id})">ADD</button></div>
-                </div>`).join('')}</div>`).join('');
+            <div class="category-block">
+                <h2 class="category-title">${section.category}</h2>
+                <div class="menu-grid">${section.items.map(item => `
+                    <div class="menu-item">
+                        <div class="item-name">${item.name}</div>
+                        <div class="price-text">${item.priceHalf ? `H: ₹${item.priceHalf} / F: ₹${item.priceFull}` : `₹${item.price}`}</div>
+                        <div id="ctrls-${item.id}"><button class="add-btn" onclick="handleItemClick(${item.id})">ADD</button></div>
+                    </div>`).join('')}</div>
+            </div>`).join('');
     }
 
     function handleItemClick(id) {
@@ -205,12 +222,27 @@
         document.getElementById('grand-total').innerText = total;
     }
 
+    // FIXED SEARCH BAR LOGIC
     function filterMenu() {
-        const query = document.getElementById('menu-search').value.toLowerCase();
-        const items = document.querySelectorAll('.menu-item');
-        items.forEach(item => {
-            const name = item.querySelector('.item-name').innerText.toLowerCase();
-            item.style.display = name.includes(query) ? "flex" : "none";
+        const query = document.getElementById('menu-search').value.toLowerCase().trim();
+        const blocks = document.querySelectorAll('.category-block');
+
+        blocks.forEach(block => {
+            const items = block.querySelectorAll('.menu-item');
+            let hasVisibleItems = false;
+
+            items.forEach(item => {
+                const itemName = item.querySelector('.item-name').innerText.toLowerCase();
+                if (itemName.includes(query)) {
+                    item.style.display = "flex";
+                    hasVisibleItems = true;
+                } else {
+                    item.style.display = "none";
+                }
+            });
+
+            // पूरी कैटेगरी छुपाना अगर कोई मैच न मिले
+            block.style.display = hasVisibleItems ? "block" : "none";
         });
     }
 
@@ -224,7 +256,7 @@
         if (!name) { alert("Please enter your name!"); return; }
 
         let msg = `*Saffron Food*\n`;
-        msg += `*Order Summary*\n`;
+        msg += `*Order Summary*\n\n`;
         cart.forEach(item => { 
             msg += `${item.name}${item.size!=='Normal'?' ('+item.size+')':''} *${item.qty}= ${item.price * item.qty}\n`; 
         });
