@@ -8,70 +8,50 @@
     <style>
         :root {
             --baby-pink: #fce4ec;
-            --premium-pink: #f8bbd0;
-            --sky-blue: #e3f2fd;
-            --accent-blue: #0288d1;
             --zomato-yellow: #ffd600;
             --dark-bg: #121212;
             --card-bg: #1e1e1e;
             --text-main: #ffffff;
+            --sky-blue: #e3f2fd;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
         body { background-color: #000; min-height: 100vh; overflow-x: hidden; }
-        
-        .app-container { width: 100%; max-width: 480px; background-color: var(--dark-bg); min-height: 100vh; position: relative; padding-bottom: 120px; margin: 0 auto; }
+        .app-container { width: 100%; max-width: 480px; background-color: var(--dark-bg); min-height: 100vh; margin: 0 auto; padding-bottom: 120px; }
 
-        header { background-color: var(--baby-pink); padding: 15px 0 5px 0; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color: #d81b60; position: relative; }
-        header h1 { font-size: 1.6rem; margin: 0; font-weight: bold; text-transform: uppercase; }
-        
+        header { background: var(--baby-pink); padding: 15px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color: #d81b60; }
         .home-offer-strip { background: #ffd600; color: #000; font-size: 0.75rem; font-weight: 800; padding: 4px 0; margin-top: 10px; overflow: hidden; white-space: nowrap; }
         .scrolling-text { display: inline-block; animation: scroll-left 15s linear infinite; }
         @keyframes scroll-left { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        .search-container { padding: 15px; margin-bottom: 10px; }
+        .search-container { padding: 15px; }
         .search-wrapper { display: flex; align-items: center; background: white; border-radius: 25px; padding: 10px 18px; }
-        .search-wrapper input { border: none; outline: none; width: 100%; font-size: 16px; margin-left: 10px; color: #333; }
+        .search-wrapper input { border: none; outline: none; width: 100%; font-size: 16px; margin-left: 10px; }
 
-        .category-title { color: var(--zomato-yellow); padding: 10px 15px; font-size: 1.3rem; text-transform: uppercase; border-bottom: 2px solid #333; margin-top: 10px; }
+        .category-title { color: var(--zomato-yellow); padding: 10px 15px; font-size: 1.3rem; text-transform: uppercase; border-bottom: 2px solid #333; }
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
         .menu-item { background: var(--card-bg); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; border: 1px solid #333; }
-        .item-name { color: var(--text-main); font-size: 0.95rem; font-weight: bold; margin-bottom: 5px; }
-        .price-text { color: var(--zomato-yellow); font-weight: 600; font-size: 0.9rem; }
         
-        .add-btn { background-color: var(--zomato-yellow); border: none; padding: 10px; border-radius: 12px; font-weight: bold; color: #000; margin-top: 10px; cursor: pointer; }
+        .add-btn { background: var(--zomato-yellow); border: none; padding: 10px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+        
+        /* --- PLUS MINUS BUTTON UI --- */
+        .qty-selector { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; background: #252525; border-radius: 12px; padding: 5px; border: 1px solid var(--zomato-yellow); }
+        .ctrl-btn { background: var(--zomato-yellow); border: none; width: 30px; height: 30px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.2rem; }
+        .qty-num { color: white; font-weight: bold; }
 
-        /* --- HALF/FULL UI UPDATED --- */
-        .size-option-btn { 
-            width: 100%; 
-            padding: 15px; 
-            background: white; 
-            border-radius: 12px; 
-            margin-bottom: 10px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            border: 2px solid transparent;
-            font-size: 1rem;
-            color: #333;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .size-option-btn:active { background: #eee; transform: scale(0.98); }
+        .size-option-btn { width: 100%; padding: 15px; background: white; border-radius: 12px; margin-bottom: 10px; font-weight: bold; cursor: pointer; color: #333; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
-        .compact-popup { background-color: var(--sky-blue); padding: 25px; border-radius: 25px; width: 320px; text-align: center; }
+        .compact-popup { background: var(--sky-blue); padding: 25px; border-radius: 25px; width: 320px; text-align: center; }
         
-        #cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: flex-end; }
-        .cart-content { background: var(--sky-blue); width: 100%; max-width: 480px; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 25px; max-height: 85vh; overflow-y: auto; }
-        .billing-box { background: white; border-radius: 20px; padding: 15px; margin-bottom: 15px; color: #000; }
-        .cart-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 500; font-size: 0.9rem; }
-        .bill-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.9rem; color: #444; }
-        .final-total-row { display: flex; justify-content: space-between; padding: 10px 0; border-top: 2px dashed #ddd; margin-top: 10px; font-weight: 800; font-size: 1.3rem; color: #d81b60; }
+        #cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: flex-end; }
+        .cart-content { background: var(--sky-blue); width: 100%; max-width: 480px; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 25px; max-height: 85vh; overflow-y: auto; color: #000; }
+        .billing-box { background: white; border-radius: 20px; padding: 15px; margin-bottom: 15px; }
 
-        .order-form input, .order-form select { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 12px; font-size: 16px; outline: none; }
-        #address-input { display: none; }
-        .place-order-btn { background: #25d366; color: white; width: 100%; padding: 16px; border: none; border-radius: 15px; font-weight: bold; font-size: 1.2rem; cursor: pointer; }
+        .order-form input, .order-form select { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 12px; font-size: 16px; }
+        .place-order-btn { background: #25d366; color: white; width: 100%; padding: 16px; border: none; border-radius: 15px; font-weight: bold; font-size: 1.2rem; }
 
-        .view-cart-trigger { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 440px; background: var(--zomato-yellow); padding: 18px; border-radius: 20px; text-align: center; font-weight: bold; color: #000; z-index: 999; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .view-cart-trigger { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 440px; background: var(--zomato-yellow); padding: 18px; border-radius: 20px; text-align: center; font-weight: bold; color: #000; z-index: 999; }
     </style>
 </head>
 <body>
@@ -80,15 +60,12 @@
     <header>
         <h1>SAFFRON FOOD</h1>
         <div class="home-offer-strip">
-            <div class="scrolling-text">✨ FLAT 10% OFF FOR TODAY • FRESH FOOD • FAST DELIVERY • ORDER NOW ✨</div>
+            <div class="scrolling-text">✨ FLAT 10% OFF FOR TODAY • FRESH FOOD • FAST DELIVERY ✨</div>
         </div>
     </header>
 
     <div class="search-container">
-        <div class="search-wrapper">
-            <span>🔍</span>
-            <input type="text" id="menu-search" placeholder="Search items..." onkeyup="filterMenu()">
-        </div>
+        <div class="search-wrapper"><input type="text" id="menu-search" placeholder="Search items..." onkeyup="filterMenu()"></div>
     </div>
 
     <div id="menu-container"></div>
@@ -98,43 +75,31 @@
     </div>
 </div>
 
-<!-- Size Selection Popup -->
+<!-- Size Popup -->
 <div id="size-popup" class="modal-overlay" onclick="closeSizePopup()">
     <div class="compact-popup" onclick="event.stopPropagation()">
         <h3 id="popup-item-name" style="margin-bottom:20px; color:#d81b60;">Select Size</h3>
         <div id="size-options-list"></div>
-        <button onclick="closeSizePopup()" style="margin-top:15px; background:none; border:none; color:#333; font-weight:600; cursor:pointer;">Cancel</button>
     </div>
 </div>
 
 <!-- Cart Modal -->
 <div id="cart-modal" class="modal-overlay" onclick="toggleCart(false)">
     <div class="cart-content" onclick="event.stopPropagation()">
-        <h2 style="color:#d81b60; margin-bottom:15px; font-size: 1.2rem;">YOUR ORDER</h2>
-        
-        <div class="billing-box">
-            <div id="cart-items-container"></div>
-            <div style="margin-top:15px; border-top: 1px solid #eee; padding-top:10px;">
-                <div class="bill-row"><span>Subtotal:</span><span>₹<span id="sub-total">0</span></span></div>
-                <div class="bill-row" style="color: #2e7d32; font-weight: bold;"><span>Offer Discount (10%):</span><span>- ₹<span id="discount-amt">0</span></span></div>
-                <div class="final-total-row"><span>Total Payable:</span><span>₹<span id="grand-total">0</span></span></div>
-            </div>
-        </div>
+        <h2 style="margin-bottom:15px;">Your Order</h2>
+        <div class="billing-box" id="cart-items-container"></div>
+        <div style="font-weight:bold; margin-bottom:20px;">Total (After 10% Off): ₹<span id="grand-total">0</span></div>
 
         <div class="order-form">
-            <input type="text" id="cust-name" placeholder="Enter Your Name">
+            <input type="text" id="cust-name" placeholder="Full Name">
             <input type="tel" id="cust-phone" placeholder="WhatsApp Number">
-            <select id="order-type" onchange="const a=document.getElementById('address-input'); a.style.display=(this.value==='Home Delivery')?'block':'none';">
+            <select id="order-type" onchange="document.getElementById('address-input').style.display=(this.value==='Home Delivery')?'block':'none';">
                 <option value="Dining">Dining</option>
                 <option value="Take Away">Take Away</option>
-                <option value="Home Delivery">Home Delivery 🛵</option>
+                <option value="Home Delivery">Home Delivery</option>
             </select>
-            <input type="text" id="address-input" placeholder="Enter Your Full Address">
-            <select id="payment-method">
-                <option value="Online">Online</option>
-                <option value="Cash">Cash</option>
-            </select>
-            <button class="place-order-btn" onclick="placeOrder()">Order via WhatsApp 🟢</button>
+            <input type="text" id="address-input" style="display:none;" placeholder="Full Address">
+            <button class="place-order-btn" onclick="placeOrder()">Order on WhatsApp 🟢</button>
         </div>
     </div>
 </div>
@@ -146,23 +111,11 @@
     const menuData = [
         { category: "APPETIZERS", items: [
             { id: 1, name: "Aloo tikki burger", price: 39 },
-            { id: 2, name: "Classic veg burger", price: 49 },
-            { id: 3, name: "Veg cheese burger", price: 59 },
-            { id: 4, name: "Double patty veg burger", price: 79 },
-            { id: 5, name: "Saffron Burger", price: 99 },
             { id: 6, name: "French fries", priceHalf: 45, priceFull: 79 },
-            { id: 7, name: "Chilli potato", priceHalf: 59, priceFull: 109 },
-            { id: 8, name: "Honey chilli potato", priceHalf: 69, priceFull: 119 }
-        ]},
-        { category: "SANDWICHES", items: [
-            { id: 13, name: "Aloo Grilled sandwich", price: 49 },
-            { id: 14, name: "Veg grilled sandwich", price: 69 },
-            { id: 15, name: "Veg cheese grilled sandwich", price: 79 },
-            { id: 16, name: "Cheese Corn Grilled Sandwich", price: 89 }
+            { id: 7, name: "Chilli potato", priceHalf: 59, priceFull: 109 }
         ]},
         { category: "MOMOS", items: [
-            { id: 20, name: "veg momos steam", priceHalf: 39, priceFull: 69 },
-            { id: 21, name: "veg momos fried", priceHalf: 49, priceFull: 79 }
+            { id: 20, name: "veg momos steam", priceHalf: 39, priceFull: 69 }
         ]}
     ];
 
@@ -171,91 +124,105 @@
     function renderMenu() {
         const container = document.getElementById('menu-container');
         container.innerHTML = menuData.map(section => `
-            <div class="category-block">
-                <h2 class="category-title">${section.category}</h2>
-                <div class="menu-grid">${section.items.map(item => `
-                    <div class="menu-item">
-                        <div class="item-name">${item.name}</div>
-                        <div class="price-text">${item.priceHalf ? `H: ₹${item.priceHalf} / F: ₹${item.priceFull}` : `₹${item.price}`}</div>
+            <h2 class="category-title">${section.category}</h2>
+            <div class="menu-grid">${section.items.map(item => `
+                <div class="menu-item">
+                    <div style="font-weight:bold; color:white;">${item.name}</div>
+                    <div style="color:var(--zomato-yellow);">${item.price ? '₹'+item.price : '₹'+item.priceHalf + '+'}</div>
+                    <div id="btn-container-${item.id}">
                         <button class="add-btn" onclick="handleItemClick(${item.id})">ADD</button>
-                    </div>`).join('')}</div>
-            </div>`).join('');
+                    </div>
+                </div>`).join('')}</div>`).join('');
     }
 
     function handleItemClick(id) {
-        let itemRef; menuData.forEach(cat => { const found = cat.items.find(i => i.id === id); if(found) itemRef = found; });
-        if (itemRef.priceHalf) openSizePopup(itemRef); else addToCart(itemRef, 'Normal', itemRef.price);
+        let item; menuData.forEach(cat => { const f = cat.items.find(i => i.id === id); if(f) item = f; });
+        if (item.priceHalf) openSizePopup(item); else updateCart(item, 'Normal', item.price, 1);
     }
 
     function openSizePopup(item) {
         document.getElementById('popup-item-name').innerText = item.name;
         document.getElementById('size-options-list').innerHTML = `
-            <div class="size-option-btn" onclick="addToCartById(${item.id}, 'Half', ${item.priceHalf})">Half - ₹${item.priceHalf}</div>
-            <div class="size-option-btn" onclick="addToCartById(${item.id}, 'Full', ${item.priceFull})">Full - ₹${item.priceFull}</div>`;
+            <div class="size-option-btn" onclick="updateCartById(${item.id}, 'Half', ${item.priceHalf}, 1)">Half - ₹${item.priceHalf}</div>
+            <div class="size-option-btn" onclick="updateCartById(${item.id}, 'Full', ${item.priceFull}, 1)">Full - ₹${item.priceFull}</div>`;
         document.getElementById('size-popup').style.display = 'flex';
     }
 
-    function addToCartById(id, size, price) {
-        let item; menuData.forEach(cat => { const found = cat.items.find(i => i.id === id); if(found) item = found; });
-        addToCart(item, size, price);
+    function updateCartById(id, size, price, change) {
+        let item; menuData.forEach(cat => { const f = cat.items.find(i => i.id === id); if(f) item = f; });
+        updateCart(item, size, price, change);
         closeSizePopup();
     }
 
-    function addToCart(item, size, price) {
-        const cartKey = item.id + size;
-        const existing = cart.find(c => c.cartKey === cartKey);
-        if (existing) existing.qty++; else cart.push({ ...item, cartKey, size, price, qty: 1 });
-        updateCartUI();
+    function updateCart(item, size, price, change) {
+        const key = item.id + size;
+        const index = cart.findIndex(c => c.key === key);
+        
+        if (index > -1) {
+            cart[index].qty += change;
+            if (cart[index].qty <= 0) cart.splice(index, 1);
+        } else if (change > 0) {
+            cart.push({ ...item, key, size, price, qty: 1 });
+        }
+        
+        updateUI(item.id);
     }
 
-    function updateCartUI() {
-        let subtotal = 0, count = 0;
-        const container = document.getElementById('cart-items-container');
-        container.innerHTML = cart.map(item => {
-            const itemTotal = item.price * item.qty;
-            subtotal += itemTotal; count += item.qty;
-            return `<div class="cart-row"><span>${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x${item.qty}</span><span>₹${itemTotal}</span></div>`;
+    function updateUI(lastId) {
+        let total = 0, count = 0;
+        const cartItemsDiv = document.getElementById('cart-items-container');
+        cartItemsDiv.innerHTML = cart.map(c => {
+            total += (c.price * c.qty); count += c.qty;
+            return `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #eee">
+                <span>${c.name}(${c.size}) x${c.qty}</span><span>₹${c.price*c.qty}</span>
+            </div>`;
         }).join('');
-        
-        const discount = Math.round(subtotal * 0.10);
-        const grandTotal = subtotal - discount;
-        
+
+        const discountTotal = Math.round(total * 0.9);
         document.getElementById('cart-count').innerText = count;
-        document.getElementById('float-total').innerText = grandTotal;
-        document.getElementById('sub-total').innerText = subtotal;
-        document.getElementById('discount-amt').innerText = discount;
-        document.getElementById('grand-total').innerText = grandTotal;
+        document.getElementById('float-total').innerText = discountTotal;
+        document.getElementById('grand-total').innerText = discountTotal;
         document.getElementById('cart-float-btn').style.display = count > 0 ? 'block' : 'none';
+
+        // Update Button to +/- if item is in cart
+        if(lastId) {
+            const btnCont = document.getElementById(`btn-container-${lastId}`);
+            const itemInCart = cart.find(c => c.id === lastId);
+            if(itemInCart) {
+                btnCont.innerHTML = `
+                    <div class="qty-selector">
+                        <button class="ctrl-btn" onclick="updateCartById(${lastId}, '${itemInCart.size}', ${itemInCart.price}, -1)">-</button>
+                        <span class="qty-num">${itemInCart.qty}</span>
+                        <button class="ctrl-btn" onclick="updateCartById(${lastId}, '${itemInCart.size}', ${itemInCart.price}, 1)">+</button>
+                    </div>`;
+            } else {
+                btnCont.innerHTML = `<button class="add-btn" onclick="handleItemClick(${lastId})">ADD</button>`;
+            }
+        }
     }
 
     function filterMenu() {
-        const query = document.getElementById('menu-search').value.toLowerCase();
-        document.querySelectorAll('.menu-item').forEach(item => {
-            const name = item.querySelector('.item-name').innerText.toLowerCase();
-            item.style.display = name.includes(query) ? "flex" : "none";
+        const q = document.getElementById('menu-search').value.toLowerCase();
+        document.querySelectorAll('.menu-item').forEach(el => {
+            el.style.display = el.innerText.toLowerCase().includes(q) ? "flex" : "none";
         });
     }
 
-    function toggleCart(show) { document.getElementById('cart-modal').style.display = show ? 'flex' : 'none'; }
+    function toggleCart(s) { document.getElementById('cart-modal').style.display = s ? 'flex' : 'none'; }
     function closeSizePopup() { document.getElementById('size-popup').style.display = 'none'; }
 
     function placeOrder() {
         const name = document.getElementById('cust-name').value;
-        const phone = document.getElementById('cust-phone').value;
-        const type = document.getElementById('order-type').value;
-        const address = document.getElementById('address-input').value || "N/A";
-        const grandTotal = document.getElementById('grand-total').innerText;
-
-        if (!name || !phone) { alert("Please fill all details!"); return; }
-
-        const orderDetails = cart.map(c => `${c.name}(${c.size})x${c.qty}`).join(', ');
-
-        const params = `?name=${encodeURIComponent(name)}&order_details=${encodeURIComponent(orderDetails)}&grand_total=${encodeURIComponent(grandTotal)}&order_type=${encodeURIComponent(type)}&payment=${encodeURIComponent(document.getElementById('payment-method').value)}&address=${encodeURIComponent(address)}`;
-        new Image().src = SCRIPT_URL + params;
-
-        let msg = `*Order - Saffron Food*\n\nName: ${name}\nPhone: ${phone}\nOrder: ${orderDetails}\nTotal: ₹${grandTotal}\nType: ${type}\nAddress: ${address}`;
-        window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, '_blank');
+        if(!name) return alert("Enter Name");
         
+        const details = cart.map(c => `${c.name}(${c.size})x${c.qty}`).join(', ');
+        const total = document.getElementById('grand-total').innerText;
+
+        // SHEET
+        new Image().src = `${SCRIPT_URL}?name=${encodeURIComponent(name)}&order_details=${encodeURIComponent(details)}&grand_total=${total}&order_type=${document.getElementById('order-type').value}&payment=Cash&address=${encodeURIComponent(document.getElementById('address-input').value || 'N/A')}`;
+
+        // WHATSAPP
+        window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent('New Order: ' + details + ' Total: ₹' + total)}`);
         setTimeout(() => location.reload(), 2000);
     }
 
