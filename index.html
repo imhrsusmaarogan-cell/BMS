@@ -80,7 +80,6 @@
     </div>
 
     <div id="menu-container"></div>
-    <div style="text-align:center; color:#555; padding:40px 20px;"><p>Freshly Prepared with Love ❤️</p></div>
 
     <div class="view-cart-trigger" id="cart-float-btn" style="display:none;" onclick="toggleCart(true)">
         View Cart (<span id="cart-count">0</span>) - ₹<span id="float-total">0</span>
@@ -131,7 +130,8 @@
 
 <script>
     const WHATSAPP_NUM = "918506996505";
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwL8vNIjL8zEGFA4Gbr2D78HuyW6PHbohdj9ZPTujcW127udS4L41D1ZKbgVEsoWklc/exec"; //
+    // आपका नया Script URL यहाँ है
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytMAsj28Fmx-H5BJn2Dd6J75GBnZ0mRCbRBtNqJ3stl8wUgxeEoD6E5g7EGkO6Qdrv/exec";
 
     const menuData = [
         { category: "APPETIZERS", items: [
@@ -268,6 +268,7 @@
 
     function placeOrder() {
         const name = document.getElementById('cust-name').value;
+        const phone = document.getElementById('cust-phone').value;
         const type = document.getElementById('order-type').value;
         const address = document.getElementById('address-input').value;
         const finalTotal = document.getElementById('grand-total').innerText;
@@ -275,14 +276,16 @@
         const discount = document.getElementById('discount-amt').innerText;
         const payment = document.getElementById('payment-method').value;
 
-        if (!name) { alert("Please enter your name!"); return; }
-        if (type === "Home Delivery" && !address) { alert("Address please!"); return; }
+        if (!name || !phone) { alert("Please enter your name and phone!"); return; }
+        if (type === "Home Delivery" && !address) { alert("Please enter delivery address!"); return; }
 
-        // Send to G-Sheet
+        // --- GOOGLE SHEET SEND ---
         const orderDetails = cart.map(item => `${item.name}${item.size!=='Normal'?'('+item.size+')':''} x${item.qty}`).join(', ');
+        
         fetch(SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 name: name,
                 order_details: orderDetails,
@@ -291,17 +294,20 @@
                 payment: payment,
                 address: address || "N/A"
             })
-        });
+        }).then(() => console.log("Data sent to Sheet"))
+          .catch(err => console.error("Sheet Error:", err));
 
-        // WhatsApp Message
+        // --- WHATSAPP MESSAGE ---
         let msg = `*Saffron Food*\n*Order Summary*\n\n`;
-        cart.forEach(item => { msg += `• ${item.name} x ${item.qty} = ₹${item.price * item.qty}\n`; });
+        cart.forEach(item => { msg += `• ${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x ${item.qty} = ₹${item.price * item.qty}\n`; });
         msg += `\nSubtotal: ₹${subtotal}\n*Discount (10%): -₹${discount}*\n*Grand Total: ₹${finalTotal}*\n`;
-        msg += `\n*Order Mode:* ${type}\n*Payment:* ${payment}\n*Customer:* ${name}`;
+        msg += `\n*Order Mode:* ${type}\n*Payment:* ${payment}\n*Customer:* ${name}\n*Phone:* ${phone}`;
         if (type === "Home Delivery") msg += `\n*Address:* ${address}`;
 
         window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, '_blank');
-        setTimeout(() => { location.reload(); }, 1500);
+        
+        // Refresh after some time
+        setTimeout(() => { location.reload(); }, 2000);
     }
 
     renderMenu();
