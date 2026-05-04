@@ -41,11 +41,9 @@
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
         .compact-popup { background: var(--sky-blue); padding: 25px; border-radius: 25px; width: 320px; text-align: center; }
         
-        /* Cart Styles */
         #cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: flex-end; }
         .cart-content { background: var(--sky-blue); width: 100%; max-width: 480px; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 20px; max-height: 90vh; overflow-y: auto; color: #000; position: relative; }
         
-        /* Close Button for Cart Bar */
         .close-cart-btn { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; font-weight: bold; color: #d81b60; cursor: pointer; }
 
         .promo-tag { background: #ffd600; color: #000; padding: 8px; border-radius: 10px; font-weight: 800; font-size: 0.85rem; margin: 15px 0; text-align: center; display: block; border: 1px dashed #000; }
@@ -82,7 +80,6 @@
     </div>
 </div>
 
-<!-- Size Popup -->
 <div id="size-popup" class="modal-overlay" onclick="closeSizePopup()">
     <div class="compact-popup" onclick="event.stopPropagation()">
         <h3 id="popup-item-name" style="margin-bottom:20px; color:#d81b60;">Select Size</h3>
@@ -90,14 +87,11 @@
     </div>
 </div>
 
-<!-- Cart Modal -->
 <div id="cart-modal" class="modal-overlay" onclick="toggleCart(false)">
     <div class="cart-content" onclick="event.stopPropagation()">
         <span class="close-cart-btn" onclick="toggleCart(false)">&times;</span>
-        
         <div class="promo-tag">🎟️ 10% OFF APPLIED AUTOMATICALLY!</div>
         <h2 style="margin-bottom:15px; font-size: 1.1rem; color: #d81b60;">YOUR ORDER</h2>
-        
         <div class="billing-box">
             <div id="cart-items-container"></div>
             <div style="margin-top:10px; border-top: 1px solid #eee; padding-top:10px;">
@@ -106,7 +100,6 @@
                 <div class="final-total-row"><span>Total Payable:</span><span>₹<span id="grand-total">0</span></span></div>
             </div>
         </div>
-
         <div class="order-form">
             <input type="text" id="cust-name" placeholder="Full Name">
             <input type="tel" id="cust-phone" placeholder="WhatsApp Number">
@@ -126,13 +119,60 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRV94G5GbgF2G58T2SdujhZlVrYl1Ly-gD8gS7c8BPFiWeidlSh1jXekj2v36kCdc/exec";
 
     const menuData = [
-        { category: "APPETIZERS", items: [
+        { category: "BURGERS", items: [
             { id: 1, name: "Aloo tikki burger", price: 39 },
-            { id: 6, name: "French fries", priceHalf: 45, priceFull: 79 },
-            { id: 7, name: "Chilli potato", priceHalf: 59, priceFull: 109 }
+            { id: 2, name: "Cheese burger", price: 59 },
+            { id: 3, name: "Paneer burger", price: 69 },
+            { id: 4, name: "Double tikki burger", price: 69 },
+            { id: 5, name: "Saffron special burger", price: 89 }
         ]},
-        { category: "MOMOS", items: [
-            { id: 20, name: "veg momos steam", priceHalf: 39, priceFull: 69 }
+        { category: "FRIES & SIDES", items: [
+            { id: 6, name: "French fries", priceHalf: 45, priceFull: 79 },
+            { id: 7, name: "Chilli potato", priceHalf: 59, priceFull: 109 },
+            { id: 8, name: "Honey chilli potato", priceHalf: 79, priceFull: 139 },
+            { id: 9, name: "Paneer finger", price: 99 },
+            { id: 10, name: "Veg nuggets", price: 69 }
+        ]},
+        { category: "STEAM MOMOS", items: [
+            { id: 11, name: "Veg steam momos", priceHalf: 39, priceFull: 69 },
+            { id: 12, name: "Paneer steam momos", priceHalf: 59, priceFull: 109 },
+            { id: 13, name: "Corn steam momos", priceHalf: 49, priceFull: 89 }
+        ]},
+        { category: "FRIED MOMOS", items: [
+            { id: 14, name: "Veg fried momos", priceHalf: 49, priceFull: 89 },
+            { id: 15, name: "Paneer fried momos", priceHalf: 69, priceFull: 129 },
+            { id: 16, name: "Kurkure momos", priceHalf: 79, priceFull: 149 }
+        ]},
+        { category: "CHOWMEIN", items: [
+            { id: 17, name: "Veg chowmein", priceHalf: 49, priceFull: 89 },
+            { id: 18, name: "Paneer chowmein", priceHalf: 69, priceFull: 129 },
+            { id: 19, name: "Singapuri chowmein", priceHalf: 59, priceFull: 109 }
+        ]},
+        { category: "PIZZA (7 inch)", items: [
+            { id: 20, name: "Margherita pizza", price: 99 },
+            { id: 21, name: "Onion pizza", price: 119 },
+            { id: 22, name: "Capsicum pizza", price: 119 },
+            { id: 23, name: "Sweet corn pizza", price: 129 },
+            { id: 24, name: "Paneer pizza", price: 159 },
+            { id: 25, name: "Saffron special pizza", price: 199 }
+        ]},
+        { category: "PASTA", items: [
+            { id: 26, name: "White sauce pasta", price: 119 },
+            { id: 27, name: "Red sauce pasta", price: 99 },
+            { id: 28, name: "Mix sauce pasta", price: 139 }
+        ]},
+        { category: "SHAKES", items: [
+            { id: 29, name: "Chocolate shake", price: 69 },
+            { id: 30, name: "Vanilla shake", price: 59 },
+            { id: 31, name: "Strawberry shake", price: 59 },
+            { id: 32, name: "Cold coffee", price: 79 },
+            { id: 33, name: "Oreo shake", price: 89 }
+        ]},
+        { category: "BEVERAGES", items: [
+            { id: 34, name: "Virgin mojito", price: 69 },
+            { id: 35, name: "Blue lagoon", price: 69 },
+            { id: 36, name: "Masala coke", price: 39 },
+            { id: 37, name: "Fresh lime soda", price: 49 }
         ]}
     ];
 
