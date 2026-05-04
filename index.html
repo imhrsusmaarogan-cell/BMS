@@ -1,299 +1,419 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>Saffron Food - Order Online</title>
-    
-    <style>
-        :root {
-            --baby-pink: #fce4ec;
-            --zomato-yellow: #ffd600;
-            --dark-bg: #121212;
-            --card-bg: #1e1e1e;
-            --text-main: #ffffff;
-            --sky-blue: #e3f2fd;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<title>Saffron Cafe POS - Seffron</title>
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: #000; min-height: 100vh; overflow-x: hidden; }
-        .app-container { width: 100%; max-width: 480px; background-color: var(--dark-bg); min-height: 100vh; margin: 0 auto; padding-bottom: 120px; }
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Seff-Tech">
+<link rel="apple-touch-icon" href="logo.jpeg">
 
-        header { background: var(--baby-pink); padding: 15px; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color: #d81b60; }
-        .home-offer-strip { background: #ffd600; color: #000; font-size: 0.75rem; font-weight: 800; padding: 4px 0; margin-top: 10px; overflow: hidden; white-space: nowrap; }
-        .scrolling-text { display: inline-block; animation: scroll-left 15s linear infinite; }
-        @keyframes scroll-left { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+<style>
+:root {
+--baby-pink: #fce4ec;
+--premium-pink: #f8bbd0;
+--sky-blue: #e3f2fd;
+--accent-blue: #0288d1;
+--zomato-yellow: #ffd600;
+--dark-bg: #121212;
+--card-bg: #1e1e1e;
+--text-main: #ffffff;
+}
 
-        .search-container { padding: 15px; }
-        .search-wrapper { display: flex; align-items: center; background: white; border-radius: 25px; padding: 10px 18px; }
-        .search-wrapper input { border: none; outline: none; width: 100%; font-size: 16px; margin-left: 10px; }
+.menu-btn {
+position: absolute;
+right: 15px;
+top: 50%;
+transform: translateY(-50%);
+cursor: pointer;
+display: flex;
+flex-direction: column;
+gap: 4px;
+padding: 5px;
+}
 
-        .category-title { color: var(--zomato-yellow); padding: 10px 15px; font-size: 1.3rem; text-transform: uppercase; border-bottom: 2px solid #333; }
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
-        .menu-item { background: var(--card-bg); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; border: 1px solid #333; }
-        
-        .add-btn { background: var(--zomato-yellow); border: none; padding: 10px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
-        
-        .qty-selector { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; background: #252525; border-radius: 12px; padding: 5px; border: 1px solid var(--zomato-yellow); }
-        .ctrl-btn { background: var(--zomato-yellow); border: none; width: 30px; height: 30px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.2rem; }
-        .qty-num { color: white; font-weight: bold; }
+.bar {
+width: 25px;
+height: 3px;
+background-color: #d81b60;
+border-radius: 2px;
+transition: 0.3s;
+}
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
-        .compact-popup { background: var(--sky-blue); padding: 25px; border-radius: 25px; width: 320px; text-align: center; }
-        
-        #cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: flex-end; }
-        .cart-content { background: var(--sky-blue); width: 100%; max-width: 480px; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 20px; max-height: 90vh; overflow-y: auto; color: #000; position: relative; }
-        
-        .close-cart-btn { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; font-weight: bold; color: #d81b60; cursor: pointer; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+body { background-color: #000; min-height: 100vh; overflow-x: hidden; }
 
-        .promo-tag { background: #ffd600; color: #000; padding: 8px; border-radius: 10px; font-weight: 800; font-size: 0.85rem; margin: 15px 0; text-align: center; display: block; border: 1px dashed #000; }
-        .billing-box { background: white; border-radius: 20px; padding: 15px; margin-bottom: 15px; }
-        .bill-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.9rem; color: #444; align-items: center; }
-        .final-total-row { display: flex; justify-content: space-between; padding: 10px 0; border-top: 2px dashed #ddd; margin-top: 10px; font-weight: 800; font-size: 1.2rem; color: #d81b60; }
-        
-        .remove-item { color: #ff1744; font-weight: bold; margin-right: 10px; cursor: pointer; font-size: 1.2rem; }
+.app-container { width: 100%; max-width: 480px; background-color: var(--dark-bg); min-height: 100vh; position: relative; padding-bottom: 120px; margin: 0 auto; }
 
-        .order-form input, .order-form select { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 12px; font-size: 16px; }
-        .place-order-btn { background: #25d366; color: white; width: 100%; padding: 16px; border: none; border-radius: 15px; font-weight: bold; font-size: 1.2rem; }
+#login-overlay {
+position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+background: rgba(0,0,0,0.95); backdrop-filter: blur(12px);
+z-index: 9999; display: flex; justify-content: center; align-items: center;
+}
+.login-box {
+background: var(--card-bg); padding: 40px 30px; border-radius: 30px;
+width: 90%; max-width: 350px; text-align: center;
+border: 2px solid var(--zomato-yellow);
+}
+.login-box input {
+width: 100%; padding: 15px; margin-bottom: 15px;
+background: #252525; border: 1px solid #444; border-radius: 12px;
+color: white; font-size: 16px; outline: none;
+}
+.login-btn {
+width: 100%; padding: 15px; background: var(--zomato-yellow);
+border: none; border-radius: 12px; font-weight: bold; cursor: pointer; color: #000;
+}
 
-        .view-cart-trigger { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 440px; background: var(--zomato-yellow); padding: 18px; border-radius: 20px; text-align: center; font-weight: bold; color: #000; z-index: 999; }
-    </style>
+header { background-color: var(--baby-pink); padding: 10px 0; text-align: center; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; color: #d81b60; }
+header h1 { font-size: 1.4rem; margin: 0; font-weight: bold; }
+
+.search-container { padding: 2px 15px 5px 15px; margin-bottom: 10px; background-color: transparent; width: 100%; }
+.search-wrapper { display: flex; align-items: center; background: white; border-radius: 25px; padding: 8px 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+.search-wrapper input { border: none; outline: none; width: 100%; font-size: 16px; margin-left: 10px; color: #333; }
+
+.category-title { color: var(--zomato-yellow); padding: 1px 15px 5px; font-size: 1.3rem; text-transform: uppercase; border-bottom: 5px solid #333; }
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+.menu-item { background: var(--card-bg); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; }
+.item-name { color: var(--text-main); font-size: 0.95rem; font-weight: bold; margin-bottom: 5px; }
+.price-text { color: var(--zomato-yellow); font-weight: 600; font-size: 0.85rem; }
+.add-btn { background-color: var(--zomato-yellow); border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; color: #000; margin-top: 10px; cursor: pointer; }
+.qty-selector { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.ctrl-btn { background-color: var(--zomato-yellow); border: none; width: 30px; height: 30px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
+.compact-popup { background-color: var(--sky-blue); padding: 25px; border-radius: 25px; width: 300px; text-align: center; }
+
+#cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: flex-end; }
+.cart-content { background: var(--sky-blue); width: 100%; max-width: 480px; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 25px; max-height: 90vh; overflow-y: auto; }
+.billing-box { background: white; border-radius: 20px; padding: 15px; margin-bottom: 15px; color: #000; }
+.cart-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+.order-form input, .order-form select { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; }
+.place-order-btn { background: #25d366; color: white; width: 100%; padding: 15px; border: none; border-radius: 15px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
+
+.view-cart-trigger { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 440px; background: var(--zomato-yellow); padding: 15px; border-radius: 15px; text-align: center; font-weight: bold; color: #000; z-index: 999; }
+
+/* Sidebar CSS */
+.sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #1a1a1a; color: white; z-index: 10000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: 5px 0 15px rgba(0,0,0,0.5); }
+.sidebar.active { left: 0; }
+.sidebar-header { padding: 25px 20px; background: #d81b60; display: flex; justify-content: space-between; align-items: center; }
+.sale-card { background: #2b2b2b; padding: 20px; border-radius: 15px; margin: 15px; border-left: 5px solid #ffd600; }
+#sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; }
+.login-box h2 {
+color: white;
+}
+</style>
 </head>
 <body>
 
-<div class="app-container">
-    <header>
-        <h1>SAFFRON FOOD</h1>
-        <div class="home-offer-strip">
-            <div class="scrolling-text">✨ FLAT 10% OFF FOR TODAY • FRESH FOOD • FAST DELIVERY ✨</div>
-        </div>
-    </header>
-
-    <div class="search-container">
-        <div class="search-wrapper"><input type="text" id="menu-search" placeholder="Search items..." onkeyup="filterMenu()"></div>
-    </div>
-
-    <div id="menu-container"></div>
-
-    <div class="view-cart-trigger" id="cart-float-btn" style="display:none;" onclick="toggleCart(true)">
-        View Cart (<span id="cart-count">0</span>) - ₹<span id="float-total">0</span>
-    </div>
+<div id="login-overlay">
+<div class="login-box">
+<h2> LOGIN</h2>
+<input type="text" id="user-id" placeholder="User ID">
+<input type="password" id="user-pass" placeholder="Password">
+<button class="login-btn" onclick="checkLogin()">LOGIN</button>
+<p id="login-error" style="color: #ff5252; margin-top: 15px; display: none;">Invalid Credentials!</p>
+</div>
 </div>
 
+<div class="app-container">
+<header style="position: relative;">
+<h1>SAFFRON cafe</h1>
+<div class="menu-btn" onclick="toggleSidebar()">
+<div class="bar"></div>
+<div class="bar"></div>
+<div class="bar"></div>
+</div>
+</header>
+
+<div id="sidebar" class="sidebar">
+<div class="sidebar-header">
+<h3 style="color:white; margin:0;">Sales Dashboard</h3>
+<span class="close-btn" style="color:white; cursor:pointer; font-size:24px;" onclick="toggleSidebar()">✕</span>
+</div>
+<div class="sidebar-content" style="padding:20px;">
+<div class="sale-card">
+<span style="color:#aaa; font-size:12px;">DTD</span>
+<h2 id="dtd-value" style="color:#ffd600; margin:5px 0 0 0;">₹0</h2>
+</div>
+<div class="sale-card">
+<span style="color:#aaa; font-size:12px;">MTD</span>
+<h2 id="mtd-value" style="color:#ffd600; margin:5px 0 0 0;">₹0</h2>
+</div>
+</div>
+</div>
+<div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<div class="search-container">
+<div class="search-wrapper">
+<span>🔍</span>
+<input type="text" id="menu-search" placeholder="Search for dishes..." onkeyup="filterMenu()">
+</div>
+</div>
+
+<div id="menu-container"></div>
+<div style="text-align:center; color:#555; padding:20px;">Powered by SEFF-TECH</div>
+<div class="view-cart-trigger" onclick="toggleCart(true)">View Cart (<span id="cart-count">0</span>)</div>
+</div>
+
+<!-- All Popups and Modals remain same -->
 <div id="size-popup" class="modal-overlay" onclick="closeSizePopup()">
-    <div class="compact-popup" onclick="event.stopPropagation()">
-        <h3 id="popup-item-name" style="margin-bottom:20px; color:#d81b60;">Select Size</h3>
-        <div id="size-options-list"></div>
-    </div>
+<div class="compact-popup" onclick="event.stopPropagation()">
+<h3 id="popup-item-name" style="margin-bottom:20px; color:#d81b60;">Select Size</h3>
+<div id="size-options-list"></div>
+<button onclick="closeSizePopup()" style="margin-top:15px; background:none; border:none; color:#d81b60; font-weight:bold;">Cancel</button>
+</div>
 </div>
 
 <div id="cart-modal" class="modal-overlay" onclick="toggleCart(false)">
-    <div class="cart-content" onclick="event.stopPropagation()">
-        <span class="close-cart-btn" onclick="toggleCart(false)">&times;</span>
-        <div class="promo-tag">🎟️ 10% OFF APPLIED AUTOMATICALLY!</div>
-        <h2 style="margin-bottom:15px; font-size: 1.1rem; color: #d81b60;">YOUR ORDER</h2>
-        <div class="billing-box">
-            <div id="cart-items-container"></div>
-            <div style="margin-top:10px; border-top: 1px solid #eee; padding-top:10px;">
-                <div class="bill-row"><span>Subtotal:</span><span>₹<span id="sub-total">0</span></span></div>
-                <div class="bill-row" style="color: #2e7d32; font-weight: bold;"><span>Offer Discount (10%):</span><span>- ₹<span id="discount-amt">0</span></span></div>
-                <div class="final-total-row"><span>Total Payable:</span><span>₹<span id="grand-total">0</span></span></div>
-            </div>
-        </div>
-        <div class="order-form">
-            <input type="text" id="cust-name" placeholder="Full Name">
-            <input type="tel" id="cust-phone" placeholder="WhatsApp Number">
-            <select id="order-type" onchange="document.getElementById('address-input').style.display=(this.value==='Home Delivery')?'block':'none';">
-                <option value="Dining">Dining</option>
-                <option value="Take Away">Take Away</option>
-                <option value="Home Delivery">Home Delivery</option>
-            </select>
-            <input type="text" id="address-input" style="display:none;" placeholder="Full Address">
-            <button class="place-order-btn" onclick="placeOrder()">Order on WhatsApp 🟢</button>
-        </div>
-    </div>
+<div class="cart-content" onclick="event.stopPropagation()">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+<h2 style="color:#0288d1;">ORDER SUMMARY</h2>
+<button onclick="toggleCart(false)" style="background:none; border:none; font-size:1.5rem;">✕</button>
+</div>
+<div class="billing-box" id="cart-items-container"></div>
+<div class="order-form">
+<input type="text" id="cust-name" placeholder="Customer Name">
+<input type="tel" id="cust-phone" placeholder="WhatsApp Number">
+<select id="order-type" onchange="toggleAddress()">
+<option value="Dining">Dining</option>
+<option value="Take Away">Take Away</option>
+</select>
+<input type="text" id="cust-address" placeholder="Delivery Address" style="display:none;">
+<select id="payment-method">
+<option value="Cash">Cash</option>
+<option value="Online">Online</option>
+</select>
+<div style="text-align:right; font-weight:bold; font-size:1.4rem; margin:15px 0; color:#000;">TOTAL: ₹<span id="grand-total">0</span></div>
+<button class="place-order-btn" onclick="placeOrder()">Place Order ❣️</button>
+</div>
+</div>
 </div>
 
 <script>
-    const WHATSAPP_NUM = "918506996505";
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRV94G5GbgF2G58T2SdujhZlVrYl1Ly-gD8gS7c8BPFiWeidlSh1jXekj2v36kCdc/exec";
+const G_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyropeBOjRp-iJMpBG_eugzQmHOdiIf8LgqHuvpK89jmRrBOVwKnMMw7Jkk5V3j5V_r/exec';
 
-    const menuData = [
-        { category: "APPETIZERS (BURGERS)", items: [
-            { id: 1, name: "Aloo tikki burger", price: 54 },
-            { id: 2, name: "Classic veg burger", price: 64 },
-            { id: 3, name: "Veg cheese burger", price: 74 },
-            { id: 4, name: "Double patty veg burger", price: 94 },
-            { id: 5, name: "Saffron Burger", price: 114 }
-        ]},
-        { category: "FRIES & CHILLI", items: [
-            { id: 6, name: "French fries", priceHalf: 60, priceFull: 94 },
-            { id: 7, name: "Chilli potato", priceHalf: 74, priceFull: 124 },
-            { id: 8, name: "Honey chilli potato", priceHalf: 84, priceFull: 134 }
-        ]},
-        { category: "NOODLES", items: [
-            { id: 9, name: "Plain Veg Noodles", priceHalf: 74, priceFull: 124 },
-            { id: 10, name: "Veg Hakka Noodles", priceHalf: 84, priceFull: 134 },
-            { id: 11, name: "Veg Schezwan Noodles", priceHalf: 94, priceFull: 154 },
-            { id: 12, name: "Veg Chilli Garlic Noodle", priceHalf: 104, priceFull: 174 }
-        ]},
-        { category: "SANDWICHES", items: [
-            { id: 13, name: "Aloo Grilled sandwich", price: 64 },
-            { id: 14, name: "Veg grilled sandwich", price: 84 },
-            { id: 15, name: "Veg cheese grilled sandwich", price: 94 },
-            { id: 16, name: "Cheese Corn Grilled Sandwich", price: 104 },
-            { id: 17, name: "Paneer & cheese Grilled Sandwich", price: 114 }
-        ]},
-        { category: "PASTA", items: [
-            { id: 18, name: "veg Red sauce pasta", price: 74 },
-            { id: 19, name: "veg white sauce pasta", price: 84 }
-        ]},
-        { category: "MOMOS", items: [
-            { id: 20, name: "veg momos steam", priceHalf: 54, priceFull: 84 },
-            { id: 21, name: "veg momos fried", priceHalf: 64, priceFull: 94 },
-            { id: 22, name: "paneer momos steam", priceHalf: 64, priceFull: 104 },
-            { id: 23, name: "paneer momos fried", priceHalf: 84, priceFull: 134 }
-        ]},
-        { category: "PARATHAS & CURD", items: [
-            { id: 24, name: "Aloo paratha (2pc)", price: 64 },
-            { id: 25, name: "Aloo pyaz paratha (2pc)", price: 74 },
-            { id: 26, name: "Gobhi paratha (2pc)", price: 84 },
-            { id: 27, name: "paneer paratha (2pc)", price: 94 },
-            { id: 28, name: "Plain curd", price: 35 },
-            { id: 29, name: "Boondi Raita", price: 54 },
-            { id: 30, name: "Sweet lassi", price: 64 }
-        ]},
-        { category: "MAGGI", items: [
-            { id: 31, name: "Plain maggi", price: 54 },
-            { id: 32, name: "Veg maggi", price: 64 }
-        ]},
-        { category: "RICE", items: [
-            { id: 33, name: "Veg fried rice", priceHalf: 74, priceFull: 124 },
-            { id: 34, name: "Classic spicy veg fried rice", priceHalf: 84, priceFull: 134 },
-            { id: 35, name: "veg schezwan fried rice", priceHalf: 94, priceFull: 164 }
-        ]},
-        { category: "BEVERAGES", items: [
-            { id: 36, name: "Cold coffee", price: 74 },
-            { id: 37, name: "Sweet lassi (Large)", price: 64 }
-        ]}
-    ];
+function checkLogin() {
+const user = document.getElementById('user-id').value;
+const pass = document.getElementById('user-pass').value;
+if (user === "Saffron" && pass === "258000") {
+document.getElementById('login-overlay').style.display = 'none';
+sessionStorage.setItem('isLoggedIn', 'true');
+} else {
+document.getElementById('login-error').style.display = 'block';
+}
+}
 
-    let cart = [];
+window.onload = function() {
+if (sessionStorage.getItem('isLoggedIn') === 'true') {
+document.getElementById('login-overlay').style.display = 'none';
+}
+renderMenu();
+};
 
-    function renderMenu() {
-        const container = document.getElementById('menu-container');
-        container.innerHTML = menuData.map(section => `
-            <h2 class="category-title">${section.category}</h2>
-            <div class="menu-grid">${section.items.map(item => `
-                <div class="menu-item">
-                    <div style="font-weight:bold; color:white;">${item.name}</div>
-                    <div style="color:var(--zomato-yellow); font-size: 0.85rem;">
-                        ${item.price ? '₹'+item.price : 'H: ₹'+item.priceHalf + ' / F: ₹'+item.priceFull}
-                    </div>
-                    <div id="btn-container-${item.id}">
-                        <button class="add-btn" onclick="handleItemClick(${item.id})">ADD</button>
-                    </div>
-                </div>`).join('')}</div>`).join('');
-    }
+const menuData = [
+{ category: "APPETIZERS", items: [
+{ id: 1, name: "Aloo tikki burger", price: 39 },
+{ id: 2, name: "Classic veg burger", price: 49 },
+{ id: 3, name: "Veg cheese burger", price: 59 },
+{ id: 4, name: "Double patty veg burger", price: 79 },
+{ id: 5, name: "Saffron Burger", price: 99 },
+{ id: 6, name: "French fries", priceHalf: 45, priceFull: 79 },
+{ id: 7, name: "Chilli potato", priceHalf: 59, priceFull: 109 },
+{ id: 8, name: "Honey chilli potato", priceHalf: 69, priceFull: 119 },
+{ id: 9, name: "Plain Veg Noodles", priceHalf: 59, priceFull: 109 },
+{ id: 10, name: "Veg Hakka Noodles", priceHalf: 69, priceFull: 119 },
+{ id: 11, name: "Veg Schezwan Noodles", priceHalf: 79, priceFull: 139 },
+{ id: 12, name: "Veg Chilli Garlic Noodle", priceHalf: 89, priceFull: 159 }
+]},
+{ category: "SANDWICHES", items: [
+{ id: 13, name: "Aloo Grilled sandwich", price: 49 },
+{ id: 14, name: "Veg grilled sandwich", price: 69 },
+{ id: 15, name: "Veg cheese grilled sandwich", price: 79 },
+{ id: 16, name: "Cheese Corn Grilled Sandwich", price: 89 },
+{ id: 17, name: "Paneer & cheese Grilled Sandwich", price: 99 }
+]},
+{ category: "PASTA", items: [
+{ id: 18, name: "veg Red souce pasta", price: 59 },
+{ id: 19, name: "veg white souce pasta", price: 69 }
+]},
+{ category: "MOMOS", items: [
+{ id: 20, name: "veg momos steam", priceHalf: 39, priceFull: 69 },
+{ id: 21, name: "veg momos fried", priceHalf: 49, priceFull: 79 },
+{ id: 22, name: "paneer momos steam", priceHalf: 49, priceFull: 89 },
+{ id: 23, name: "paneer momos fried", priceHalf: 69, priceFull: 119 }
+]},
+{ category: "PARATHA'S", items: [
+{ id: 24, name: "Aloo paratha (2pc)", price: 49 },
+{ id: 25, name: "Aloo pyaz paratha (2pc)", price: 59 },
+{ id: 26, name: "Gobhi paratha (2pc)", price: 69 },
+{ id: 27, name: "paneer paratha (2pc)", price: 79 },
+{ id: 28, name: "Plain curd", price: 20 },
+{ id: 29, name: "Boondi Raita", price: 39 },
+{ id: 30, name: "Sweet lassi", price: 49 }
+]},
+{ category: "MAGGI", items: [
+{ id: 31, name: "Plain maggi", price: 39 },
+{ id: 32, name: "Veg maggi", price: 49 }
+]},
+{ category: "RICE", items: [
+{ id: 33, name: "Veg fried rice", priceHalf: 59, priceFull: 109 },
+{ id: 34, name: "Classic spicy veg fried rice", priceHalf: 69, priceFull: 119 },
+{ id: 35, name: "veg schezwan fried rice", priceHalf: 79, priceFull: 149 }
+]},
+{ category: "BEVERAGES", items: [
+{ id: 36, name: "Cold coffee", price: 59 },
+{ id: 37, name: "Sweet lassi", price: 49 }
+]}
+];
 
-    function handleItemClick(id) {
-        let item; menuData.forEach(cat => { const f = cat.items.find(i => i.id === id); if(f) item = f; });
-        if (item.priceHalf) openSizePopup(item); else updateCart(item, 'Normal', item.price, 1);
-    }
+let cart = [];
 
-    function openSizePopup(item) {
-        document.getElementById('popup-item-name').innerText = item.name;
-        document.getElementById('size-options-list').innerHTML = `
-            <div class="size-option-btn" onclick="updateCartById(${item.id}, 'Half', ${item.priceHalf}, 1)">Half - ₹${item.priceHalf}</div>
-            <div class="size-option-btn" onclick="updateCartById(${item.id}, 'Full', ${item.priceFull}, 1)">Full - ₹${item.priceFull}</div>`;
-        document.getElementById('size-popup').style.display = 'flex';
-    }
+function renderMenu() {
+const container = document.getElementById('menu-container');
+container.innerHTML = menuData.map(section => `
+<h2 class="category-title">${section.category}</h2>
+<div class="menu-grid">${section.items.map(item => `
+<div class="menu-item">
+<div class="item-name">${item.name}</div>
+<div class="price-text">${item.priceHalf ? `H: ₹${item.priceHalf} / F: ₹${item.priceFull}` : `₹${item.price}`}</div>
+<div id="ctrls-${item.id}"><button class="add-btn" onclick="handleItemClick(${item.id})">Add Item</button></div>
+</div>`).join('')}</div>`).join('');
+}
 
-    function updateCartById(id, size, price, change) {
-        let item; menuData.forEach(cat => { const f = cat.items.find(i => i.id === id); if(f) item = f; });
-        updateCart(item, size, price, change);
-        closeSizePopup();
-    }
+function handleItemClick(id) {
+let itemRef; menuData.forEach(cat => { const found = cat.items.find(i => i.id === id); if(found) itemRef = found; });
+if (itemRef.priceHalf) openSizePopup(itemRef); else addToCart(id, 'Normal');
+}
 
-    function removeFromCart(key, id) {
-        cart = cart.filter(c => c.key !== key);
-        updateUI(id);
-    }
+function openSizePopup(item) {
+document.getElementById('popup-item-name').innerText = item.name;
+document.getElementById('size-options-list').innerHTML = `
+<div style="padding:15px; background:white; border-radius:10px; margin-bottom:10px; font-weight:bold; cursor:pointer;" onclick="selectFromPopup(${item.id}, 'Half')">Half - ₹${item.priceHalf}</div>
+<div style="padding:15px; background:white; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="selectFromPopup(${item.id}, 'Full')">Full - ₹${item.priceFull}</div>`;
+document.getElementById('size-popup').style.display = 'flex';
+}
 
-    function updateCart(item, size, price, change) {
-        const key = item.id + size;
-        const index = cart.findIndex(c => c.key === key);
-        if (index > -1) {
-            cart[index].qty += change;
-            if (cart[index].qty <= 0) cart.splice(index, 1);
-        } else if (change > 0) {
-            cart.push({ ...item, key, size, price, qty: 1 });
-        }
-        updateUI(item.id);
-    }
+function selectFromPopup(id, size) { addToCart(id, size); closeSizePopup(); }
+function closeSizePopup() { document.getElementById('size-popup').style.display = 'none'; }
 
-    function updateUI(lastId) {
-        let subtotal = 0, count = 0;
-        const cartItemsDiv = document.getElementById('cart-items-container');
-        
-        cartItemsDiv.innerHTML = cart.map(c => {
-            subtotal += (c.price * c.qty); count += c.qty;
-            return `<div class="bill-row">
-                <div style="display:flex; align-items:center;">
-                    <span class="remove-item" onclick="removeFromCart('${c.key}', ${c.id})">×</span>
-                    <span>${c.name}(${c.size}) x${c.qty}</span>
-                </div>
-                <span>₹${c.price*c.qty}</span>
-            </div>`;
-        }).join('');
+function addToCart(id, size) {
+let itemRef; menuData.forEach(cat => { const found = cat.items.find(i => i.id === id); if(found) itemRef = found; });
+const price = size === 'Half' ? itemRef.priceHalf : (size === 'Full' ? itemRef.priceFull : itemRef.price);
+const cartKey = `${id}-${size}`;
+const existing = cart.find(c => c.cartKey === cartKey);
+if (existing) existing.qty++; else cart.push({ ...itemRef, size, price, qty: 1, cartKey });
+updateItemControls(id, size); updateCartUI();
+}
 
-        const discount = Math.round(subtotal * 0.10);
-        const grandTotal = subtotal - discount;
-        
-        document.getElementById('cart-count').innerText = count;
-        document.getElementById('float-total').innerText = grandTotal;
-        document.getElementById('sub-total').innerText = subtotal;
-        document.getElementById('discount-amt').innerText = discount;
-        document.getElementById('grand-total').innerText = grandTotal;
-        document.getElementById('cart-float-btn').style.display = count > 0 ? 'block' : 'none';
+function updateItemControls(id, size) {
+const container = document.getElementById(`ctrls-${id}`);
+if(!container) return;
+const cartKey = `${id}-${size}`;
+const itemInCart = cart.find(c => c.cartKey === cartKey);
+if (itemInCart && itemInCart.qty > 0) {
+container.innerHTML = `<div class="qty-selector"><button class="ctrl-btn" onclick="updateQty('${cartKey}', -1)">-</button><span style="color:white;">${itemInCart.qty}</span><button class="ctrl-btn" onclick="updateQty('${cartKey}', 1)">+</button></div>`;
+} else {
+container.innerHTML = `<button class="add-btn" onclick="handleItemClick(${id})">Add Item</button>`;
+}
+}
 
-        if(lastId) {
-            const btnCont = document.getElementById(`btn-container-${lastId}`);
-            const itemInCart = cart.find(c => c.id === lastId);
-            if(itemInCart) {
-                btnCont.innerHTML = `
-                    <div class="qty-selector">
-                        <button class="ctrl-btn" onclick="updateCartById(${lastId}, '${itemInCart.size}', ${itemInCart.price}, -1)">-</button>
-                        <span class="qty-num">${itemInCart.qty}</span>
-                        <button class="ctrl-btn" onclick="updateCartById(${lastId}, '${itemInCart.size}', ${itemInCart.price}, 1)">+</button>
-                    </div>`;
-            } else {
-                btnCont.innerHTML = `<button class="add-btn" onclick="handleItemClick(${lastId})">ADD</button>`;
-            }
-        }
-    }
+function updateQty(cartKey, delta) {
+const index = cart.findIndex(c => c.cartKey === cartKey);
+if (index > -1) {
+cart[index].qty += delta;
+const itemId = cart[index].id; const size = cart[index].size;
+if (cart[index].qty <= 0) cart.splice(index, 1);
+updateItemControls(itemId, size);
+}
+updateCartUI();
+}
 
-    function filterMenu() {
-        const q = document.getElementById('menu-search').value.toLowerCase();
-        document.querySelectorAll('.menu-item').forEach(el => {
-            el.style.display = el.innerText.toLowerCase().includes(q) ? "flex" : "none";
-        });
-    }
+function updateCartUI() {
+const container = document.getElementById('cart-items-container');
+let total = 0, count = 0;
+if (cart.length === 0) { container.innerHTML = "<p>Cart is empty.</p>"; }
+else {
+container.innerHTML = cart.map(item => {
+const subtotal = item.price * item.qty; total += subtotal; count += item.qty;
+return `<div class="cart-row"><div>${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x${item.qty}</div><div>₹${subtotal}</div></div>`;
+}).join('');
+}
+document.getElementById('cart-count').innerText = count;
+document.getElementById('grand-total').innerText = total;
+}
 
-    function toggleCart(s) { document.getElementById('cart-modal').style.display = s ? 'flex' : 'none'; }
-    function closeSizePopup() { document.getElementById('size-popup').style.display = 'none'; }
+function filterMenu() {
+const query = document.getElementById('menu-search').value.toLowerCase();
+const items = document.querySelectorAll('.menu-item');
+items.forEach(item => {
+const name = item.querySelector('.item-name').innerText.toLowerCase();
+item.style.display = name.includes(query) ? "flex" : "none";
+});
+}
 
-    function placeOrder() {
-        const name = document.getElementById('cust-name').value;
-        if(!name) return alert("Please enter your name");
-        const details = cart.map(c => `${c.name}(${c.size})x${c.qty}`).join(', ');
-        const total = document.getElementById('grand-total').innerText;
-        new Image().src = `${SCRIPT_URL}?name=${encodeURIComponent(name)}&order_details=${encodeURIComponent(details)}&grand_total=${total}&order_type=${document.getElementById('order-type').value}&payment=Cash&address=${encodeURIComponent(document.getElementById('address-input').value || 'N/A')}`;
-        window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent('Order: ' + details + ' Total: ₹' + total)}`);
-        setTimeout(() => location.reload(), 1500);
-    }
+function toggleAddress() { document.getElementById('cust-address').style.display = (document.getElementById('order-type').value === 'Take Away') ? 'block' : 'none'; }
+function toggleCart(show) { document.getElementById('cart-modal').style.display = show ? 'flex' : 'none'; }
 
-    renderMenu();
+async function toggleSidebar() {
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebar-overlay');
+
+sidebar.classList.toggle('active');
+overlay.style.display = sidebar.classList.contains('active') ? 'block' : 'none';
+
+if (sidebar.classList.contains('active')) {
+document.getElementById('dtd-value').innerText = "Loading...";
+document.getElementById('mtd-value').innerText = "Loading...";
+try {
+const res = await fetch(G_SCRIPT_URL);
+const data = await res.json();
+document.getElementById('dtd-value').innerText = `₹${data.dtd.toLocaleString('en-IN')}`;
+document.getElementById('mtd-value').innerText = `₹${data.mtd.toLocaleString('en-IN')}`;
+} catch (e) {
+document.getElementById('dtd-value').innerText = "Error";
+document.getElementById('mtd-value').innerText = "Error";
+}
+}
+}
+
+function placeOrder() {
+if (cart.length === 0) return;
+const nInp = document.getElementById('cust-name');
+const pInp = document.getElementById('cust-phone');
+const tInp = document.getElementById('order-type');
+const aInp = document.getElementById('cust-address');
+const mInp = document.getElementById('payment-method');
+const grandTotal = document.getElementById('grand-total').innerText;
+
+if (!pInp.value || !nInp.value) { alert("Fill Name & Phone!"); return; }
+
+const orderData = {
+name: nInp.value, phone: pInp.value, type: tInp.value,
+address: aInp.value || "N/A", payment: mInp.value,
+total: grandTotal, items: cart.map(i => `${i.name}(${i.size})x${i.qty}`).join(", ")
+};
+
+fetch(G_SCRIPT_URL, {
+method: 'POST',
+mode: 'no-cors',
+body: JSON.stringify(orderData)
+});
+
+let msg = `*SAFFRON FOOD*\nDear ${nInp.value}\nyour order placed\n\n*Order Summary:*\n`;
+cart.forEach(item => { msg += `* ${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x${item.qty} = ₹${item.price * item.qty}\n`; });
+msg += `\n*TOTAL: ₹${grandTotal}*\n\nThanks for visiting ❣️`;
+
+window.open(`https://wa.me/${pInp.value.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
+
+setTimeout(() => {
+cart = [];
+location.reload();
+}, 1000);
+}
 </script>
 </body>
 </html>
