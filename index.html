@@ -119,60 +119,62 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRV94G5GbgF2G58T2SdujhZlVrYl1Ly-gD8gS7c8BPFiWeidlSh1jXekj2v36kCdc/exec";
 
     const menuData = [
-        { category: "BURGERS", items: [
-            { id: 1, name: "Aloo tikki burger", price: 39 },
-            { id: 2, name: "Cheese burger", price: 59 },
-            { id: 3, name: "Paneer burger", price: 69 },
-            { id: 4, name: "Double tikki burger", price: 69 },
-            { id: 5, name: "Saffron special burger", price: 89 }
+        { category: "APPETIZERS (BURGERS)", items: [
+            { id: 1, name: "Aloo tikki burger", price: 54 },
+            { id: 2, name: "Classic veg burger", price: 64 },
+            { id: 3, name: "Veg cheese burger", price: 74 },
+            { id: 4, name: "Double patty veg burger", price: 94 },
+            { id: 5, name: "Saffron Burger", price: 114 }
         ]},
-        { category: "FRIES & SIDES", items: [
-            { id: 6, name: "French fries", priceHalf: 45, priceFull: 79 },
-            { id: 7, name: "Chilli potato", priceHalf: 59, priceFull: 109 },
-            { id: 8, name: "Honey chilli potato", priceHalf: 79, priceFull: 139 },
-            { id: 9, name: "Paneer finger", price: 99 },
-            { id: 10, name: "Veg nuggets", price: 69 }
+        { category: "FRIES & CHILLI", items: [
+            { id: 6, name: "French fries", priceHalf: 60, priceFull: 94 },
+            { id: 7, name: "Chilli potato", priceHalf: 74, priceFull: 124 },
+            { id: 8, name: "Honey chilli potato", priceHalf: 84, priceFull: 134 }
         ]},
-        { category: "STEAM MOMOS", items: [
-            { id: 11, name: "Veg steam momos", priceHalf: 39, priceFull: 69 },
-            { id: 12, name: "Paneer steam momos", priceHalf: 59, priceFull: 109 },
-            { id: 13, name: "Corn steam momos", priceHalf: 49, priceFull: 89 }
+        { category: "NOODLES", items: [
+            { id: 9, name: "Plain Veg Noodles", priceHalf: 74, priceFull: 124 },
+            { id: 10, name: "Veg Hakka Noodles", priceHalf: 84, priceFull: 134 },
+            { id: 11, name: "Veg Schezwan Noodles", priceHalf: 94, priceFull: 154 },
+            { id: 12, name: "Veg Chilli Garlic Noodle", priceHalf: 104, priceFull: 174 }
         ]},
-        { category: "FRIED MOMOS", items: [
-            { id: 14, name: "Veg fried momos", priceHalf: 49, priceFull: 89 },
-            { id: 15, name: "Paneer fried momos", priceHalf: 69, priceFull: 129 },
-            { id: 16, name: "Kurkure momos", priceHalf: 79, priceFull: 149 }
-        ]},
-        { category: "CHOWMEIN", items: [
-            { id: 17, name: "Veg chowmein", priceHalf: 49, priceFull: 89 },
-            { id: 18, name: "Paneer chowmein", priceHalf: 69, priceFull: 129 },
-            { id: 19, name: "Singapuri chowmein", priceHalf: 59, priceFull: 109 }
-        ]},
-        { category: "PIZZA (7 inch)", items: [
-            { id: 20, name: "Margherita pizza", price: 99 },
-            { id: 21, name: "Onion pizza", price: 119 },
-            { id: 22, name: "Capsicum pizza", price: 119 },
-            { id: 23, name: "Sweet corn pizza", price: 129 },
-            { id: 24, name: "Paneer pizza", price: 159 },
-            { id: 25, name: "Saffron special pizza", price: 199 }
+        { category: "SANDWICHES", items: [
+            { id: 13, name: "Aloo Grilled sandwich", price: 64 },
+            { id: 14, name: "Veg grilled sandwich", price: 84 },
+            { id: 15, name: "Veg cheese grilled sandwich", price: 94 },
+            { id: 16, name: "Cheese Corn Grilled Sandwich", price: 104 },
+            { id: 17, name: "Paneer & cheese Grilled Sandwich", price: 114 }
         ]},
         { category: "PASTA", items: [
-            { id: 26, name: "White sauce pasta", price: 119 },
-            { id: 27, name: "Red sauce pasta", price: 99 },
-            { id: 28, name: "Mix sauce pasta", price: 139 }
+            { id: 18, name: "veg Red sauce pasta", price: 74 },
+            { id: 19, name: "veg white sauce pasta", price: 84 }
         ]},
-        { category: "SHAKES", items: [
-            { id: 29, name: "Chocolate shake", price: 69 },
-            { id: 30, name: "Vanilla shake", price: 59 },
-            { id: 31, name: "Strawberry shake", price: 59 },
-            { id: 32, name: "Cold coffee", price: 79 },
-            { id: 33, name: "Oreo shake", price: 89 }
+        { category: "MOMOS", items: [
+            { id: 20, name: "veg momos steam", priceHalf: 54, priceFull: 84 },
+            { id: 21, name: "veg momos fried", priceHalf: 64, priceFull: 94 },
+            { id: 22, name: "paneer momos steam", priceHalf: 64, priceFull: 104 },
+            { id: 23, name: "paneer momos fried", priceHalf: 84, priceFull: 134 }
+        ]},
+        { category: "PARATHAS & CURD", items: [
+            { id: 24, name: "Aloo paratha (2pc)", price: 64 },
+            { id: 25, name: "Aloo pyaz paratha (2pc)", price: 74 },
+            { id: 26, name: "Gobhi paratha (2pc)", price: 84 },
+            { id: 27, name: "paneer paratha (2pc)", price: 94 },
+            { id: 28, name: "Plain curd", price: 35 },
+            { id: 29, name: "Boondi Raita", price: 54 },
+            { id: 30, name: "Sweet lassi", price: 64 }
+        ]},
+        { category: "MAGGI", items: [
+            { id: 31, name: "Plain maggi", price: 54 },
+            { id: 32, name: "Veg maggi", price: 64 }
+        ]},
+        { category: "RICE", items: [
+            { id: 33, name: "Veg fried rice", priceHalf: 74, priceFull: 124 },
+            { id: 34, name: "Classic spicy veg fried rice", priceHalf: 84, priceFull: 134 },
+            { id: 35, name: "veg schezwan fried rice", priceHalf: 94, priceFull: 164 }
         ]},
         { category: "BEVERAGES", items: [
-            { id: 34, name: "Virgin mojito", price: 69 },
-            { id: 35, name: "Blue lagoon", price: 69 },
-            { id: 36, name: "Masala coke", price: 39 },
-            { id: 37, name: "Fresh lime soda", price: 49 }
+            { id: 36, name: "Cold coffee", price: 74 },
+            { id: 37, name: "Sweet lassi (Large)", price: 64 }
         ]}
     ];
 
