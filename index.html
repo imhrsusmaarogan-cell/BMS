@@ -386,9 +386,9 @@ msg += `* ${item.name}${item.size !== 'Normal' ? ' (' + item.size + ')' : ''} x$
 });
 
 msg += `\n*TOTAL: ₹${grandTotal}*\n\n`;
-msg += `*Client Name:* ${nInp.value}\n`;
-msg += `*Order Type:* ${tInp.value}\n`;
-msg += `*Payment Type:* ${mInp.value}`;
+msg += `👤 ${nInp.value}\n`;
+msg += `🍽️ ${tInp.value}\n`;
+msg += `💳 ${mInp.value}`;
 
 window.open(`https://wa.me/918449481394?text=${encodeURIComponent(msg)}`, '_blank');
 setTimeout(() => {
