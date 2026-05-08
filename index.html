@@ -385,7 +385,10 @@ cart.forEach(item => {
 msg += `* ${item.name}${item.size !== 'Normal' ? ' (' + item.size + ')' : ''} x${item.qty} = ₹${item.price * item.qty}\n`;
 });
 
-msg += `\n*TOTAL: ₹${grandTotal}*`;
+msg += `\n*TOTAL: ₹${grandTotal}*\n\n`;
+msg += `*Client Name:* ${nInp.value}\n`;
+msg += `*Order Type:* ${tInp.value}\n`;
+msg += `*Payment Type:* ${mInp.value}`;
 
 window.open(`https://wa.me/918449481394?text=${encodeURIComponent(msg)}`, '_blank');
 setTimeout(() => {
