@@ -186,17 +186,6 @@ color: white;
 <script>
 const G_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyropeBOjRp-iJMpBG_eugzQmHOdiIf8LgqHuvpK89jmRrBOVwKnMMw7Jkk5V3j5V_r/exec';
 
-function checkLogin() {
-const user = document.getElementById('user-id').value;
-const pass = document.getElementById('user-pass').value;
-if (user === "Saffron" && pass === "258000") {
-document.getElementById('login-overlay').style.display = 'none';
-sessionStorage.setItem('isLoggedIn', 'true');
-} else {
-document.getElementById('login-error').style.display = 'block';
-}
-}
-
 window.onload = function() {
 if (sessionStorage.getItem('isLoggedIn') === 'true') {
 document.getElementById('login-overlay').style.display = 'none';
