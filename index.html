@@ -331,9 +331,17 @@ item.style.display = name.includes(query) ? "flex" : "none";
 });
 }
 
-function toggleAddress() { document.getElementById('cust-address').style.display = (document.getElementById('order-type').value === 'Take Away') ? 'block' : 'none'; }
-function toggleCart(show) { document.getElementById('cart-modal').style.display = show ? 'flex' : 'none'; }
+function toggleCart(show) {
 
+document.getElementById('cart-modal').style.display = show ? 'flex' : 'none';
+
+if (show) {
+document.body.style.overflow = 'hidden';
+} else {
+document.body.style.overflow = 'auto';
+}
+
+}
 async function toggleSidebar() {
 const sidebar = document.getElementById('sidebar');
 const overlay = document.getElementById('sidebar-overlay');
