@@ -139,6 +139,18 @@ color: white;
 <span class="close-btn" style="color:white; cursor:pointer; font-size:24px;" onclick="toggleSidebar()">✕</span>
 </div>
 <div class="sidebar-content" style="padding:20px;">
+ <div class="outlet-status-card" style="display: flex; justify-content: space-between; align-items: center; background: #2b2b2b; padding: 12px 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
+            <div style="display: flex; flex-direction: column;">
+                <span style="color:#ffffff; font-size:14px; font-weight: bold; margin-bottom: 2px;">Saffron Food</span>
+                <span style="color:#888888; font-size:11px;">Outlet Info | Sector 12</span>
+            </div>
+            
+            <label style="position: relative; display: flex; align-items: center; background: #4cd964; padding: 5px 12px; border-radius: 20px; cursor: pointer; transition: 0.3s;" id="status-bg">
+                <span id="status-label-text" style="color: white; font-size: 13px; font-weight: bold; margin-right: 8px; user-select: none;">Online</span>
+                <input type="checkbox" id="store-toggle" checked style="display: none;" onchange="handleStoreToggle()">
+                <div style="width: 16px; height: 16px; background: white; border-radius: 50%; transition: 0.3s; transform: translateX(0);" id="toggle-circle"></div>
+            </label>
+        </div>   
 <div class="sale-card">
 <span style="color:#aaa; font-size:12px;">DTD</span>
 <h2 id="dtd-value" style="color:#ffd600; margin:5px 0 0 0;">₹0</h2>
