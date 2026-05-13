@@ -279,7 +279,7 @@ container.innerHTML = menuData.map(section => `
 <div class="menu-grid">${section.items.map(item => `
 <div class="menu-item">
 <div class="item-name">${item.name}</div>
-<div class="price-text">${item.priceHalf ? `H: ₹${item.priceHalf} / F: ₹${item.priceFull}` : `₹${item.price}`}</div>
+<div class="price-text" style="color: #ffffff !important;">${item.priceHalf ? `H: ₹${item.priceHalf} / F: ₹${item.priceFull}` : `₹${item.price}`}</div>
 <div id="ctrls-${item.id}"><button class="add-btn" onclick="handleItemClick(${item.id})">Add Item</button></div>
 </div>`).join('')}</div>`).join('');
 }
