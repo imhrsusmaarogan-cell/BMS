@@ -189,6 +189,17 @@ const G_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyropeBOjRp-iJMpBG
 window.onload = function() {
 renderMenu();
 };
+function toggleAddress() {
+    const orderType = document.getElementById('order-type').value;
+    const addressInput = document.getElementById('cust-address');
+    
+    if (orderType === 'Take Away') {
+        addressInput.style.display = 'block'; // एड्रेस बॉक्स दिखाएगा
+    } else {
+        addressInput.style.display = 'none';  // एड्रेस बॉक्स छुपाएगा
+        addressInput.value = '';             // खाली कर देगा
+    }
+}
 
 const menuData = [
 { category: "APPETIZERS", items: [
