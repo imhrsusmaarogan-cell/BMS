@@ -190,15 +190,15 @@ window.onload = function() {
 renderMenu();
 };
 function toggleAddress() {
-    const orderType = document.getElementById('order-type').value;
-    const addressInput = document.getElementById('cust-address');
-    
-    if (orderType === 'Take Away') {
-        addressInput.style.display = 'block'; // एड्रेस बॉक्स दिखाएगा
-    } else {
-        addressInput.style.display = 'none';  // एड्रेस बॉक्स छुपाएगा
-        addressInput.value = '';             // खाली कर देगा
-    }
+const orderType = document.getElementById('order-type').value;
+const addressInput = document.getElementById('cust-address');
+
+if (orderType === 'Take Away') {
+addressInput.style.display = 'block'; // एड्रेस बॉक्स दिखाएगा
+} else {
+addressInput.style.display = 'none';  // एड्रेस बॉक्स छुपाएगा
+addressInput.value = '';             // खाली कर देगा
+}
 }
 
 const menuData = [
@@ -320,134 +320,15 @@ updateCartUI();
 }
 
 function updateCartUI() {
-    try {
-        const container = document.getElementById('cart-items-container') || document.getElementById('cart-items-list');
-        let total = 0, count = 0;
-        
-        if (!container) return; // अगर कंटेनर नहीं मिला तो फंक्शन यहीं रुक जाएगा, एरर नहीं देगा
-        
-        if (!cart || cart.length === 0) {
-            container.innerHTML = "<p style='color:#666; text-align:center; padding:20px;'>Cart is empty.</p>";
-            const grandTotalSpan = document.getElementById('grand-total');
-            if (grandTotalSpan) grandTotalSpan.innerText = "0";
-            const cartCountSpan = document.getElementById('cart-count');
-            if (cartCountSpan) cartCountSpan.innerText = "0";
-            return;
-        }
-
-        let cartHtml = "";
-        cart.forEach(item => {
-            const itemTotal = (item.price || 0) * (item.qty || 0);
-            total += itemTotal;
-            count += (item.qty || 0);
-            
-            const sizeText = item.size ? ` (${item.size})` : "";
-            const itemName = item.itemRef ? item.itemRef.name : (item.name || "Item");
-
-            cartHtml += `
-            <div class="cart-row" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
-                <div style="flex: 1; color: #000; font-weight: 500;">
-                    ${itemName}${sizeText}
-                </div>
-                <div style="display: flex; align-items: center; gap: 10px; margin-right: 15px;">
-                    <button onclick="updateQty('${item.cartKey}', -1)" style="background: #ffd600; border: none; width: 26px; height: 26px; border-radius: 6px; font-weight: bold; cursor: pointer; color: #000;">-</button>
-                    <span style="font-weight: bold; color: #000; min-width: 15px; text-align: center;">${item.qty}</span>
-                    <button onclick="updateQty('${item.cartKey}', 1)" style="background: #ffd600; border: none; width: 26px; height: 26px; border-radius: 6px; font-weight: bold; cursor: pointer; color: #000;">+</button>
-                </div>
-                <div style="color: #000; font-weight: bold; min-width: 60px; text-align: right;">
-                    ₹${itemTotal}
-                </div>
-            </div>`;
-        });
-
-        container.innerHTML = cartHtml;
-        
-        const grandTotalSpan = document.getElementById('grand-total');
-        if (grandTotalSpan) grandTotalSpan.innerText = total;
-        
-        const cartCountSpan = document.getElementById('cart-count');
-        if (cartCountSpan) cartCountSpan.innerText = count;
-        
-    } catch (error) {
-        console.log("Cart UI Error bypassed:", error);
-    }
+const container = document.getElementById('cart-items-container');
+let total = 0, count = 0;
+if (cart.length === 0) { container.innerHTML = "<p>Cart is empty.</p>"; }
+else {
+container.innerHTML = cart.map(item => {
+const subtotal = item.price * item.qty; total += subtotal; count += item.qty;
+return `<div class="cart-row"><div>${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x${item.qty}</div><div>₹${subtotal}</div></div>`;
+}).join('');
 }
-
-    let cartHtml = "";
-    cart.forEach(item => {
-        const itemTotal = item.price * item.qty;
-        total += itemTotal;
-        count += item.qty;
-        
-        const sizeText = item.size ? ` (${item.size})` : "";
-
-        cartHtml += `
-        <div class="cart-row" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; background: white; margin-bottom: 5px; border-radius: 8px;">
-            <div style="flex: 1; color: #000; font-weight: 500; font-size: 0.95rem; padding-left: 10px;">
-                ${item.itemRef ? item.itemRef.name : (item.name || "Item")}${sizeText}
-            </div>
-            
-            <!-- प्लस-माइनस (+/-) बटन्स -->
-            <div style="display: flex; align-items: center; gap: 10px; margin-right: 15px;">
-                <button onclick="updateQty('${item.cartKey}', -1)" style="background: #ffd600; border: none; width: 26px; height: 26px; border-radius: 6px; font-weight: bold; cursor: pointer; color: #000; font-size: 1rem; display: flex; align-items: center; justify-content: center;">-</button>
-                <span style="font-weight: bold; color: #000; min-width: 15px; text-align: center; font-size: 0.95rem;">${item.qty}</span>
-                <button onclick="updateQty('${item.cartKey}', 1)" style="background: #ffd600; border: none; width: 26px; height: 26px; border-radius: 6px; font-weight: bold; cursor: pointer; color: #000; font-size: 1rem; display: flex; align-items: center; justify-content: center;">+</button>
-            </div>
-
-            <div style="color: #000; font-weight: bold; min-width: 60px; text-align: right; font-size: 0.95rem; padding-right: 10px;">
-                ₹${itemTotal}
-            </div>
-        </div>`;
-    });
-
-    if (container) container.innerHTML = cartHtml;
-    
-    // आईडी चेक करके ही वैल्यू डाल रहे हैं ताकि एरर न आये
-    const grandTotalSpan = document.getElementById('grand-total');
-    if (grandTotalSpan) grandTotalSpan.innerText = total;
-    
-    const cartCountSpan = document.getElementById('cart-count');
-    if (cartCountSpan) cartCountSpan.innerText = count;
-}
-
-
-    let cartHtml = "";
-    cart.forEach(item => {
-        const itemTotal = item.price * item.qty;
-        total += itemTotal;
-        count += item.qty;
-        
-        const sizeText = item.size ? ` (${item.size})` : "";
-
-        cartHtml += `
-        <div class="cart-row" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
-            <div style="flex: 1; color: #000; font-weight: 500; font-size: 0.95rem;">
-                ${item.itemRef.name}${sizeText}
-            </div>
-            
-            <!-- यहाँ कार्ट के अंदर नया प्लस-माइनस (+/-) बटन डिज़ाइन किया है -->
-            <div style="display: flex; align-items: center; gap: 10px; margin-right: 15px;">
-                <button onclick="updateQty('${item.cartKey}', -1)" style="background: #ffd600; border: none; width: 26px; height: 26px; border-radius: 6px; font-weight: bold; cursor: pointer; color: #000; font-size: 1rem; display: flex; align-items: center; justify-content: center;">-</button>
-                <span style="font-weight: bold; color: #000; min-width: 15px; text-align: center; font-size: 0.95rem;">${item.qty}</span>
-                <button onclick="updateQty('${item.cartKey}', 1)" style="background: #ffd600; border: none; width: 26px; height: 26px; border-radius: 6px; font-weight: bold; cursor: pointer; color: #000; font-size: 1rem; display: flex; align-items: center; justify-content: center;">+</button>
-            </div>
-
-            <div style="color: #000; font-weight: bold; min-width: 60px; text-align: right; font-size: 0.95rem;">
-                ₹${itemTotal}
-            </div>
-        </div>`;
-    });
-
-    if (container) container.innerHTML = cartHtml;
-    
-    // टोटल अमाउंट और कार्ट काउंट अपडेट करना
-    const grandTotalSpan = document.getElementById('grand-total');
-    if (grandTotalSpan) grandTotalSpan.innerText = total;
-    
-    const cartCountSpan = document.getElementById('cart-count');
-    if (cartCountSpan) cartCountSpan.innerText = count;
-}
-
 document.getElementById('cart-count').innerText = count;
 document.getElementById('grand-total').innerText = total;
 }
