@@ -373,13 +373,31 @@ document.getElementById('grand-total').innerText = total;
 }
 
 function filterMenu() {
-const query = document.getElementById('menu-search').value.toLowerCase();
-const items = document.querySelectorAll('.menu-item');
-items.forEach(item => {
-const name = item.querySelector('.item-name').innerText.toLowerCase();
-item.style.display = name.includes(query) ? "flex" : "none";
-});
+    const query = document.getElementById('menu-search').value.toLowerCase();
+    
+    // 1. पहले सारे आइटम्स को सर्च क्वेरी के हिसाब से छुपाएं या दिखाएं
+    const items = document.querySelectorAll('.menu-item');
+    items.forEach(item => {
+        const name = item.querySelector('.item-name').innerText.toLowerCase();
+        item.style.display = name.includes(query) ? "flex" : "none";
+    });
+
+    // 2. अब चेक करें कि किस कैटेगरी में एक भी आइटम दिखाई दे रहा है या नहीं
+    const categoryTitles = document.querySelectorAll('.category-title');
+    categoryTitles.forEach(title => {
+        // हर टाइटल के ठीक आगे वाला ग्रिड बॉक्स ढूंढें जिसमें आइटम्स रखे हैं
+        const nextGrid = title.nextElementSibling;
+        if (nextGrid && nextGrid.classList.contains('menu-grid')) {
+            // चेक करें कि क्या उस ग्रिड के अंदर कोई भी आइटम 'flex' (दिखने वाला) है
+            const hasVisibleItems = Array.from(nextGrid.children).some(item => item.style.display !== 'none');
+            
+            // अगर एक भी आइटम नहीं दिख रहा, तो पूरी कैटेगरी हेडिंग को छुपा दें
+            title.style.display = hasVisibleItems ? "block" : "none";
+            nextGrid.style.display = hasVisibleItems ? "grid" : "none";
+        }
+    });
 }
+
 
 function toggleCart(show) {
 
