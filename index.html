@@ -410,6 +410,24 @@ function filterMenu() {
         }
     });
 }
+function handleStoreToggle() {
+    const toggle = document.getElementById('store-toggle');
+    const statusBg = document.getElementById('status-bg');
+    const labelText = document.getElementById('status-label-text');
+    const circle = document.getElementById('toggle-circle');
+    
+    if (toggle && statusBg && labelText && circle) {
+        if (toggle.checked) {
+            statusBg.style.background = '#4cd964'; // हरा रंग (Online)
+            labelText.innerText = "Online";
+            circle.style.transform = "translateX(0)";
+        } else {
+            statusBg.style.background = '#777777'; // ग्रे रंग (Offline)
+            labelText.innerText = "Offline";
+            circle.style.transform = "translateX(4px)"; // स्विच इफेक्ट
+        }
+    }
+}
 
 
 function toggleCart(show) {
