@@ -469,6 +469,11 @@ document.getElementById('mtd-value').innerText = "Error";
 }
 
 function placeOrder() {
+const toggleBtn = document.getElementById('store-toggle');
+    if (toggleBtn && !toggleBtn.checked) {
+        alert("🚨 Sorry, Restaurant is Closed Right Now! Will open at 10am.");
+        return;
+    }    
 if (cart.length === 0) return;
 const nInp = document.getElementById('cust-name');
 const pInp = document.getElementById('cust-phone');
