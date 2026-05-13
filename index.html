@@ -320,15 +320,55 @@ updateCartUI();
 }
 
 function updateCartUI() {
-const container = document.getElementById('cart-items-container');
-let total = 0, count = 0;
-if (cart.length === 0) { container.innerHTML = "<p>Cart is empty.</p>"; }
-else {
-container.innerHTML = cart.map(item => {
-const subtotal = item.price * item.qty; total += subtotal; count += item.qty;
-return `<div class="cart-row"><div>${item.name}${item.size!=='Normal'?' ('+item.size+')':''} x${item.qty}</div><div>₹${subtotal}</div></div>`;
-}).join('');
+    const container = document.getElementById('cart-items-container');
+    let total = 0, count = 0;
+    
+    if (cart.length === 0) {
+        if (container) container.innerHTML = "<p style='color:#666; text-align:center; padding:20px;'>Cart is empty.</p>";
+        const grandTotalSpan = document.getElementById('grand-total');
+        if (grandTotalSpan) grandTotalSpan.innerText = "0";
+        const cartCountSpan = document.getElementById('cart-count');
+        if (cartCountSpan) cartCountSpan.innerText = "0";
+        return;
+    }
+
+    let cartHtml = "";
+    cart.forEach(item => {
+        const itemTotal = item.price * item.qty;
+        total += itemTotal;
+        count += item.qty;
+        
+        const sizeText = item.size ? ` (${item.size})` : "";
+
+        cartHtml += `
+        <div class="cart-row" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
+            <div style="flex: 1; color: #000; font-weight: 500; font-size: 0.95rem;">
+                ${item.itemRef.name}${sizeText}
+            </div>
+            
+            <!-- यहाँ कार्ट के अंदर नया प्लस-माइनस (+/-) बटन डिज़ाइन किया है -->
+            <div style="display: flex; align-items: center; gap: 10px; margin-right: 15px;">
+                <button onclick="updateQty('${item.cartKey}', -1)" style="background: #ffd600; border: none; width: 26px; height: 26px; border-radius: 6px; font-weight: bold; cursor: pointer; color: #000; font-size: 1rem; display: flex; align-items: center; justify-content: center;">-</button>
+                <span style="font-weight: bold; color: #000; min-width: 15px; text-align: center; font-size: 0.95rem;">${item.qty}</span>
+                <button onclick="updateQty('${item.cartKey}', 1)" style="background: #ffd600; border: none; width: 26px; height: 26px; border-radius: 6px; font-weight: bold; cursor: pointer; color: #000; font-size: 1rem; display: flex; align-items: center; justify-content: center;">+</button>
+            </div>
+
+            <div style="color: #000; font-weight: bold; min-width: 60px; text-align: right; font-size: 0.95rem;">
+                ₹${itemTotal}
+            </div>
+        </div>`;
+    });
+
+    if (container) container.innerHTML = cartHtml;
+    
+    // टोटल अमाउंट और कार्ट काउंट अपडेट करना
+    const grandTotalSpan = document.getElementById('grand-total');
+    if (grandTotalSpan) grandTotalSpan.innerText = total;
+    
+    const cartCountSpan = document.getElementById('cart-count');
+    if (cartCountSpan) cartCountSpan.innerText = count;
 }
+
 document.getElementById('cart-count').innerText = count;
 document.getElementById('grand-total').innerText = total;
 }
