@@ -90,6 +90,10 @@ header h1 { font-size: 1.4rem; margin: 0; font-weight: bold; }
     background-color: #fce4ec !important;
     padding-bottom: 20px;
 }
+.category-section:has(.menu-grid:empty),
+.category-section[style*="display: none"] {
+    display: none !important;
+}
 
 .ctrl-btn { background-color: var(--zomato-yellow); border: none; width: 30px; height: 30px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
