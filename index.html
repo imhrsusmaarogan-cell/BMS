@@ -44,10 +44,9 @@ transition: 0.3s;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
-body { background-color: #fce4ec; min-height: 100vh; overflow-x: hidden; }
+body { background-color: #000; min-height: 100vh; overflow-x: hidden; }
 
-.app-container { width: 100%; max-width: 480px; background-color: #fce4ec; min-height: 100vh; position: relative; padding-bottom: 120px; margin: 0 auto; }
-
+.app-container { width: 100%; max-width: 480px; background-color: var(--dark-bg); min-height: 100vh; position: relative; padding-bottom: 120px; margin: 0 auto; }
 
 #login-overlay {
 position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -77,9 +76,9 @@ header h1 { font-size: 1.4rem; margin: 0; font-weight: bold; }
 .search-wrapper input { border: none; outline: none; width: 100%; font-size: 16px; margin-left: 10px; color: #333; }
 
 .category-title { color: var(--zomato-yellow); padding: 1px 15px 5px; font-size: 1.3rem; text-transform: uppercase; border-bottom: 5px solid #333; }
-.menu-item { background: #ffffff !important; border-radius: 20px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; }
-.menu-item { background: var(--baby-pink); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-.item-name { color: #000000; font-size: 0.95rem; font-weight: bold; margin-bottom: 5px; }
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+.menu-item { background: var(--card-bg); border-radius: 20px; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; min-height: 160px; }
+.item-name { color: var(--text-main); font-size: 0.95rem; font-weight: bold; margin-bottom: 5px; }
 .price-text { color: var(--zomato-yellow); font-weight: 600; font-size: 0.85rem; }
 .add-btn { background-color: var(--zomato-yellow); border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; color: #000; margin-top: 10px; cursor: pointer; }
 .qty-selector { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
@@ -321,43 +320,43 @@ updateCartUI();
 }
 
 function updateCartUI() {
-    const container = document.getElementById('cart-items-container');
-    let total = 0, count = 0;
-    
-    if (cart.length === 0) { 
-        if (container) container.innerHTML = "<p style='color:#666; text-align:center; padding:20px;'>Cart is empty.</p>"; 
-    } else {
-        if (container) {
-            container.innerHTML = cart.map(item => {
-                const subtotal = item.price * item.qty; 
-                total += subtotal; 
-                count += item.qty;
-                
-                const sizeText = item.size !== 'Normal' ? ' (' + item.size + ')' : '';
-                
-                return `
-                <div class="cart-row" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
-                    <div style="flex: 1; color: #000; font-weight: 500;">
-                        ${item.name}${sizeText}
-                    </div>
-                    
-                    <!-- यहाँ क्वांटिटी बदलने के लिए + / - बटन्स -->
-                    <div style="display: flex; align-items: center; gap: 8px; margin-right: 15px;">
-                        <button onclick="updateQty('${item.cartKey}', -1)" style="background: #ffd600; border: none; width: 25px; height: 25px; border-radius: 5px; font-weight: bold; cursor: pointer; color: #000; font-size: 1rem; display: flex; align-items: center; justify-content: center;">-</button>
-                        <span style="font-weight: bold; color: #000; min-width: 15px; text-align: center;">${item.qty}</span>
-                        <button onclick="updateQty('${item.cartKey}', 1)" style="background: #ffd600; border: none; width: 25px; height: 25px; border-radius: 5px; font-weight: bold; cursor: pointer; color: #000; font-size: 1rem; display: flex; align-items: center; justify-content: center;">+</button>
-                    </div>
+const container = document.getElementById('cart-items-container');
+let total = 0, count = 0;
 
-                    <div style="color: #000; font-weight: bold; min-width: 60px; text-align: right;">
-                        ₹${subtotal}
-                    </div>
-                </div>`;
-            }).join('');
-        }
-    }
-    
-    document.getElementById('cart-count').innerText = count;
-    document.getElementById('grand-total').innerText = total;
+if (cart.length === 0) {
+if (container) container.innerHTML = "<p style='color:#666; text-align:center; padding:20px;'>Cart is empty.</p>";
+} else {
+if (container) {
+container.innerHTML = cart.map(item => {
+const subtotal = item.price * item.qty;
+total += subtotal;
+count += item.qty;
+
+const sizeText = item.size !== 'Normal' ? ' (' + item.size + ')' : '';
+
+return `
+<div class="cart-row" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
+<div style="flex: 1; color: #000; font-weight: 500;">
+${item.name}${sizeText}
+</div>
+
+<!-- यहाँ क्वांटिटी बदलने के लिए + / - बटन्स -->
+<div style="display: flex; align-items: center; gap: 8px; margin-right: 15px;">
+<button onclick="updateQty('${item.cartKey}', -1)" style="background: #ffd600; border: none; width: 25px; height: 25px; border-radius: 5px; font-weight: bold; cursor: pointer; color: #000; font-size: 1rem; display: flex; align-items: center; justify-content: center;">-</button>
+<span style="font-weight: bold; color: #000; min-width: 15px; text-align: center;">${item.qty}</span>
+<button onclick="updateQty('${item.cartKey}', 1)" style="background: #ffd600; border: none; width: 25px; height: 25px; border-radius: 5px; font-weight: bold; cursor: pointer; color: #000; font-size: 1rem; display: flex; align-items: center; justify-content: center;">+</button>
+</div>
+
+<div style="color: #000; font-weight: bold; min-width: 60px; text-align: right;">
+₹${subtotal}
+</div>
+</div>`;
+}).join('');
+}
+}
+
+document.getElementById('cart-count').innerText = count;
+document.getElementById('grand-total').innerText = total;
 }
 
 function filterMenu() {
