@@ -177,30 +177,31 @@ color: white;
 
 <div id="menu-container"></div>
 <div style="text-align:center; color:#555; padding:20px;">Powered by SEFFRON</div>
-<!-- Yeh ek dummy link hai taaki aapki purani JavaScript ko iski trigger ID mil sake aur code break na ho -->
-<a id="view-cart-trigger" style="display: none;"></a>
+<!-- 🚨 BUG FIX: यह लाइन आपकी पुरानी जावास्क्रिप्ट को क्रैश होने से बचाएगी और हाफ/फुल पॉपअप खोल देगी -->
+<div class="view-cart-trigger" id="view-cart-trigger" style="display: none !important; opacity: 0 !important; visibility: hidden !important;"></div>
 
+<!-- आपकी सुंदर 4 बटन वाली बॉटम बार -->
 <div class="mobile-only-bar" style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 450px; height: 60px; background-color: #fbc2c8; z-index: 99; display: flex; align-items: center; justify-content: space-around; box-sizing: border-box; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);">
     
-    <!-- Button 1: HOME -->
+    <!-- बटन 1: HOME -->
     <a href="#" style="text-decoration: none; color: #1a1a1a; text-align: center; font-size: 11px; font-family: sans-serif; font-weight: bold; flex: 1;">
         <span style="font-size: 22px; display: block; margin-bottom: 2px;">🏠</span>
         Home
     </a>
 
-    <!-- Button 2: HISTORY -->
+    <!-- बटन 2: HISTORY -->
     <a href="#" style="text-decoration: none; color: #1a1a1a; text-align: center; font-size: 11px; font-family: sans-serif; font-weight: bold; flex: 1;">
         <span style="font-size: 22px; display: block; margin-bottom: 2px;">🕒</span>
         History
     </a>
 
-    <!-- Button 3: VIEW CART -->
+    <!-- बटन 3: VIEW CART -->
     <a href="#" onclick="toggleCart(true); return false;" style="text-decoration: none; color: #1a1a1a; text-align: center; font-size: 11px; font-family: sans-serif; font-weight: bold; flex: 1;">
         <span style="font-size: 22px; display: block; margin-bottom: 2px;">🛒</span>
         Cart (<span id="cart-count">0</span>)
     </a>
 
-    <!-- Button 4: PROFILE -->
+    <!-- बटन 4: PROFILE -->
     <a href="#" style="text-decoration: none; color: #1a1a1a; text-align: center; font-size: 11px; font-family: sans-serif; font-weight: bold; flex: 1;">
         <span style="font-size: 22px; display: block; margin-bottom: 2px;">👤</span>
         Profile
