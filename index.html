@@ -177,7 +177,10 @@ color: white;
 
 <div id="menu-container"></div>
 <div style="text-align:center; color:#555; padding:20px;">Powered by SEFFRON</div>
-<div class="mobile-only-bar" style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 450px; height: 60px; background-color: #fbc2c8; z-index: 5; display: flex; align-items: center; justify-content: space-around; box-sizing: border-box; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);">
+<!-- इसमें हमने एक छुपा हुआ पुराना ID (style="display:none;") जोड़ दिया है ताकि आपकी पुरानी JavaScript न टूटे -->
+<button id="view-cart-btn" style="display: none;"></button>
+
+<div class="mobile-only-bar" style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 450px; height: 60px; background-color: #fbc2c8; z-index: 99; display: flex; align-items: center; justify-content: space-around; box-sizing: border-box; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);">
     
     <!-- बटन 1: HOME -->
     <a href="#" style="text-decoration: none; color: #1a1a1a; text-align: center; font-size: 11px; font-family: sans-serif; font-weight: bold; flex: 1;">
