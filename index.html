@@ -177,26 +177,16 @@ color: white;
 
 <div id="menu-container"></div>
 <div style="text-align:center; color:#555; padding:20px;">Powered by SEFFRON</div>
-<!-- 🌟 PREMIUM BOTTOM SHEET POPUP -->
+<!-- 🚨 खोया हुआ Half/Full पॉपअप बॉक्स -->
 <div id="size-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; justify-content: center; align-items: flex-end; transition: opacity 0.3s ease;">
-    
     <div style="background: #ffffff; padding: 24px 20px; border-radius: 24px 24px 0 0; width: 100%; max-width: 450px; text-align: center; box-shadow: 0 -10px 25px rgba(0,0,0,0.15); box-sizing: border-box; animation: slideUp 0.3s ease-out; margin-bottom: 60px;">
-        
-        <!-- प्रीमियम पुल-डाउन इंडिकेटर बार -->
         <div style="width: 40px; height: 5px; background: #e0e0e0; border-radius: 10px; margin: 0 auto 15px auto;"></div>
-        
-        <!-- डिश का नाम -->
-        <h3 id="popup-item-name" style="margin-top: 0; margin-bottom: 20px; color: #1a1a1a; font-family: 'Poppins', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.5px;">Select Size</h3>
-        
-        <!-- साइज ऑप्शन्स की लिस्ट -->
+        <h3 id="popup-item-name" style="margin-top: 0; margin-bottom: 20px; color: #1a1a1a; font-family: 'Poppins', sans-serif; font-size: 18px; font-weight: 700;">Select Size</h3>
         <div id="size-options-list" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;"></div>
-        
-        <!-- क्लोज बटन -->
-        <button onclick="document.getElementById('size-popup').style.display='none'" style="width: 100%; background: #ff4757; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 14px; cursor: pointer; font-family: sans-serif; box-shadow: 0 4px 10px rgba(255, 71, 87, 0.2);">Close</button>
+        <button onclick="document.getElementById('size-popup').style.display='none'" style="width: 100%; background: #ff4757; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer;">Close</button>
     </div>
 </div>
 
-<!-- नीचे से ऊपर आने का एनिमेशन इफ़ेक्ट -->
 <style>
 @keyframes slideUp {
     from { transform: translateY(100%); }
@@ -204,8 +194,8 @@ color: white;
 }
 </style>
 
-<!-- आपकी 4 बटन वाली बॉटम बार (यह वैसी ही रहेगी) -->
-<div class="mobile-only-bar" style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 450px; height: 60px; background-color: #fbc2c8; z-index: 10005; display: flex; align-items: center; justify-content: space-around; box-sizing: border-box; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);">
+<!-- 🌟 SMART BOTTOM BAR: यह कार्ट खुलने पर अपने आप छिप जाएगी -->
+<div class="mobile-only-bar" id="smartBottomNav" style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 450px; height: 60px; background-color: #fbc2c8; z-index: 9999; display: flex; align-items: center; justify-content: space-around; box-sizing: border-box; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); transition: all 0.2s ease;">
     
     <!-- बटन 1: HOME -->
     <a href="#" style="text-decoration: none; color: #1a1a1a; text-align: center; font-size: 11px; font-family: sans-serif; font-weight: bold; flex: 1;">
@@ -232,6 +222,24 @@ color: white;
     </a>
 
 </div>
+
+<script>
+// जब ऑर्डर समरी (Cart) खुले, तो नीचे की बार को छुपाने का ऑटोमैटिक लॉजिक
+setInterval(function() {
+    var cartPopup = document.querySelector('[class*="cart"], [id*="cart"]');
+    var navBar = document.getElementById('smartBottomNav');
+    
+    // अगर कार्ट स्क्रीन पर दिख रहा है और उसका display 'none' नहीं है
+    if (cartPopup && cartPopup.style.display !== 'none' && cartPopup.style.visibility !== 'hidden' && window.getComputedStyle(cartPopup).display !== 'none') {
+        // यह चेक करने के लिए कि कहीं यह हमारा छोटा कार्ट बटन तो नहीं है
+        if(cartPopup.offsetHeight > 200) { 
+            navBar.style.transform = 'translate(-50%, 100%)'; // बार नीचे छिप जाएगी
+        }
+    } else {
+        navBar.style.transform = 'translate(-50%, 0)'; // बार वापस आ जाएगी
+    }
+}, 300);
+</script>
 
 
 </div>
