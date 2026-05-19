@@ -177,9 +177,9 @@ color: white;
 
 <div id="menu-container"></div>
 <div style="text-align:center; color:#555; padding:20px;">Powered by SEFFRON</div>
-<!-- 🚨 Half/Full पॉपअप बॉक्स -->
+<!-- 🚨 1. HALF/FULL POPUP BOX (Vaisa hi rahega) -->
 <div id="size-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; justify-content: center; align-items: flex-end; transition: opacity 0.3s ease;">
-    <div style="background: #ffffff; padding: 24px 20px; border-radius: 24px 24px 0 0; width: 100%; max-width: 450px; text-align: center; box-shadow: 0 -10px 25px rgba(0,0,0,0.15); box-sizing: border-box; animation: slideUp 0.3s ease-out; margin-bottom: 60px;">
+    <div style="background: #ffffff; padding: 24px 20px; border-radius: 24px 24px 0 0; width: 100%; max-width: 450px; text-align: center; box-shadow: 0 -10px 25px rgba(0,0,0,0.15); box-sizing: border-box; animation: slideUpNav 0.3s ease-out; margin-bottom: 60px;">
         <div style="width: 40px; height: 5px; background: #e0e0e0; border-radius: 10px; margin: 0 auto 15px auto;"></div>
         <h3 id="popup-item-name" style="margin-top: 0; margin-bottom: 20px; color: #1a1a1a; font-family: 'Poppins', sans-serif; font-size: 18px; font-weight: 700;">Select Size</h3>
         <div id="size-options-list" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;"></div>
@@ -187,58 +187,154 @@ color: white;
     </div>
 </div>
 
+<!-- 🚨 2. NEW PREMIUM HISTORY BOTTOM SHEET POPUP -->
+<div id="history-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; justify-content: center; align-items: flex-end; transition: opacity 0.3s ease;">
+    <div style="background: #ffffff; padding: 24px 20px; border-radius: 24px 24px 0 0; width: 100%; max-width: 450px; box-shadow: 0 -10px 25px rgba(0,0,0,0.15); box-sizing: border-box; animation: slideUpNav 0.3s ease-out; margin-bottom: 60px; max-height: 75vh; display: flex; flex-direction: column;">
+        <div style="width: 40px; height: 5px; background: #e0e0e0; border-radius: 10px; margin: 0 auto 15px auto; flex-shrink: 0;"></div>
+        <h3 style="margin-top: 0; margin-bottom: 15px; color: #1a1a1a; font-family: 'Poppins', sans-serif; font-size: 18px; font-weight: 700; text-align: center;">📜 Your Order History</h3>
+        
+        <!-- History Items List Container -->
+        <div id="history-items-list" style="overflow-y: auto; flex-grow: 1; padding-bottom: 10px; display: flex; flex-direction: column; gap: 15px;">
+            <!-- History cards will load here via JavaScript -->
+        </div>
+        
+        <button onclick="document.getElementById('history-popup').style.display='none'" style="width: 100%; background: #ff4757; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; flex-shrink: 0; margin-top: 10px;">Close History</button>
+    </div>
+</div>
+
 <style>
-@keyframes slideUp {
+@keyframes slideUpNav {
     from { transform: translateY(100%); }
     to { transform: translateY(0); }
 }
-
-/* 🌟 PERFECT FIX: यह गैप को खत्म करके कार्ट को सीधे नीचे वाली पट्टी से सटा देगा */
 #cart-modal, .cart-modal, #cart-container, .cart-container, [id*="cart"], [class*="cart"] {
-    bottom: 58px !important; /* हाइट को पट्टी के ठीक ऊपर (58px) पर चिपका दिया */
+    bottom: 60px !important;
     height: auto !important;
-    max-height: calc(100% - 75px) !important;
+    max-height: calc(100% - 70px) !important;
     overflow-y: auto !important;
-    border-radius: 24px 24px 0 0 !important; /* निचले कोने सीधे रहेंगे ताकि गैप न बने */
-    box-shadow: 0 -5px 15px rgba(0,0,0,0.1) !important;
 }
-
-/* सफ़ेद डिब्बे के अंदर की लिस्ट का ऑटो-साइज */
-.cart-items, #cart-items, [class*="items-list"], [id*="items-list"] {
-    height: auto !important;
-    max-height: 220px !important;
-    overflow-y: auto !important;
+/* Premium History Card Style */
+.history-card {
+    background: #f9f9f9; border: 1px solid #eee; border-radius: 14px; padding: 12px; font-family: sans-serif;
 }
 </style>
 
-<!-- आपकी 4 बटन वाली बॉटम बार -->
-<div class="mobile-only-bar" style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 450px; height: 60px; background-color: #fbc2c8; z-index: 10005; display: flex; align-items: center; justify-content: space-around; box-sizing: border-box; box-shadow: 0 -4px 12px rgba(0,0,0,0.08);">
-    
-    <!-- बटन 1: HOME -->
-    <a href="#" style="text-decoration: none; color: #1a1a1a; text-align: center; font-size: 11px; font-family: sans-serif; font-weight: bold; flex: 1;">
-        <span style="font-size: 22px; display: block; margin-bottom: 2px;">🏠</span>
-        Home
+<!-- 🚨 3. 4-BUTTON MOBILE BOTTOM NAV BAR -->
+<div class="mobile-only-bar" id="smartBottomNav" style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 450px; height: 60px; background-color: #fbc2c8; z-index: 10005; display: flex; align-items: center; justify-content: space-around; box-sizing: border-box; box-shadow: 0 -4px 12px rgba(0,0,0,0.08); transition: background-color 0.2s ease;">
+    <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" style="text-decoration: none; color: #1a1a1a; text-align: center; font-size: 11px; font-family: sans-serif; font-weight: bold; flex: 1;">
+        <span style="font-size: 22px; display: block; margin-bottom: 2px;">🏠</span>Home
     </a>
-
-    <!-- बटन 2: HISTORY -->
-    <a href="#" style="text-decoration: none; color: #1a1a1a; text-align: center; font-size: 11px; font-family: sans-serif; font-weight: bold; flex: 1;">
-        <span style="font-size: 22px; display: block; margin-bottom: 2px;">🕒</span>
-        History
+    <!-- History Button is now clickable! -->
+    <a href="#" onclick="openHistoryPopup(); return false;" style="text-decoration: none; color: #1a1a1a; text-align: center; font-size: 11px; font-family: sans-serif; font-weight: bold; flex: 1;">
+        <span style="font-size: 22px; display: block; margin-bottom: 2px;">🕒</span>History
     </a>
-
-    <!-- बटन 3: VIEW CART -->
     <a href="#" onclick="toggleCart(true); return false;" style="text-decoration: none; color: #1a1a1a; text-align: center; font-size: 11px; font-family: sans-serif; font-weight: bold; flex: 1;">
-        <span style="font-size: 22px; display: block; margin-bottom: 2px;">🛒</span>
-        Cart (<span id="cart-count">0</span>)
+        <span style="font-size: 22px; display: block; margin-bottom: 2px;">🛒</span>Cart (<span id="cart-count">0</span>)
     </a>
-
-    <!-- BUTTON 4: PROFILE -->
-    <a href="#" style="text-decoration: none; color: #1a1a1a; text-align: center; font-size: 11px; font-family: sans-serif; font-weight: bold; flex: 1;">
-        <span style="font-size: 22px; display: block; margin-bottom: 2px;">👤</span>
-        Profile
+    <a href="#" onclick="alert('Profile Feature Coming Soon!'); return false;" style="text-decoration: none; color: #1a1a1a; text-align: center; font-size: 11px; font-family: sans-serif; font-weight: bold; flex: 1;">
+        <span style="font-size: 22px; display: block; margin-bottom: 2px;">👤</span>Profile
     </a>
-
 </div>
+
+<!-- 🚨 4. AUTOMATIC LOCALSTORAGE & POPUP JAVASCRIPT LOGIC -->
+<script>
+// --- Function: History Popup Open karna aur Data load karna ---
+function openHistoryPopup() {
+    var historyList = document.getElementById('history-items-list');
+    historyList.innerHTML = ''; // Pehle se khali karein
+    
+    // LocalStorage se orders nikalna
+    var savedOrders = JSON.parse(localStorage.getItem('saffron_orders')) || [];
+    
+    if (savedOrders.length === 0) {
+        historyList.innerHTML = '<div style="text-align:center; color:#777; margin-top:20px; font-family:sans-serif;">No orders found yet! 🍔</div>';
+    } else {
+        // Ulta loop chalayenge taaki Naya order sabse upar dikhe
+        for (var i = savedOrders.length - 1; i >= 0; i--) {
+            var order = savedOrders[i];
+            var card = document.createElement('div');
+            card.className = 'history-card';
+            
+            card.innerHTML = `
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:12px; color:#666;">
+                    <span>📅 ${order.date}</span>
+                    <span style="color:#2ed573; font-weight:bold;">Ordered via WA</span>
+                </div>
+                <div style="font-weight:bold; color:#333; margin-bottom:6px; font-size:14px;">${order.items}</div>
+                <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px dashed #ddd; padding-top:6px; margin-top:4px;">
+                    <span style="font-size:12px; color:#555;">Bill Total:</span>
+                    <span style="font-weight:bold; color:#ff4757; font-size:14px;">₹${order.total}</span>
+                </div>
+            `;
+            historyList.appendChild(card);
+        }
+    }
+    document.getElementById('history-popup').style.display = 'flex';
+}
+
+// --- Function: Jab customer Order Place kare, tab automatic history me save ho jaye ---
+function setupOrderTracking() {
+    // Aapki website ke main 'Place Order' button ko target karna
+    var placeOrderBtn = document.querySelector('.place-order-btn, #place-order, [onclick*="sendWhatsApp"], .checkout-btn');
+    
+    if (placeOrderBtn) {
+        placeOrderBtn.addEventListener('click', function() {
+            try {
+                // Aapke cart elements se text nikalna (IDs aapki website ke elements ke matching hain)
+                var cartItemsText = "";
+                var allItems = document.querySelectorAll('.cart-item, .cart-items div, #cart-items div');
+                
+                if(allItems.length > 0) {
+                    var itemsArray = [];
+                    allItems.forEach(function(item) {
+                        if(item.innerText.trim() !== "") itemsArray.push(item.innerText.trim().split('\n')[0]);
+                    });
+                    cartItemsText = itemsArray.join(', ');
+                } else {
+                    cartItemsText = "Delicious Food Items";
+                }
+                
+                var totalAmountElement = document.querySelector('#total-price, #cart-total, .total-amount, #total');
+                var totalAmount = totalAmountElement ? totalAmountElement.innerText.replace(/[^0-9]/g, '') : '0';
+                
+                if (totalAmount === '0' || totalAmount === '') return; // Khali cart save na ho
+
+                var currentDate = new Date().toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+
+                var newOrder = {
+                    date: currentDate,
+                    items: cartItemsText,
+                    total: totalAmount
+                };
+
+                var currentOrders = JSON.parse(localStorage.getItem('saffron_orders')) || [];
+                currentOrders.push(newOrder);
+                localStorage.setItem('saffron_orders', JSON.stringify(currentOrders));
+            } catch (e) {
+                console.log("History save error:", e);
+            }
+        });
+    }
+}
+
+// Automatically active functions when page loads
+setTimeout(setupOrderTracking, 1500);
+
+// Cart check interval for auto background color shift (Pichla gap fix logic)
+setInterval(function() {
+    var cartPopup = document.querySelector('[class*="cart-modal"], [id*="cart-modal"], .cart-container, #cart-container, [id*="cart-popup"]');
+    var navBar = document.getElementById('smartBottomNav');
+    if (cartPopup && (cartPopup.style.display === 'block' || cartPopup.style.display === 'flex' || window.getComputedStyle(cartPopup).display !== 'none')) {
+        if(cartPopup.offsetHeight > 200) {
+            navBar.style.backgroundColor = '#ffffff';
+            navBar.style.borderTop = '1px solid #eee';
+        }
+    } else {
+        navBar.style.backgroundColor = '#fbc2c8';
+        navBar.style.borderTop = 'none';
+    }
+}, 300);
+</script>
 
 <script>
 // जब ऑर्डर समरी (Cart) खुले, तो नीचे की बार को छुपाने का ऑटोमैटिक लॉजिक
