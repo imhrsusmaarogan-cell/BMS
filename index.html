@@ -177,7 +177,7 @@ color: white;
 
 <div id="menu-container"></div>
 <div style="text-align:center; color:#555; padding:20px;">Powered by SEFFRON</div>
-<!-- 🚨 1. HALF/FULL POPUP BOX (Vaisa hi rahega) -->
+<!-<!-- 🚨 1. HALF/FULL POPUP BOX (Vaisa hi rahega) -->
 <div id="size-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; justify-content: center; align-items: flex-end; transition: opacity 0.3s ease;">
     <div style="background: #ffffff; padding: 24px 20px; border-radius: 24px 24px 0 0; width: 100%; max-width: 450px; text-align: center; box-shadow: 0 -10px 25px rgba(0,0,0,0.15); box-sizing: border-box; animation: slideUpNav 0.3s ease-out; margin-bottom: 60px;">
         <div style="width: 40px; height: 5px; background: #e0e0e0; border-radius: 10px; margin: 0 auto 15px auto;"></div>
@@ -194,9 +194,7 @@ color: white;
         <h3 style="margin-top: 0; margin-bottom: 15px; color: #1a1a1a; font-family: 'Poppins', sans-serif; font-size: 18px; font-weight: 700; text-align: center;">📜 Your Order History</h3>
         
         <!-- History Items List Container -->
-        <div id="history-items-list" style="overflow-y: auto; flex-grow: 1; padding-bottom: 10px; display: flex; flex-direction: column; gap: 15px;">
-            <!-- History cards will load here via JavaScript -->
-        </div>
+        <div id="history-items-list" style="overflow-y: auto; flex-grow: 1; padding-bottom: 10px; display: flex; flex-direction: column; gap: 15px;"></div>
         
         <button onclick="document.getElementById('history-popup').style.display='none'" style="width: 100%; background: #ff4757; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; flex-shrink: 0; margin-top: 10px;">Close History</button>
     </div>
@@ -213,9 +211,8 @@ color: white;
     max-height: calc(100% - 70px) !important;
     overflow-y: auto !important;
 }
-/* Premium History Card Style */
 .history-card {
-    background: #f9f9f9; border: 1px solid #eee; border-radius: 14px; padding: 12px; font-family: sans-serif;
+    background: #f9f9f9; border: 1px solid #eee; border-radius: 14px; padding: 12px; font-family: sans-serif; text-align: left;
 }
 </style>
 
@@ -224,7 +221,6 @@ color: white;
     <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" style="text-decoration: none; color: #1a1a1a; text-align: center; font-size: 11px; font-family: sans-serif; font-weight: bold; flex: 1;">
         <span style="font-size: 22px; display: block; margin-bottom: 2px;">🏠</span>Home
     </a>
-    <!-- History Button is now clickable! -->
     <a href="#" onclick="openHistoryPopup(); return false;" style="text-decoration: none; color: #1a1a1a; text-align: center; font-size: 11px; font-family: sans-serif; font-weight: bold; flex: 1;">
         <span style="font-size: 22px; display: block; margin-bottom: 2px;">🕒</span>History
     </a>
@@ -236,25 +232,20 @@ color: white;
     </a>
 </div>
 
-<!-- 🚨 4. AUTOMATIC LOCALSTORAGE & POPUP JAVASCRIPT LOGIC -->
+<!-- 🚨 4. DIRECT INJECTION JAVASCRIPT FOR 100% RECORDING -->
 <script>
-// --- Function: History Popup Open karna aur Data load karna ---
 function openHistoryPopup() {
     var historyList = document.getElementById('history-items-list');
-    historyList.innerHTML = ''; // Pehle se khali karein
-    
-    // LocalStorage se orders nikalna
+    historyList.innerHTML = '';
     var savedOrders = JSON.parse(localStorage.getItem('saffron_orders')) || [];
     
     if (savedOrders.length === 0) {
         historyList.innerHTML = '<div style="text-align:center; color:#777; margin-top:20px; font-family:sans-serif;">No orders found yet! 🍔</div>';
     } else {
-        // Ulta loop chalayenge taaki Naya order sabse upar dikhe
         for (var i = savedOrders.length - 1; i >= 0; i--) {
             var order = savedOrders[i];
             var card = document.createElement('div');
             card.className = 'history-card';
-            
             card.innerHTML = `
                 <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:12px; color:#666;">
                     <span>📅 ${order.date}</span>
@@ -272,55 +263,62 @@ function openHistoryPopup() {
     document.getElementById('history-popup').style.display = 'flex';
 }
 
-// --- Function: Jab customer Order Place kare, tab automatic history me save ho jaye ---
-function setupOrderTracking() {
-    // Aapki website ke main 'Place Order' button ko target karna
-    var placeOrderBtn = document.querySelector('.place-order-btn, #place-order, [onclick*="sendWhatsApp"], .checkout-btn');
-    
-    if (placeOrderBtn) {
-        placeOrderBtn.addEventListener('click', function() {
-            try {
-                // Aapke cart elements se text nikalna (IDs aapki website ke elements ke matching hain)
-                var cartItemsText = "";
-                var allItems = document.querySelectorAll('.cart-item, .cart-items div, #cart-items div');
-                
-                if(allItems.length > 0) {
-                    var itemsArray = [];
-                    allItems.forEach(function(item) {
-                        if(item.innerText.trim() !== "") itemsArray.push(item.innerText.trim().split('\n')[0]);
-                    });
-                    cartItemsText = itemsArray.join(', ');
-                } else {
-                    cartItemsText = "Delicious Food Items";
+// FORCE SAVE LOGIC: Yeh function direct capture karega jab click hoga
+function forceSaveHistory() {
+    try {
+        var itemsArray = [];
+        // Aapke cart ke item text nikalne ke sabhi possible tarike
+        var selectors = ['.cart-item', '#cart-items div', '.order-summary div', '.cart-items p'];
+        selectors.forEach(function(sel) {
+            document.querySelectorAll(sel).forEach(function(el) {
+                var txt = el.innerText.trim();
+                if(txt && txt.length > 2 && !txt.includes('Total') && !txt.includes('Cart')) {
+                    itemsArray.push(txt.replace(/\s+/g, ' '));
                 }
-                
-                var totalAmountElement = document.querySelector('#total-price, #cart-total, .total-amount, #total');
-                var totalAmount = totalAmountElement ? totalAmountElement.innerText.replace(/[^0-9]/g, '') : '0';
-                
-                if (totalAmount === '0' || totalAmount === '') return; // Khali cart save na ho
-
-                var currentDate = new Date().toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-
-                var newOrder = {
-                    date: currentDate,
-                    items: cartItemsText,
-                    total: totalAmount
-                };
-
-                var currentOrders = JSON.parse(localStorage.getItem('saffron_orders')) || [];
-                currentOrders.push(newOrder);
-                localStorage.setItem('saffron_orders', JSON.stringify(currentOrders));
-            } catch (e) {
-                console.log("History save error:", e);
-            }
+            });
         });
+
+        // Agar automatic na mile, toh global cart variable se count nikalna
+        var cartItemsText = itemsArray.length > 0 ? itemsArray.join(', ') : "Saffron Special Combo Items";
+        
+        // Price dhoondhna
+        var total = "0";
+        var priceElements = ['#total-price', '#cart-total', '.total-amount', '#total', '.cart-total span'];
+        for(var i=0; i<priceElements.length; i++) {
+            var el = document.querySelector(priceElements[i]);
+            if(el && el.innerText.replace(/[^0-9]/g, '')) {
+                total = el.innerText.replace(/[^0-9]/g, '');
+                break;
+            }
+        }
+        
+        if(total === "0" || total === "") {
+            // Check mapping fallback if text parsing fails
+            var countEl = document.getElementById('cart-count');
+            if(countEl && countEl.innerText !== "0") total = "Check Invoice";
+            else return; // Don't save empty cart
+        }
+
+        var currentDate = new Date().toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+        var newOrder = { date: currentDate, items: cartItemsText, total: total };
+
+        var currentOrders = JSON.parse(localStorage.getItem('saffron_orders')) || [];
+        currentOrders.push(newOrder);
+        localStorage.setItem('saffron_orders', JSON.stringify(currentOrders));
+    } catch (e) {
+        console.log("History Hook Error:", e);
     }
 }
 
-// Automatically active functions when page loads
-setTimeout(setupOrderTracking, 1500);
+// pure document par listener lagana taaki "Place Order" click hote hi turant data block ho jaye
+document.addEventListener('click', function(event) {
+    var target = event.target;
+    if(target.innerText.includes('Place Order') || target.innerText.includes('Order') || target.id === 'place-order' || target.className.includes('place-order')) {
+        forceSaveHistory();
+    }
+});
 
-// Cart check interval for auto background color shift (Pichla gap fix logic)
+// Auto Background adjustment logic
 setInterval(function() {
     var cartPopup = document.querySelector('[class*="cart-modal"], [id*="cart-modal"], .cart-container, #cart-container, [id*="cart-popup"]');
     var navBar = document.getElementById('smartBottomNav');
